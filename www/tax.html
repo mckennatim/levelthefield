@@ -1,0 +1,399 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> - jsFiddle demo</title> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
+	<link href="css/style.css" rel="stylesheet" type="text/css" />
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>  
+	<script type='text/javascript' src="http://people.iola.dk/olau/flot/jquery.flot.js"></script>
+	<script type='text/javascript' src="js/jquery.flot.valuelabels.js"></script>
+	<script type='text/javascript' src="js/jquery.flot.stack.js"></script>
+	<script src="js/vertical-slider.jquery.js"></script>	
+	<script type='text/javascript' src="js/mckt.mat.js"></script>
+	
+	<!-- <script type='text/javascript' src='http://code.jquery.com/jquery-1.6.js'></script>  
+	<script type='text/javascript' src="http://people.iola.dk/olau/flot/jquery.flot.js"></script>
+	<script type='text/javascript' src="js/jquery.flot.valuelabels.js"></script>
+  	<script type='text/javascript' src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css">
+-->
+  <style type='text/css'>
+    #upto4 {
+        width: 65px;
+        margin-left: 5px;
+        margin-right: 5px;
+        display: inline-block;
+    }  
+    #upto5 {
+        width: 65px;
+        margin-left: 5px;
+        margin-right: 5px;
+        display: inline-block;
+        magin: 0;
+    }      
+    #rate5 {
+        width: 20px;
+        margin-left: 5px;
+        margin-right: 5px;
+        display: inline-block;
+        margin: 0;
+    }  
+	#rate4 {
+    	width : 60px;
+	}​
+	#uptop4{
+		-webkit-magin-before: 0px;
+		-webkit-magin-after: 0px;
+		margin: 0;
+		padding: 0;
+	}
+	#duck{
+		margin: 0;
+	}
+	#rate2 {
+		-webkit-appearance: slider-vertical;
+        width: 20px;
+        height: 100px;
+	}
+
+  </style>
+  
+<script type='text/javascript'>//<![CDATA[ 
+$(window).load(function(){
+//[[20,9]]
+	var data1a = [[20, 9300], [40, 20600], [60, 34400], [80, 56400], [95, 97400] , [99, 210000], [99.88, 1117000] ];
+	var data1b = [[20, 9300], [40, 20528], [60, 32672], [80, 52032], [95, 88112] , [99, 181700], [99.88, 681050] ];
+	
+	$('#graph').bind('pageshow', function() {
+	    var plot = $.plot($("#chart"), [
+	    {
+	        label: "income",
+	        data: data1a,
+	        bars: {show: true, fill: true},
+	        points: {show: true}
+	    },
+	    {
+	        label: "after tax ncome",
+	        data: data1b,
+	        bars: {show: true, fill: true},
+	        points: {show: true}
+	    }],
+	    {	    
+	    	legend: { position: 'nw' }
+	    });
+	});	
+	var data2a = [[20, 9300], [40, 20600], [60, 34400], [80, 56400], [95, 97400] , [99, 210000] ];
+	var data2b = [[20, 9300], [40, 20528], [60, 32672], [80, 52032], [95, 88112] , [99, 181700] ];
+	//var data2c = .5*data2b;
+	//console.log(data2c);
+	$('#page4').bind('pageshow', function() {
+	    var plot = $.plot($("#chart2"), [
+	    {
+	        label: "income",
+	        data: data2a,
+	        bars: {show: true, fill: true},
+	        points: {show: true}
+	    },
+	    {
+	        label: "after tax ncome",
+	        data: data2b,
+	        bars: {show: true, fill: true},
+	        points: {show: true}
+	    }],
+	    {	
+	    	grid: { hoverable: true, clickable: true },   
+	    	legend: { position: 'nw' },
+			valueLabels: {show: true}
+	    })	;
+	});	
+});//]]>  
+
+</script>
+
+
+</head>
+<body>
+  <div data-role="page" id="main" data-add-back-btn="true">
+    <div data-role="header" data-position="fixed">
+        <h1>test</h1>
+    </div>
+    <div data-role="content">
+        <a href="#graph" data-role="button" data-mini="true" data-transition="pop">Display graph</a>
+        <a href="#graph2" data-role="button" data-mini="true" data-transition="slidedown">Display graph2</a> 
+        <a href="#calcs" data-role="button" data-mini="true" data-transition="turn">Calcs page</a>       
+        <a href="#page4" data-role="button" data-mini="true" data-transition="turn">page4</a>  
+        <a href="#page5" data-role="button" data-mini="true" data-transition="turn">page5</a>  
+        <a href="#thelists" data-role="button" data-mini="true" data-transition="turn">thelists</a>                  
+    </div>
+    <div data-role="footer" data-position="fixed">
+        <h4>test</h4>
+    </div>
+</div>
+
+<div data-role="page" id="graph" data-add-back-btn="true">
+    <div data-role="header" data-position="fixed">
+        <h1>graphics</h1>
+    </div>
+    <div data-role="content">
+        <div id="chart" style="width: 300px; height: 650px;"></div>
+    </div>
+    <div data-role="footer" data-position="fixed">
+        <h4>test</h4>
+    </div>
+</div>
+
+<div data-role="page" id="graph2" data-add-back-btn="true">
+    <div data-role="header" data-position="fixed">
+        <h1>graphics2</h1>
+    </div>
+    <div data-role="content">
+
+    </div>
+    <div data-role="footer" data-position="fixed">
+        <h4>test</h4>
+    </div>
+</div>
+
+<div id="thelists" data-role="page">     
+	<div data-role="header">
+		<a href="#" data-icon="back"  id="get" data-role="button" >get</a>
+			<h2>TestPage</h2>
+	</div><!-- /header -->       
+	<div data-role="content">	 
+		<p id="list" >nada </p>
+	</div><!-- /content -->
+</div><!-- /page -->   
+
+<div data-role="page" id="page4" data-add-back-btn="true">
+    <div data-role="header" data-position="fixed">
+        <h1>graphics4</h1>
+    </div>
+    <div data-role="content">
+    	<div id="chart2" style="width: 300px; height: 160px;"></div>
+    	<div class="ui-grid-d">
+			<div class="ui-block-a">
+			<input type="range" name="slider" id="slider-0" value="50" step="5" min="0" max="100"  sliderOrientation="vertical" />	
+			</div>
+			<div class="ui-block-b">
+			<input type="range" name="slider" id="slider-0" value="50" step="5" min="0" max="100"  sliderOrientation="vertical" />	
+			</div>
+			<div class="ui-block-c">
+			<input type="range" name="slider" id="slider-0" value="50" step="5" min="0" max="100"  sliderOrientation="vertical" />	
+			</div>
+			<div class="ui-block-d">
+			<input type="range" name="slider" id="slider-0" value="50" step="5" min="0" max="100"  sliderOrientation="vertical" />	
+			</div>
+			<div class="ui-block-e">
+			<input type="range" name="slider" id="slider-0" value="50" step="5" min="0" max="100"  sliderOrientation="vertical" />	
+			</div>	
+		</div><!-- /grid-b -->
+    </div>
+</div>
+
+<div data-role="page" id="page5" data-add-back-btn="true">
+    <div data-role="header" data-position="fixed">
+        <h1>graphics5</h1>
+    </div>
+    <div data-role="content">
+    </div>
+    <div data-role="footer" data-position="fixed">
+        <h4>test</h4>
+    </div>
+</div>
+ 
+<div data-role="page" id="calcs" data-add-back-btn="true">
+    <div data-role="header" data-position="fixed">
+        <h1>graphics2</h1>
+    </div>
+    <div data-role="content">
+		<form action="#" method="get">
+
+			<h2>Mini form elements</h2>
+
+
+			<div data-role="fieldcontain">
+	         <label>Tax Plan name:</label>
+	         <input type="text" name="tname" id="tname" value="" data-mini="true" />
+			</div>
+			<div data-role="fieldcontain">
+				<b>Capital Gains</b>
+				<label>Rate:</label>
+			 	<input type="range" name="slider" id="capgrate" value="15" min="0" max="70" data-highlight="true" data-mini="true" />
+				<label>Tax as ordinary income</label>
+				<select name="slider2" id="isord" data-role="slider" data-mini="true">
+					<option value="off">Off</option>
+					<option value="on">On</option>
+				</select>
+			</div>
+
+			<div data-role="fieldcontain" id="ratelist">
+				<b>Ordinary Tax Rates</b>
+				<label>% rate:</label>
+			 	<input type="range" name="slider" id="rate1" value="10" min="0" max="70" /><br/>
+				<label>up to $</label>
+			 	<input type="range" name="slider" id="upto1" value="8700" min="0" max="50000" data-highlight="true" data-mini="true" /><br/>
+				<label>% rate:</label>
+			 	<input type="range" name="slider" id="rate2" value="15" min="0" max="100"/>	<br/>		 	
+				<label>up to $</label>
+			 	<input type="range" name="slider" id="upto2" value="35350" min="0" max="100000" data-highlight="true" data-mini="true" /><br/>
+			 	<div data-role="fieldcontain">
+				<label>% rate:</label>
+			 	<input type="range" name="slider" id="rate4" value="30" min="0" max="100" data-highlight="true" data-mini="true" />		
+			 	 <br/>from $85,640 to $:	 					
+			 	<input type="text" name="upto4" id="upto4" value="1786530" data-mini="true"/>g 
+			 	</div>
+			 	<div data-role="fieldcontain">
+				<label>% rate:</label>
+			 	<input type="range" name="slider" id="rate4b" value="30" min="0" max="100" data-highlight="true" data-mini="true" />		
+			 	 <br/>from $85,640 to $:	 					
+			 	<input type="text" name="upto4" id="upto4b" value="1786530" data-mini="true"/>g 
+			 	</div>
+			 	<div data-role="fieldcontain" id="duck">	
+			 	 <input type="text" name="rate5" class="rate" id="rate5b" value="15" data-mini="true"/>% from $85,640 to $:	 					
+			 	<input type="text" name="upto5" class="upto"  id="upto5b" value="1786530" data-mini="true"/>
+
+
+			 	 <input type="text" name="rate5" class="rate" id="rate5a" value="15" data-mini="true"/>% from $85,640 to $:	 					
+			 	<input type="text" name="upto5" class="upto"  id="upto5a" value="1786530" data-mini="true"/>
+			 	 <input type="text" name="rate5" class="rate" id="rate5c" value="15" data-mini="true"/>% from $85,640 to $:	 					
+			 	<input type="text" name="upto5" class="upto"  id="upto5c" value="1786530" data-mini="true"/>
+			 	</div>		 	
+			 	<br/>
+				<label>% rate:</label>
+			 	<input type="range" name="slider" id="rate5" value="33" min="0" max="70" data-highlight="true" data-mini="true" /><br/>
+				<label>up to $</label>
+			 	<input type="range" name="slider" id="upto5" value="388350" min="0" max="3000000" data-highlight="true" data-mini="true" /><br/>
+				<label>% rate:</label>
+			 	<input type="range" name="slider" id="rate6" value="35" min="0" max="100" data-highlight="true" data-mini="true" /><br/>			 	
+				<label>over $</label>
+			 	<input type="range" name="slider" id="over" value="388350" min="0" max="10000000" data-highlight="true" data-mini="true"/><br/>			 				 	
+			</div>
+
+
+			<div data-role="fieldcontain">
+			<fieldset data-role="controlgroup" data-mini="true">
+				<legend>Choose as many snacks as you'd like:</legend>
+				<input type="checkbox" name="checkbox-1a" id="checkbox-1a" class="custom" />
+				<label for="checkbox-1a">Cheetos</label>
+
+				<input type="checkbox" name="checkbox-2a" id="checkbox-2a" class="custom" />
+				<label for="checkbox-2a">Doritos</label>
+				
+				<label>Text Input:</label>
+	            <input type="text" name="name" id="named" value="" data-mini="true" />
+
+				<input type="checkbox" name="checkbox-3a" id="checkbox-3a" class="custom" />
+				<label for="checkbox-3a">Fritos</label>
+
+				<input type="checkbox" name="checkbox-4a" id="checkbox-4a" class="custom" />
+				<label for="checkbox-4a">Sun Chips</label>
+		    </fieldset>
+			</div>
+
+			<div data-role="fieldcontain">
+			<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+		    	<legend>Font styling:</legend>
+		    	<input type="checkbox" name="checkbox-6" id="checkbox-6" class="custom" />
+				<label for="checkbox-6">b</label>
+
+				<input type="checkbox" name="checkbox-7" id="checkbox-7" class="custom" />
+				<label for="checkbox-7"><em>i</em></label>
+
+				<input type="checkbox" name="checkbox-8" id="checkbox-8" class="custom" />
+				<label for="checkbox-8">u</label>
+		    </fieldset>
+			</div>
+
+			<div data-role="fieldcontain">
+			    <fieldset data-role="controlgroup" data-mini="true">
+			    	<legend>Choose a pet:</legend>
+			         	<input type="radio" name="radio-choice-1" id="radio-choice-1" value="choice-1" checked="checked" />
+			         	<label for="radio-choice-1">Cat</label>
+
+			         	<input type="radio" name="radio-choice-1" id="radio-choice-2" value="choice-2"  />
+			         	<label for="radio-choice-2">Dog</label>
+
+			         	<input type="radio" name="radio-choice-1" id="radio-choice-3" value="choice-3"  />
+			         	<label for="radio-choice-3">Hamster</label>
+
+			         	<input type="radio" name="radio-choice-1" id="radio-choice-4" value="choice-4"  />
+			         	<label for="radio-choice-4">Lizard</label>
+			    </fieldset>
+			</div>
+
+			<div data-role="fieldcontain">
+			    <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+			     	<legend>Layout view:</legend>
+			         	<input type="radio" name="radio-choice-b" id="radio-choice-c" value="on" checked="checked" />
+			         	<label for="radio-choice-c">List</label>
+			         	<input type="radio" name="radio-choice-b" id="radio-choice-d" value="off" />
+			         	<label for="radio-choice-d">Grid</label>
+			         	<input type="radio" name="radio-choice-b" id="radio-choice-e" value="other" />
+			         	<label for="radio-choice-e">Gallery</label>
+			    </fieldset>
+			</div>
+
+			<div data-role="fieldcontain">
+				<label for="select-choice-1" class="select">Choose shipping method:</label>
+				<select name="select-choice-1" id="select-choice-1" data-mini="true">
+					<option value="standard">Standard: 7 day</option>
+					<option value="rush">Rush: 3 days</option>
+					<option value="express">Express: next day</option>
+					<option value="overnight">Overnight</option>
+				</select>
+			</div>
+
+			<div data-role="fieldcontain">
+				<label for="select-choice-3" class="select">Your state:</label>
+				<select name="select-choice-3" id="select-choice-3" data-mini="true">
+					<option value="AL">Alabama</option>
+					<option value="AK">Alaska</option>
+					<option value="AZ">Arizona</option>
+					<option value="AR">Arkansas</option>
+					<option value="CA">California</option>
+					<option value="SD">South Dakota</option>
+					<option value="TN">Tennessee</option>
+					<option value="TX">Texas</option>
+					<option value="UT">Utah</option>
+					<option value="VT">Vermont</option>
+					<option value="VA">Virginia</option>
+					<option value="WA">Washington</option>
+					<option value="WV">West Virginia</option>
+					<option value="WI">Wisconsin</option>
+					<option value="WY">Wyoming</option>
+				</select>
+			</div>
+
+			<div data-role="fieldcontain">
+				<label for="select-choice-a" class="select">Choose shipping method:</label>
+				<select name="select-choice-a" id="select-choice-a" data-native-menu="false" data-mini="true">
+					<option>Custom menu example</option>
+					<option value="standard">Standard: 7 day</option>
+					<option value="rush">Rush: 3 days</option>
+					<option value="express">Express: next day</option>
+					<option value="overnight">Overnight</option>
+				</select>
+			</div>
+
+		<div class="ui-body ui-body-b">
+		<fieldset class="ui-grid-a">
+				<div class="ui-block-a"><button type="submit" data-theme="d" data-mini="true">Cancel</button></div>
+				<div class="ui-block-b"><button type="submit" data-theme="a" data-mini="true">Submit</button></div>
+	    </fieldset>
+		</div>
+	</form>
+    </div>
+    <div data-role="footer" data-position="fixed">
+        <h4>test</h4>
+    </div>
+</div> 
+
+</body>
+
+
+</html>
+ 

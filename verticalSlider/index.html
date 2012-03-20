@@ -1,0 +1,74 @@
+
+<!DOCTYPE html> 
+<html > 
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=0"> 
+	<title>Multi-page template</title> 
+
+	
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
+	<link rel="stylesheet" href="style.css" />
+	
+
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>
+	<script src="vertical-slider.jquery.js"></script>
+		<style type='text/css'>
+			#slider-0 {
+				width: 40px;
+			}
+			.ui-field-contain {
+				width: 90%;
+			}
+	</style>
+	
+</head> 
+
+
+<body> 
+
+<!-- Start of first page: #one -->
+<div data-role="page" >
+
+	<div data-role="content" >	
+			<div  class="y ">
+					<h3>Vertical:</h3>
+		
+					<input type="range" name="slider" id="slider-0" value="50" step="5" min="0" max="100"  sliderOrientation="vertical" />
+	
+			</div>
+			
+			<div style="clear:both"></div>
+			<div data-role="fieldcontain" class="x">
+<div class="ui-grid-d">
+	<div class="ui-block-a">
+	<input type="range" name="slider" id="slider-0" value="50" step="5" min="0" max="100"  sliderOrientation="vertical" />	
+	</div>
+	<div class="ui-block-b">
+	<input type="range" name="slider" id="slider-0" value="50" step="5" min="0" max="100"  sliderOrientation="vertical" />	
+	</div>
+	<div class="ui-block-c">
+	<input type="range" name="slider" id="slider-0" value="50" step="5" min="0" max="100"  sliderOrientation="vertical" />	
+	</div>
+	<div class="ui-block-d">
+	<input type="range" name="slider" id="slider-0" value="50" step="5" min="0" max="100"  sliderOrientation="vertical" />	
+	</div>
+	<div class="ui-block-e">
+	<input type="range" name="slider" id="slider-0" value="50" step="5" min="0" max="100"  sliderOrientation="vertical" />	
+	</div>	
+</div><!-- /grid-b -->
+					<h3>Horizontal:</h3>
+					
+					<input type="range" name="slider" value="5" min="1" max="20"  />
+			</div>
+		
+	</div><!-- /content -->
+	
+
+</div><!-- /page one -->
+
+
+</body>
+</html>
