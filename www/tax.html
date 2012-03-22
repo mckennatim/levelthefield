@@ -1,19 +1,21 @@
-
 <!DOCTYPE html>
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> - jsFiddle demo</title> 
+  <title>Tax</title> 
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
 	<link href="css/style.css" rel="stylesheet" type="text/css" />
+	<link href="css/tax.css" rel="stylesheet" type="text/css" />
 	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>  
 	<script type='text/javascript' src="http://people.iola.dk/olau/flot/jquery.flot.js"></script>
 	<script type='text/javascript' src="js/jquery.flot.valuelabels.js"></script>
 	<script type='text/javascript' src="js/jquery.flot.stack.js"></script>
+	<script type='text/javascript' src="js/jquery.flot.pie.min.js"></script>
 	<script src="js/vertical-slider.jquery.js"></script>	
 	<script type='text/javascript' src="js/mckt.mat.js"></script>
+	<script type='text/javascript' src="js/tax.js"></script>
 	
 	<!-- <script type='text/javascript' src='http://code.jquery.com/jquery-1.6.js'></script>  
 	<script type='text/javascript' src="http://people.iola.dk/olau/flot/jquery.flot.js"></script>
@@ -21,116 +23,147 @@
   	<script type='text/javascript' src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css">
 -->
-  <style type='text/css'>
-    #upto4 {
-        width: 65px;
-        margin-left: 5px;
-        margin-right: 5px;
-        display: inline-block;
-    }  
-    #upto5 {
-        width: 65px;
-        margin-left: 5px;
-        margin-right: 5px;
-        display: inline-block;
-        magin: 0;
-    }      
-    #rate5 {
-        width: 20px;
-        margin-left: 5px;
-        margin-right: 5px;
-        display: inline-block;
-        margin: 0;
-    }  
-	#rate4 {
-    	width : 60px;
-	}​
-	#uptop4{
-		-webkit-magin-before: 0px;
-		-webkit-magin-after: 0px;
-		margin: 0;
-		padding: 0;
-	}
-	#duck{
-		margin: 0;
-	}
-	#rate2 {
-		-webkit-appearance: slider-vertical;
-        width: 20px;
-        height: 100px;
-	}
-
-  </style>
   
-<script type='text/javascript'>//<![CDATA[ 
-$(window).load(function(){
-//[[20,9]]
-	var data1a = [[20, 9300], [40, 20600], [60, 34400], [80, 56400], [95, 97400] , [99, 210000], [99.88, 1117000] ];
-	var data1b = [[20, 9300], [40, 20528], [60, 32672], [80, 52032], [95, 88112] , [99, 181700], [99.88, 681050] ];
-	
-	$('#graph').bind('pageshow', function() {
-	    var plot = $.plot($("#chart"), [
-	    {
-	        label: "income",
-	        data: data1a,
-	        bars: {show: true, fill: true},
-	        points: {show: true}
-	    },
-	    {
-	        label: "after tax ncome",
-	        data: data1b,
-	        bars: {show: true, fill: true},
-	        points: {show: true}
-	    }],
-	    {	    
-	    	legend: { position: 'nw' }
-	    });
-	});	
-	var data2a = [[20, 9300], [40, 20600], [60, 34400], [80, 56400], [95, 97400] , [99, 210000] ];
-	var data2b = [[20, 9300], [40, 20528], [60, 32672], [80, 52032], [95, 88112] , [99, 181700] ];
-	//var data2c = .5*data2b;
-	//console.log(data2c);
-	$('#page4').bind('pageshow', function() {
-	    var plot = $.plot($("#chart2"), [
-	    {
-	        label: "income",
-	        data: data2a,
-	        bars: {show: true, fill: true},
-	        points: {show: true}
-	    },
-	    {
-	        label: "after tax ncome",
-	        data: data2b,
-	        bars: {show: true, fill: true},
-	        points: {show: true}
-	    }],
-	    {	
-	    	grid: { hoverable: true, clickable: true },   
-	    	legend: { position: 'nw' },
-			valueLabels: {show: true}
-	    })	;
-	});	
-});//]]>  
-
-</script>
-
-
 </head>
 <body>
-  <div data-role="page" id="main" data-add-back-btn="true">
+  <div data-role="page" id="main" data-add-back-btn="true" class="ui-body-a" class="green">
     <div data-role="header" data-position="fixed">
-        <h1>test</h1>
+     	<a href="#existing" data-icon="arrow-r" data-role="button">next</a>      
+     	<h1>Level The Field</h1>
     </div>
     <div data-role="content">
-        <a href="#graph" data-role="button" data-mini="true" data-transition="pop">Display graph</a>
-        <a href="#graph2" data-role="button" data-mini="true" data-transition="slidedown">Display graph2</a> 
-        <a href="#calcs" data-role="button" data-mini="true" data-transition="turn">Calcs page</a>       
-        <a href="#page4" data-role="button" data-mini="true" data-transition="turn">page4</a>  
-        <a href="#page5" data-role="button" data-mini="true" data-transition="turn">page5</a>  
-        <a href="#thelists" data-role="button" data-mini="true" data-transition="turn">thelists</a>                  
-    </div>
-    <div data-role="footer" data-position="fixed">
-        <h4>test</h4>
+<div class="ui-body ui-body-b" data-role="collapsible-set">
+	<div data-role="collapsible" data-theme="b" data-content-theme="d">
+		<h2>Level the playing field</h2>
+		<p><b>Big Money's side</b><br/>It's running downhill for the financial big boys. It's so easy for them to win. They control the big corporations and can get factories to make their stuff cheap, an iphone for $6, 'free trade zone' factories paying 60 cents an hour.  
+		<div data-role="collapsible">
+			<h6>They run the money.</h6>
+			<p>The financial sector is taking over an ever bigger slice of the economy, sucking up every spare nickel from every man, woman and child in America and the world. And..</p>
+		</div>					 		   
+		<div data-role="collapsible">
+			<h5>They run the government.</h5>
+			<p>In the early eighties the billionaires have re-arisen,  taking hold of the reigns of government to assist in them in their game. Under Reagan it begun, but that poor boy from Arkansas found himself more and more beholden to global capitalism and he did them plenty of favors in return. During Bush/Cheney the rich remebered how profitable war can be. They were welcome in the halls of power. Today they have a lock on political power, They play the super-pac game; if you are a politician and you refuse to play, you lose. </p>
+		</div>
+		<div data-role="collapsible">
+			<h5>They have a game plan.</h5>
+			<p>Privatize the prisons, the T, the schools, the roads; Goldman Sachs will tell them how. Suck out the pensions, cut the pay of the middle class. They call it being efficient. It is a religion. By praying at the altar of capitalism, more games are won. Endlesslly proselytizing through the media they control,  they play the poor rabble that is 99% of the population against each other: white against black, old vs young, the poor against the struggling middle class, non-union workers against union workers,  citizens against immigrants, everyone against the government,  undermining the very idea that there is a commonwealth that we share.</p>
+		</div>
+		<div data-role="collapsible">
+			<h5>They are invisible,</h5>
+			<p>claiming to do nothing; 'it is the 'free' market at work', they say. Their nothing is a complicated strategy to game the system, while calling out the naysayers as meddlers, who sully the purity of the free market. It's a mystical system controlled by invisble puppeteers. Hedge fund managers, the FED, default credit swaps, $180 trillion in derivatives, are all shrouded in secrecy, beyond the understanding of mortal man.</p>
+		</div>		
+				
+	<p><b>The other side</b><br/> has a big hill to climb to get to the goal. Mired in credit card debt and student loans, progress is slow. 'The whole world's in an uproar,  the whole world's upside down'  Often you feel as though you are moving backward. Confused by the billboards on the side of the field; such happy consumers, 'what's wrong with me?', you think. 'Maybe it's that guy on my left holding me back'. Food and shelter are at a premium, urban schools suck, college is unaffordable, health care costs are killing you and your representatives are all in the pocket of the super-pac of rich guys who are playing for the other side. </p>
+		<div data-role="collapsible">
+			<h5>You have the numbers</h5>
+			<p>Vote in your best interest, or at least don't vote in their interest. The biggest fear of the super-rich is an informed democracy. You can level the playing field by voting in your own interest. Each Koch brother has one vote. You have 200,000,000. </p>
+		</div>	
+		<div data-role="collapsible">
+			<h5>You are smart, </h5>
+			<p>smart enough to know that something is fishy, smart enough to realize you cannot trust economists, politicains and the talking heads on TV, smart enough to understand the economy. What you don't know can be learned, what is hidden can be uncovered, what is shrouded in mystery can be understood.</p>
+		</div>	
+		<div data-role="collapsible">
+			<h5>The field can be leveled.</h5>
+			<p>It will not be easy to tilt the earth but it must be done. Otherwise the game sucks and their is no way to win. After all fair is fair. Sure it's just a game but it is the game we are in now. Later we can make a different game with different rules. One that is more fun to play. </p>
+		</div>		
+	</div>	    	
+
+	<div data-role="collapsible" data-theme="b" data-content-theme="d">
+		<h2>Create a Better Tax System</h2>
+		<p>There are mutliple parts of the tax system: income tax, corporate tax, payroll taxes (SSI, medicare), excise tax... There is plenty of work to do on all of them. This app takes on just a little piece, the income tax system. In it you will design a new system, new rates, new brackets new, assumtions. The only rule is somewhat artificial. You have to raise the same amount of money for income tax that is being raised now under the current system.  Then you win.  </p>
+	</div>	
+
+	<div data-role="collapsible">
+		<h2>The Income Tax</h2>
+		<p>Click on the charts below for more information on the current system. Your job is to devise a better system</p>
+	</div>
+	<div class="center-wrapper" id="p1topLabel">
+		<big><b>~One Trillion Dollars</b></big>
+	</div>
+</div>
+		<div id="page1graph" class="ui-body ui-body-c" style="height:190px">
+			<div id="page1left" class="graph"></div>
+		</div>
+	
+	        <a href="#graph" data-role="button" data-mini="true" data-transition="pop">Display graph</a>
+	        <a href="#graph2" data-role="button" data-mini="true" data-transition="slidedown">Display graph2</a> 
+	        <a href="#calcs" data-role="button" data-mini="true" data-transition="turn">Calcs page</a>       
+	        <a href="#page4" data-role="button" data-mini="true" data-transition="turn">page4</a>  
+	        <a href="#page5" data-role="button" data-mini="true" data-transition="turn">page5</a>  
+	        <a href="#thelists" data-role="button" data-mini="true" data-transition="turn">thelists</a>                  	    
+	</div>
+</div>
+
+<div id="existing" data-role="page" class="green">
+    <div data-role="header">
+    	<a href="#main" data-icon="back" data-role="button">back</a>
+        <h4> The Existing</h4>
+        <a href="#decisions" data-icon="arrow-r" data-role="button" id="joinls">next</a>
+        <div data-role="navbar"  data-iconpos="left">
+			<div class="center-wrapper">
+	 	   		<big><b>Obama/Bush Tax plan</b></big>
+	 	   	</div>
+	    </div>
+    </div><!-- /header -->
+    <div data-role="content">	  
+		<div class="ui-body ui-body-b" data-role="collapsible-set">
+			<div data-role="collapsible" data-theme="b" data-content-theme="d">
+		    	<h2>Income data - IRS SOI,</h2>
+		    	<p>Aka <a href="http://www.irs.gov/taxstats/">Statistic of Income</a>, is put out by the IRS. There is data on the top 400, on each of the quintiles (each quintile is 20% of the population). There in some data on the top 5% and some on the top 1% and .5%. Other data on slices of the richest of our population comes from the work of Prof. Emmanuel Saez. David Cay Johnston references that work in an article for Tax Analysts, published on <a href="http://www.tax.com/taxcom/features.nsf/Articles/68051B5A9788CD038525762300631E71?OpenDocument"> tax.com.</a> Basically you see the average incomes of each group. Multiply those by the number of people and you get a sense of where the money is.<div id="erate"></div>  	 </p>
+		    </div>	
+		    <div data-role="collapsible">
+		    	<h2>Ord. Income Brackets. </h2>
+		    	<p>The current Obama / Bush system has a set of income brackets and the rates for each bracket. Rich people pay the same rate on the first x dollars as everyone else. The top rate kicks in very early some that even families making less thatn $200,000 are paying at the same  ordinary income rate as the those with millions of dollars in income. <div id="ebrackets" ></div></p>>
+	    	</div>
+		    <div data-role="collapsible" data-theme="b" data-content-theme="d">
+		    	<h2>Capital Gains are different.</h2>
+		    	<p>There are two basic classes of income. </p>
+		    	<div data-role="collapsible">
+		    		<h4>C.Gains/Q.Dividends are taxed at a lower rate</h4>
+		    		<p>Ordinary income is taxed at the wage rates ie. 15%,25%,30%,33%&amp;35%. Capital gains and Qualified Dividends is taxed at 15%. On a phone this graph (below) is unreadable; the white area in the upper right is capital gains, the lower dark band is dividends. For the rich, most of their income is 'unearned'; coming from investments that pay dividends and have capital gains. The argument is that low capital gains rates is good for Americans; there is even a special  0% rate if you make less than $30,000. Trouble is those who make $30,000, on average, have about 2-4% 'unearned'  income. Even if your income is $100,000, you are likely to have less that 10% capital gains/dividend income. For the rich the numbers are reversed. ) Once you cross the million dollar mark (about the middle of the chart), then more than %50 of your income is likely to be from capital gains and (qualified (US corp)) dividends. </p>
+		    	</div>
+<img src="http://www.taxpolicycenter.org/taxfacts/Content/GIF/income_composition_2000.gif"/><small>[The white area in the upper right is capital gains, the lower dark band is dividends]</small><br/>
+		    	<div data-role="collapsible">
+		    		<h4>Determining amount of Capital Gains</h4>
+		    		<p>It is difficult to find information on how much total income in the US is 'unearned' and taxed at low rates. The best information on the upper slices I found in a Forbes article by Janet Novak in 2011 (<a href="http://www.forbes.com/sites/janetnovack/2011/05/11/richest-400-took-record-share-of-capital-gains-during-market-meltdown-year/">Richest 400 Took Record Share Of Capital Gains During Market Meltdown Year) </a>.  Unless I had other information I ended up reading off the above chart for the average income of each quintile or smaller slice of population and then multipling that % by the income and then by the number of people with that average income. <div id="capg"></div></p>
+		    	</div>
+<p> We do know that "In 2010, the average person with income under $200,000 had a capital loss, not a gain.  Only the top 10 percent had gains on average, and people earning over $1 million had $258 billion of the $261 billion of net gains reported on tax returns.  That is 97% of the gains went to people earning over $1 million.  In 2008, Janet Novack reports, the richest 400 taxpayers–income over $110 million–earned 13.1% of capital gains." (Len Burman, professor at Syracuse, in Forbes from <a href="http://www.forbes.com/sites/leonardburman/2012/01/18/mitt-romneys-teachable-moment-on-capital-gains/">Mitt Romney's Teachable Moment on Capital Gains</a></p>
+	    	</div>	 
+		    <div data-role="collapsible">	    	   	
+		    	<h2>Typical Deductions</h2>
+		    	<p><a href="http://www.filetax.com/deductions.html">Filetax.com</a> is the source for deduction information for the lower 99% of the population. Again finding what is up with the rich is a little harder. I ended up back at the <a href="http://www.irs.gov/pub/irs-soi/07intop400.pdf">IRS top 400 SOI data</a>, though it is from 2007. <div id="exidud" ></div> These numbers, if anything, are too low for people from the upper slices.</p>
+	    	</div>	 
+		</div>    	    	
+    </div><!-- /content -->
+</div><!-- /page -->
+
+<div id="decisions" data-role="page" class="green">
+    <div data-role="header">
+    	<a href="#main" data-icon="back" data-role="button">back</a>
+        <h4> Your Plan</h4>
+        <a href="#joinls" data-icon="arrow-r" data-role="button" id="joinls">next</a>
+        <div data-role="navbar"  data-iconpos="left">
+			<div class="center-wrapper">
+	 	   		<big><b>for a better income tax system</b></big>
+	 	   	</div>
+	    </div>
+    </div><!-- /header -->
+    <div data-role="content">	  
+    	<h3>Decide and make assumptions for...</h3>
+		<div class="ui-body ui-body-b" data-role="collapsible-set">
+			<div data-role="collapsible" data-theme="b" data-content-theme="d">
+				<h3>Capital Gains</h4>
+					<p><div id="decCG"></div></p>
+			</div>
+			<div data-role="collapsible" data-theme="b" data-content-theme="d">
+				<h3>Deductions</h4>
+					<p><div id="decDe"></div></p>
+			</div>
+			<div data-role="collapsible" data-theme="b" data-content-theme="d">
+				<h3>Rates and Brackets</h4>
+					<p><div id="decRB"></div></p>
+			</div>
+		</div>
     </div>
 </div>
 
@@ -160,8 +193,9 @@ $(window).load(function(){
 
 <div id="thelists" data-role="page">     
 	<div data-role="header">
-		<a href="#" data-icon="back"  id="get" data-role="button" >get</a>
+		<a href="#main" data-icon="back"  id="goback" data-role="button" >back</a>
 			<h2>TestPage</h2>
+		<a href="#" data-icon="arrow-d"  id="get" data-role="button" >run</a>
 	</div><!-- /header -->       
 	<div data-role="content">	 
 		<p id="list" >nada </p>
