@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tax</title> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
+	<link href="css/tax.css" rel="stylesheet" type="text/css" />
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>  
+</head>
+<body>
+<div id="page2" data-role="page"  data-add-back-btn="true">
+    <div data-role="header">
+        <h4> The Proposed</h4>
+        <a href="#decisions" data-icon="arrow-r" data-role="button" id="joinls">next</a>
+    </div><!-- /header -->
+    <div data-role="content">
+		<h5>Ducks are Fum</h5>
+        <div>   	
+        	<input type="range" min="0"  max="150" id="inp1" value="34"/>
+        </div>
+        <div>
+        	<a id="but1" href="#" data-role="button" data-mini="true" >but1</a>  
+	    </div>
+	    <div id="txthere"></div>
+    </div>
+</div>    	
+</body>
+</html>	
+
+<script>
+var data =87;
+$('#page2').live('pageinit', function(event) {    
+
+    $("#inp1").val(data).trigger('create');
+	$("#but1").click( function (e) {    
+		data +=1;
+		console.log(data);
+		$("#txthere").append(data+'<br/>');
+	});    
+	$("#inp1").change( function(e){
+		data = Number($(this).val());
+		console.log(data);
+		$("#txthere").append(data+'<br/>');
+	});		
+});
+</script>

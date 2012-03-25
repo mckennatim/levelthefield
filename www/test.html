@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tax</title> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
+	
+	<link href="css/tax.css" rel="stylesheet" type="text/css" />
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>  
+	<script type='text/javascript' src="http://people.iola.dk/olau/flot/jquery.flot.js"></script>
+	<script type='text/javascript' src="js/jquery.flot.valuelabels.js"></script>
+	<script type='text/javascript' src="js/jquery.flot.stack.js"></script>
+	<script type='text/javascript' src="js/jquery.flot.pie.min.js"></script>
+	    <script language="javascript" type="text/javascript" src="js/jquery.flot.crosshair.js"></script>
+
+	<script type='text/javascript' src="js/mckt.mat.js"></script>
+	<script type='text/javascript' src="js/test.js"></script>
+
+<style type="text/css">
+#inp1 div a {left: 50%;}
+</style>
+
+</head>
+<body>
+
+<div  id="graph" data-role="page" data-add-back-btn="true">
+    <div data-role="header">
+    	<a href="#main" data-icon="back" data-role="button">back</a>
+        <h4> The Existing</h4>
+        <a href="#propage" data-icon="arrow-r" data-role="button" id="joinls">next</a>
+        <div data-role="navbar"  data-iconpos="left">
+			<div class="center-wrapper">
+	 	   		<b>Obama/Bush Tax plan</b>
+	 	   	</div>
+	    </div>
+    </div><!-- /header -->
+    <div data-role="content">
+        <div id="chart" style="width: 300px; height: 650px;"></div>
+    </div>
+    <div data-role="footer" data-position="fixed">
+        <h4>test</h4>
+    </div>
+</div>
+
+<div id="propage" data-role="page"  data-add-back-btn="true">
+    <div data-role="header">
+    	<a href="#graph" data-icon="back" data-role="button">back</a>
+        <h4> The Proposed</h4>
+        <a href="#decisions" data-icon="arrow-r" data-role="button" id="joinls">next</a>
+        <div data-role="navbar"  data-iconpos="left">
+			<div class="center-wrapper">
+	 	   		<b>McKenna Tax Plan</b>
+	 	   	</div>
+	    </div>
+    </div><!-- /header -->
+    <div data-role="content">
+		<h5>Ducks are Fum</h5>
+        <div id="chart2" style="width: 300px; height: 70px;"></div><br/>
+        <div>
+        		<input type="range" min="0" max="200" id="inp1" value="34";</script>/>
+        		
+        </div>
+        <div>
+        <a id="but1" href="#" data-role="button" data-mini="true" data-iconpos="notext" data-icon="arrow-u">but1</a>  
+	    <a id="but2" href="#" data-role="button" data-mini="true" data-iconpos="notext" data-icon="arrow-d">but2</a>
+	    <a href="index.html" data-role="button" data-icon="delete" data-iconpos="notext">Delete</a>
+	    </div>
+	    <div id="placeholder" style="width: 300px; height: 350px;"></div>
+	    <p id="hoverdata"></p>
+	    <div id="txtlist"></div>
+    </div>
+    <div data-role="footer" data-position="fixed">
+        <h4>test</h4>
+    </div>
+</div>    	
+    
+</body>
+</html>	

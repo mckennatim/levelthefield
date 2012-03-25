@@ -1,5 +1,11 @@
-#upto4 {
-    width: 65px;
+#upto {
+    width: 75px;
+    margin-left: 5px;
+    margin-right: 5px;
+    display: inline-block;
+}  
+#r25 {
+    width: 35px;
     margin-left: 5px;
     margin-right: 5px;
     display: inline-block;
@@ -51,9 +57,7 @@ text-align: center;
 margin: 0 auto;
 }
 
-		* {
-		  font-family: sans-serif;
-		}
+
 		
 		body
 		{
@@ -129,4 +133,7 @@ ul li {
     list-style-type: none;
     border-bottom: 1px dashed gray;
     margin-top: 10px; 
+}
+.fromto {
+	font-size:14px;
 }

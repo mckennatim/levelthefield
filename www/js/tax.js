@@ -1,3 +1,123 @@
+$('#propage').live('pageinit', function(event) {    
+	plotIt();
+
+	$('body').on('click', "#but1", function (e) { 
+		e.stopImmediatePropagation();
+		e.preventDefault();    
+		data2[0][0] +=1;
+		console.log(data2);
+		plotIt();
+	});    
+	
+	$("#inp1").val(data2[0][0]).slider('refresh');
+
+	
+	$("#inp1").change(function(e){
+		console.log("the sucker changed");
+		data2[0][0] = Number($(this).val());
+		plotIt();
+	})
+	
+	
+var plot;
+$(function () {
+    var sin = [], cos = [];
+    for (var i = 0; i < 14; i += 0.1) {
+        sin.push([i, Math.sin(i)]);
+        cos.push([i, Math.cos(i)]);
+    }
+
+    plot = $.plot($("#placeholder"),
+                      [ { data: sin, label: "sin(x) = -0.00"},
+                        { data: cos, label: "cos(x) = -0.00" } ], {
+                            series: {
+                                lines: { show: true }
+                            },
+                            crosshair: { mode: "x" },
+                            grid: { hoverable: true, autoHighlight: false },
+                            yaxis: { min: -1.2, max: 1.2 }
+                        });
+    var legends = $("#placeholder .legendLabel");
+    legends.each(function () {
+        // fix the widths so they don't jump around
+        $(this).css('width', $(this).width());
+    });
+
+    var updateLegendTimeout = null;
+    var latestPosition = null;
+    
+    function updateLegend() {
+        updateLegendTimeout = null;
+        
+        var pos = latestPosition;
+        
+        var axes = plot.getAxes();
+        if (pos.x < axes.xaxis.min || pos.x > axes.xaxis.max ||
+            pos.y < axes.yaxis.min || pos.y > axes.yaxis.max)
+            return;
+
+        var i, j, dataset = plot.getData();
+        for (i = 0; i < dataset.length; ++i) {
+            var series = dataset[i];
+
+            // find the nearest points, x-wise
+            for (j = 0; j < series.data.length; ++j)
+                if (series.data[j][0] > pos.x)
+                    break;
+            
+            // now interpolate
+            var y, p1 = series.data[j - 1], p2 = series.data[j];
+            if (p1 == null)
+                y = p2[1];
+            else if (p2 == null)
+                y = p1[1];
+            else
+                y = p1[1] + (p2[1] - p1[1]) * (pos.x - p1[0]) / (p2[0] - p1[0]);
+
+            legends.eq(i).text(series.label.replace(/=.*/, "= " + y.toFixed(2)));
+        }
+    }
+    
+    $("#placeholder").bind("plothover",  function (event, pos, item) {
+        latestPosition = pos;
+        if (!updateLegendTimeout)
+            updateLegendTimeout = setTimeout(updateLegend, 50);
+    });
+});	
+	
+	
+	
+	
+});
+function setit(){
+	return 27;
+}
+
+
+var data2c = [[143, 0], [123, 1.5] ];
+var data2d = [[94, 0], [145, 1.5] ];		
+var data2 = data2d;
+function plotIt(){
+    var plot = $.plot($("#chart2"), [
+    {
+        label: "income",
+        data: data2,
+        color: "rgb(200, 20, 30)", //color: "rgb(200, 20, 30)" color: "rgb(30, 180, 20)"
+        bars: {show: true, fill: true , horizontal: true,  fillColor: { colors: [ {opacity: 1.0 }, { opacity: 0.1 } ] }},
+        points: {show: false}
+    }],
+    {	
+    	grid: { hoverable: true, clickable: true },   
+    	legend: { position: 'nw', show:false },
+		valueLabels: {show: false},
+		yaxis: {show: false}
+    })	;  
+};
+   
+
+
+
+
 $(window).load(function(){
 	var obamaPlan = new TaxPlan(irssoi, obama);
 	//page1 1 chart
@@ -192,6 +312,25 @@ $('#delst').click(function() {
 	    	legend: { position: 'nw' },
 			valueLabels: {show: true}
 	    })	;
+
+		var data2c = [[1.43, 0], [1.23, 1.5] ];
+	//var data2c = .5*data2b;
+	//console.log(data2c);
+
+	    var plot = $.plot($("#chart2a"), [
+	    {
+	        label: "income",
+	        data: data2c,
+	        color: "rgb(200, 20, 30)", //color: "rgb(200, 20, 30)" color: "rgb(30, 180, 20)"
+	        bars: {show: true, fill: true , horizontal: true,  fillColor: { colors: [ {opacity: 1.0 }, { opacity: 0.1 } ] }},
+	        points: {show: false}
+	    }],
+	    {	
+	    	grid: { hoverable: true, clickable: true },   
+	    	legend: { position: 'nw', show:false },
+			valueLabels: {show: false},
+			yaxis: {show: false}
+	    })	;
 	});	
 });//]]>  
 
@@ -204,6 +343,13 @@ $('#existing').live('pageinit', function(event) {
 	$('#ebrackets').append(existRates.makeTbl());
 	var edudTbl = arrayObj2table(dedu);
 	$('#exidud').append(edudTbl);	
+});
+
+
+$('#decisions').live('pageinit', function(event) {            
+	$('#radio-mini-2').live('change', function(){
+		alert('martians have landed');
+	});
 });
 
 $('#thelists').live('pageinit', function(event) {
