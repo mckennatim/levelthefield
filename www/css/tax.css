@@ -41,15 +41,14 @@
     width: 20px;
     height: 100px;
 }    
-#main.ui-page { 
- 	background: green;
-}
-#existing.ui-page { 
- 	background: green;
-}
-#decisions.ui-page { 
- 	background: green;
-}
+#main.ui-page { background: green;}
+#existing.ui-page { background: green;}
+#decisions.ui-page { background: green;}
+#propage.ui-page { background: green;}
+#totTaxBar.crtBkg { background: white;}
+
+p.txtOnGreen{color:yellow;}
+
 .center-wrapper{
 text-align: center;
 }

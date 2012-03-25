@@ -273,6 +273,9 @@ $('#thelists').live('pageinit', function(event) {
             }
             var myTaxPlan = new TaxPlan(irssoi, obama);
             
+            var rad = $('input[name=choProCG]:checked').val();
+            $('#list').append('<br/><br/>');
+            $('#list').append(rad);              
 
             console.log(USinc);
             $('#list').append('<br/><br/>');

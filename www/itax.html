@@ -218,13 +218,41 @@
         <a href="#decisions" data-icon="arrow-r" data-role="button" id="joinls">next</a>
         <div data-role="navbar"  data-iconpos="left">
 			<div class="center-wrapper">
-	 	   		<b>McKenna Tax Plan</b>
+	 	   		<b>Tax Plan</b>
 	 	   	</div>
 	    </div>
     </div><!-- /header -->
     <div data-role="content">
-		<h5>Ducks are Fum</h5>
-        <div id="totTaxBar" style="width: 300px; height: 70px;"></div><br/>
+			<p class="txtOnGreen"><b>Taxes Raised by Plan (in trillions) </b><br/>
+			Top bar is target, match it to win</p>
+	        <div  id="totTaxBar" style="width: 270px; height: 70px;" class="crtBkg"></div>
+        <div class="ui-body ui-body-b" data-role="collapsible-set" data-mini="true">
+			<div data-role="collapsible" data-collapsed="true" data-theme="b">
+				<h3>Adjust Ord. Rates</h3>
+				<p>I have <code> data-theme</code> attribute set manually on my container to set the color to match the content block I'm in. </p>
+			</div><!-- /collapsible -->
+			<div data-role="collapsible" data-theme="b" data-content-theme="b">
+				<h3>Set Brackets</h3>
+				<p>I have <code> data-content-theme</code> attribute set manually on my container to set the color to match the content block I'm in. </p>
+			</div>    
+			<div data-role="collapsible" data-collapsed="true" data-theme="b">
+				<h3><div id="proCGlabel">Set Cap.Gains Rate</div></h3>
+				<div id="proCG">
+					<fieldset data-role="controlgroup" data-mini="true">
+						<legend>Tax Capital Gains </legend>
+				    	<input type="radio" name="choProCG" id="radProCG1" value="choice-1" checked="checked" />
+				    	<label for="radProCG1">as ordinary income</label>
+				    	<input type="radio" name="choProCG" id="radProCG2" value="choice-2" />
+				    	<label for="radProCG2">at a separate rate</label>
+					</fieldset>
+				</div>
+			</div><!-- /collapsible -->
+			<div data-role="collapsible" data-theme="b" data-content-theme="b">
+				<h3>Set Deductions</h3>
+				<p>I have <code> data-content-theme</code> attribute set manually on my container to set the color to match the content block I'm in. </p>
+			</div>  			
+		</div>    
+        
         <div>
         		<input type="range" min="0" max="200" id="sliderTotTax" value="34"/>
         		
@@ -237,9 +265,6 @@
 	    <div id="placeholder" style="width: 300px; height: 350px;"></div>
 	    <p id="hoverdata"></p>
 	    <div id="txtlist"></div>
-    </div>
-    <div data-role="footer" data-position="fixed">
-        <h4>test</h4>
     </div>
 </div>    	
     
