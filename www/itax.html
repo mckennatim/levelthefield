@@ -85,6 +85,7 @@
 		<div id="page1graph" class="ui-body ui-body-c" style="height:190px">
 			<div id="existingPies" class="graph"></div>
 		</div>
+		<p class="txtOnGreen" >These buttons are not part of the app. Being used only for development.</p>
 	        <a href="#propage" data-role="button" data-mini="true" data-transition="pop">propage</a>	
 	        <a href="#graph" data-role="button" data-mini="true" data-transition="pop">Display graph</a>
 	        <a href="#graph2" data-role="button" data-mini="true" data-transition="slidedown">Display graph2</a> 
@@ -223,7 +224,7 @@
 	    </div>
     </div><!-- /header -->
     <div data-role="content">
-			<p class="txtOnGreen"><b>Taxes Raised by Plan (in trillions) </b><br/>
+			<p id="taxRaised" class="txtOnGreen"><b>Taxes Raised by Plan (in trillions) </b><br/>
 			Top bar is target, match it to win</p>
 	        <div  id="totTaxBar" style="width: 270px; height: 70px;" class="crtBkg"></div>
         <div class="ui-body ui-body-b" data-role="collapsible-set" data-mini="true">
@@ -238,13 +239,14 @@
 			<div data-role="collapsible" data-collapsed="true" data-theme="b">
 				<h3><div id="proCGlabel">Set Cap.Gains Rate</div></h3>
 				<div id="proCG">
-					<fieldset data-role="controlgroup" data-mini="true">
+					<fieldset id="fsProCG" data-role="controlgroup" data-mini="true">
 						<legend>Tax Capital Gains </legend>
 				    	<input type="radio" name="choProCG" id="radProCG1" value="1" checked="checked" />
 				    	<label for="radProCG1">as ordinary income</label>
 				    	<input type="radio" name="choProCG" id="radProCG2" value="0" />
 				    	<label for="radProCG2">at a separate rate</label>
-					</fieldset>
+				    	<input id="inpProCG" type="range" min="0" max="35"/>
+			    	</fieldset>
 				</div>
 			</div><!-- /collapsible -->
 			<div data-role="collapsible" data-theme="b" data-content-theme="b">

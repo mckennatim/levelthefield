@@ -52,7 +52,7 @@ obama.deductions = irssoi.deductionsTyp;
 obama.useStdDed = 0; //use typical deductions
 obama.taxCGasOrd = 0;
 obama.capGains = .15;
-obama.brackets = [87000, 135350, 200000, 400000, 2000000];
+obama.brackets = [8700, 35350, 85650, 178650, 388350];
 obama.marginal = [.10, .15, .25, .30, .33, .35 ];
 
 //starting point for proposed
@@ -138,7 +138,7 @@ function TaxCalcerOrd(incomeOrd, myRates){//calculates ordinary income tax
             this.incomeRemainings[i]=incomeRemaining;
             this.taxForBrackets[i]=taxForBracket;
         }
-        console.log(this.incomeForBrackets[i-1]);//i guess i gets incremented on leaving
+        //console.log(this.incomeForBrackets[i-1]);//i guess i gets incremented on leaving
         this.incomeRemainings[i]=vlt(vminu(this.incomeRemainings[i-1], this.incomeForBrackets[i-1]),0);
         this.taxForBrackets[i]=vmult(this.incomeRemainings[i], this.rates[i]);
         this.taxForPercByBracket = inve(this.taxForBrackets);	

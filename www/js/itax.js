@@ -125,7 +125,7 @@ $('#decisions').live('pageinit', function(event) {
 
 $('#propage').live('pageinit', function(event) {    
 	plotTotTaxBar();
-
+/*
 	$('body').on('click', "#but1", function (e) { 
 		e.stopImmediatePropagation();
 		e.preventDefault();    
@@ -142,25 +142,46 @@ $('#propage').live('pageinit', function(event) {
 		dataTotTax[0][0] = Number($(this).val());
 		plotTotTaxBar();
 	});
+	*/
+	$("#inpProCG").val(proposedPlan.rates.capGains).slider('refresh');
 	
 	$('input[name=choProCG]').change( function(e){
 		//$('input[name=choProCG]').checkboxradio("refresh");
-		proposedPlan.rates.taxCGasOrd = this.value;
+			proposedPlan.rates.taxCGasOrd = this.value;
+			proposedPlan.refresh();
+			plotTotTaxBar();
+			console.log(this.value);
+			console.log(proposedPlan.rates.taxCGasOrd);
+			$('#taxRaised').empty();
+			$('#taxRaised').append('<b>target:  $'+addCommas(existingPlan.taxUStot) +'<br/>yourPlan: $'+addCommas(proposedPlan.taxUStot)+'</b>' );
+			console.log(proposedPlan.taxUStot);
+			console.log(existingPlan.taxUStot);
+		/*	
+		if (this.value==0){
+			$('#fsProCG').append('<input id="inpProCG" type="range" min="0" max="35" value="'+	proposedPlan.rates.capGains*100 + 6 +'"/>').trigger("create");
+			$('#inpProCG').slider("refresh");
+		}*/
+	});	
+	
+	$("#inpProCG").change(function(e){
+		proposedPlan.rates.capGains = Number($(this).val())/100;
+		//console.log(Number($(this).val()));
 		proposedPlan.refresh();
-		console.log(this.value);
-		console.log(proposedPlan.rates.taxCGasOrd);
-		console.log(proposedPlan.taxUStot);
+		plotTotTaxBar();
+		$('#taxRaised').empty();
+		$('#taxRaised').append('<b>target:  $'+addCommas(existingPlan.taxUStot) +'<br/>yourPlan: $'+addCommas(proposedPlan.taxUStot)+'</b>' );
 	});	
 	
 });
 //event functions
 
 //common data	
-var USinc =rund(existingPlan.incomeUStot/trillion,2);
-var UStax =rund(existingPlan.taxUStot/trillion,2);
+
 //functions
 //main page functions
 function plotExistingTotTaxPie(){
+	var USinc =rund(existingPlan.incomeUStot/trillion,2);
+	var UStax =rund(existingPlan.taxUStot/trillion,2);	
 	var USd1 = [
 	{ label: "Income  $8.33 tr",  data: USinc},
 	{ label: "Tax $1.08 tr",  data: UStax}
@@ -186,9 +207,12 @@ function plotExistingTotTaxPie(){
 }
 //propage functions
 //total tax revenue bar chart code
-var dataTotTax = [[94, 0], [145, 1.5] ];		
+		
 
 function plotTotTaxBar(){
+	var dataTotTaxExist = [rund(existingPlan.taxUStot/trillion,2), 1.5];
+	var dataTotTaxProp = [rund(proposedPlan.taxUStot/trillion,2), 0];
+	var dataTotTax = [dataTotTaxExist, dataTotTaxProp ];
     var plot = $.plot($("#totTaxBar"), [
     {
         label: "income",
@@ -286,9 +310,9 @@ $('#thelists').live('pageinit', function(event) {
             $('#list').append('<br/><br/>');
             $('#list').append(rad);              
 
-            console.log(USinc);
+            console.log(myTaxPlan.taxUStot);
             $('#list').append('<br/><br/>');
-            $('#list').append(USinc);                   
+            $('#list').append(myTaxPlan.taxUStot);                   
 			var propRates = new OrdTax(rates);
 			//$('#list').append(propRates.makeTbl());
 
@@ -314,7 +338,13 @@ $('#thelists').live('pageinit', function(event) {
             $('#list').append('<br/><br/>');
             $('#list').append(JSON.stringify(myTaxPlan.irssoi.income));       
             $('#list').append('<br/><br/>');
+            $('#list').append(JSON.stringify(myTaxPlan.deductions));       
+            $('#list').append('<br/><br/>');
+            $('#list').append(JSON.stringify(myTaxPlan.irssoi.incomePercCapGains));       
+            $('#list').append('<br/><br/>');
             $('#list').append(JSON.stringify(myTaxPlan.incomeCapGains));       
+            $('#list').append('<br/><br/>');
+            $('#list').append(JSON.stringify(myTaxPlan.incomeOrd));       
             $('#list').append('<br/><br/>');                    
             $('#list').append(JSON.stringify(myTaxPlan.taxOrd.tax));            
             $('#list').append('<br/><br/>');
