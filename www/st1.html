@@ -1,0 +1,41 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Tax</title> 
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
+        <link href="css/tax.css" rel="stylesheet" type="text/css" />
+        <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>  
+    </head>
+    <body>
+    <div id="page2" data-role="page"  data-add-back-btn="true">
+        <div data-role="content">
+            <div id="proCG">
+                <fieldset data-role="controlgroup" data-mini="true">
+                    <legend>Tax Capital Gains </legend>
+                    <input type="radio" name="choProCG" id="radProCG1" value="1" checked="checked" />
+                    <label for="radProCG1">as ordinary income</label>
+                    <input type="radio" name="choProCG" id="radProCG2" value="0" />
+                    <label for="radProCG2">at a separate rate</label>
+                </fieldset>
+            </div>
+            <div id="txthere"></div>
+        </div>
+    </div>    	
+    </body>
+    </html>	
+    
+    <script>
+    $('#page2').live('pageinit', function(event) {    
+        console.log('here');
+        $('#txthere').append('duck');
+        $('#txthere').append($('input[name=choProCG]:checked').val());
+        $('input[name=choProCG]').change( function(e){
+         	$('#txthere').append(this.value);
+            $('#txthere').append('frog');
+
+        });	
+    });
+    </script>

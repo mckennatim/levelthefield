@@ -38,7 +38,7 @@ dedu.deductions=vDollaCommas(deductions_typ);
 var new_std_deduct = 20000;
 var use_std_ded = 1;
 var current_cap_gains_rate = .15;
-var use_cap_gains_rate =0;
+var tax_cap_gains_as_ord =0;
 var new_cap_gains_rate =.15;
 
 var current_brackets = [8700, 35350, 85650, 178650, 388350];
@@ -46,21 +46,23 @@ var new_brackets = [87000, 135350, 200000, 400000, 2000000];
 var current_rates = [.10, .15, .25, .30, .33, .35 ];
 var new_rates = [.12, .15, .17, .19, .45, .55 ]; 
 
+//current Obama/Bush plan
 var obama = new Object();
 obama.deductions = irssoi.deductionsTyp;
 obama.useStdDed = 0; //use typical deductions
-obama.isCapGainsTax = 1;
-obama.capGains = current_cap_gains_rate;
-obama.brackets = current_brackets;
-obama.marginal = current_rates;
+obama.taxCGasOrd = 0;
+obama.capGains = .15;
+obama.brackets = [87000, 135350, 200000, 400000, 2000000];
+obama.marginal = [.10, .15, .25, .30, .33, .35 ];
 
+//starting point for proposed
 var rates = new Object();
-rates.deductionStd = new_std_deduct;
-rates.useStdDed = use_std_ded;
-rates.isCapGainsTax = use_cap_gains_rate;
-rates.capGains = new_cap_gains_rate;
-rates.brackets = new_brackets;
-rates.marginal = new_rates;
+rates.deductionStd = 20000;
+rates.useStdDed = 1;
+rates.taxCGasOrd = 1;
+rates.capGains = 0;
+rates.brackets =  [87000, 135350, 200000, 400000, 2000000];
+rates.marginal = [.12, .15, .17, .19, .45, .55 ];
 
 
 function TaxPlan(irssoi, taxrates){
@@ -69,38 +71,48 @@ function TaxPlan(irssoi, taxrates){
 	//calculated from irs soi
 	this.popByPerc = vmult(this.irssoi.popPerc, this.irssoi.popTot);
 	this.incomeUS = vmult(this.popByPerc, this.irssoi.income);	
+    this.calcDeductions =function(){
+		if (this.rates.useStdDed == 0){//use tytpical ded
+		    this.deductionsUS = vmult(this.popByPerc, this.irssoi.deductionsTyp);
+		    this.deductions =  this.irssoi.deductionsTyp;
+		}else {//use (your) std deduction
+		    this.deductionsUS = vmult(this.popByPerc, this.rates.deductionStd);
+		    this.deductions = vmult(this.irssoi.unity, this.rates.deductionStd);	
+		}    	
+		this.incomeUStaxable = vminu(this.incomeUS, this.deductionsUS);
+		this.incomeTaxable = vminu(this.irssoi.income, this.deductions);
+    }
+    this.calcDeductions();
+	this.calcCapGains =function(){
+		if (this.rates.taxCGasOrd==0){
+		    this.incomeUScapGains = vmult(this.incomeUS, this.irssoi.incomePercCapGains);
+		    this.incomeUSord = vminu(this.incomeUS, this.incomeUScapGains);
+		    this.incomeCapGains = vmult(this.irssoi.income, this.irssoi.incomePercCapGains);
+		    this.incomeOrd= vminu(this.incomeTaxable, this.incomeCapGains);	
+		}else{
+		    this.incomeUScapGains = vmult(this.incomeUS, 0);
+		    this.incomeUSord = vminu(this.incomeUS, this.deductionsUS);
+		    this.incomeCapGains = vmult(this.irssoi.income, 0);
+		    this.incomeOrd= this.incomeTaxable;
+		}	
+		this.taxCapGains = vmult(this.incomeCapGains, this.rates.capGains);
+	}
+	this.calcCapGains();
+	console.log(this.incomeOrd);
 
-	if (this.rates.useStdDed == 0){//use tytpical ded
-	    this.deductionsUS = vmult(this.popByPerc, this.irssoi.deductionsTyp);
-	    this.deductions =  this.irssoi.deductionsTyp;
-	}else {//use (your) std deduction
-	    this.deductionsUS = vmult(this.popByPerc, this.rates.deductionStd);
-	    console.log(this.irssoi.unity);
-	    this.deductions = vmult(this.irssoi.unity, this.rates.deductionStd);	
-	}	
-	this.incomeUStaxable = vminu(this.incomeUS, this.deductionsUS);
-	this.incomeTaxable = vminu(this.irssoi.income, this.deductions);
-			console.log(this.rates.isCapGainsTax);
-	if (this.rates.isCapGainsTax ==1){
-	    this.incomeUScapGains = vmult(this.incomeUS, this.irssoi.incomePercCapGains);
-	    this.incomeUSord = vminu(this.incomeUS, this.incomeUScapGains);
-	    this.incomeCapGains = vmult(this.irssoi.income, this.irssoi.incomePercCapGains);
-	    this.incomeOrd= vminu(this.incomeTaxable, this.incomeCapGains);	
-	}else{
-	    this.incomeUScapGains = vmult(this.incomeUS, 0);
-	    this.incomeUSord = vminu(this.incomeUS, this.deductionsUS);
-	    this.incomeCapGains = vmult(this.irssoi.income, 0);
-	    this.incomeOrd= this.incomeTaxable;
-	}	
-	this.taxCapGains = vmult(this.incomeCapGains, this.rates.capGains);
-	this.taxOrd = new TaxCalcerOrd(this.incomeOrd, this.rates);
-	this.taxOrd.calc();//forces the new taxOrd object to do its calculation
-	this.tax = vplus(this.taxCapGains, this.taxOrd.tax);
-	this.taxUS = vmult(this.tax, this.popByPerc);
-	this.taxUStot = vsum(this.taxUS);
-	this.taxAsPerc = vdivi(this.tax,this.irssoi.income,3);
-	this.incomeKept = vminu(this.irssoi.income, this.tax);
-	this.incomeUStot = vsum(this.incomeUS);
+	this.refresh =function(){
+		this.calcDeductions();
+		this.calcCapGains()
+		this.taxOrd = new TaxCalcerOrd(this.incomeOrd, this.rates);
+		this.taxOrd.calc();//forces the new taxOrd object to do its calculation
+		this.tax = vplus(this.taxCapGains, this.taxOrd.tax);
+		this.taxUS = vmult(this.tax, this.popByPerc);
+		this.taxUStot = vsum(this.taxUS);
+		this.taxAsPerc = vdivi(this.tax,this.irssoi.income,3);
+		this.incomeKept = vminu(this.irssoi.income, this.tax);
+		this.incomeUStot = vsum(this.incomeUS);		
+	}
+	this.refresh();
 }
 console.log(rates.brackets);
 

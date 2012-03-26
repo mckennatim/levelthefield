@@ -72,7 +72,7 @@ function vplus(a,b){
         }		
         c[i] = rund(r, accu);
     }
-    console.log(c);
+    //console.log(c);
     return c;			
 }  
 function vminu(a,b){
@@ -158,9 +158,9 @@ function vcat(a,b){
 }
 function inve(a) {
     var xlen =a.length;
-    console.log(xlen);
+    //console.log(xlen);
     var ylen = a[0].length;
-    console.log(ylen);
+    //console.log(ylen);
     var r =[];
     for (var k=0; k<ylen;k++){
         r[k] =[ ];//necessary to declare each row as an array otherwise undefined

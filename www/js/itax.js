@@ -1,6 +1,6 @@
 //data for every page
-            var existingPlan = new TaxPlan(irssoi, obama);
-
+var existingPlan = new TaxPlan(irssoi, obama);
+var proposedPlan = new TaxPlan(irssoi, rates);
 //page iniitialization
 $('#main').live('pageinit', function(event) {    
 	plotExistingTotTaxPie();
@@ -142,6 +142,15 @@ $('#propage').live('pageinit', function(event) {
 		dataTotTax[0][0] = Number($(this).val());
 		plotTotTaxBar();
 	});
+	
+	$('input[name=choProCG]').change( function(e){
+		//$('input[name=choProCG]').checkboxradio("refresh");
+		proposedPlan.rates.taxCGasOrd = this.value;
+		proposedPlan.refresh();
+		console.log(this.value);
+		console.log(proposedPlan.rates.taxCGasOrd);
+		console.log(proposedPlan.taxUStot);
+	});	
 	
 });
 //event functions
