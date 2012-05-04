@@ -98,7 +98,7 @@ function TaxPlan(irssoi, taxrates){
 		this.taxCapGains = vmult(this.incomeCapGains, this.rates.capGains);
 	}
 	this.calcCapGains();
-	console.log(this.incomeOrd);
+	//console.log(this.incomeOrd);
 
 	this.refresh =function(){
 		this.calcDeductions();
@@ -114,7 +114,7 @@ function TaxPlan(irssoi, taxrates){
 	}
 	this.refresh();
 }
-console.log(rates.brackets);
+//.log(rates.brackets);
 
 function TaxCalcerOrd(incomeOrd, myRates){//calculates ordinary income tax
     this.rates=myRates.marginal;//[.10, .15, .25, .30, .33, .35 ];

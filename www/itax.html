@@ -14,6 +14,7 @@
 	<script type='text/javascript' src="js/jquery.flot.stack.js"></script>
 	<script type='text/javascript' src="js/jquery.flot.pie.min.js"></script>
 	<script language="javascript" type="text/javascript" src="js/jquery.flot.crosshair.js"></script>
+	<script language="javascript" type="text/javascript" src="js/jquery.flot.marks.js"></script>
 	<script type='text/javascript' src="js/mckt.mat.js"></script>
 	<script type='text/javascript' src="js/idata.js"></script>
 	<script type='text/javascript' src="js/itax.js"></script>
@@ -36,7 +37,7 @@
 <div class="ui-body ui-body-b" data-role="collapsible-set">
 	<div data-role="collapsible" data-theme="b" data-content-theme="d">
 		<h2>Level the playing field</h2>
-		<p><b>Big Money's side</b><br/>It's running downhill for the financial big boys. It's so easy for them to win. They control the big corporations and can get factories to make their stuff cheap, an iphone for $6, 'free trade zone' factories paying 60 cents an hour.  
+		<p><b>Big Money's side</b><br/>It's running downhill for the financial big boys. It's so easy for them to win. They control the big corporations, the banks, the money supply, the media, the politicians...
 		<div data-role="collapsible">
 			<h6>They run the money.</h6>
 			<p>The financial sector is taking over an ever bigger slice of the economy, sucking up every spare nickel from every man, woman and child in America and the world. And..</p>
@@ -233,8 +234,14 @@
 				<p>I have <code> data-theme</code> attribute set manually on my container to set the color to match the content block I'm in. </p>
 			</div><!-- /collapsible -->
 			<div data-role="collapsible" data-theme="b" data-content-theme="b">
-				<h3>Set Brackets</h3>
-				<p>I have <code> data-content-theme</code> attribute set manually on my container to set the color to match the content block I'm in. </p>
+				<h3><div id="proORlabel">Set Brackets</div></h3>
+				<div id="proOR">
+			    	<div id="brChart" style="width: 250px; height: 120px;"></div>
+					<fieldset id="fsProOR" data-role="controlgroup" data-mini="true">
+				    	<a href="#" id="butBr" data-role="button" data-mini="true">next bracket</a>						
+				    	<input id="inpAdjBr" type="range" min="-4.00" max="2.50" step=".01" />
+				    </fieldset>			    	
+				</div>
 			</div>    
 			<div data-role="collapsible" data-collapsed="true" data-theme="b">
 				<h3><div id="proCGlabel">Set Cap.Gains Rate</div></h3>
@@ -264,7 +271,7 @@
 	    <a id="but2" href="#" data-role="button" data-mini="true" data-iconpos="notext" data-icon="arrow-d">but2</a>
 	    <a href="index.html" data-role="button" data-icon="delete" data-iconpos="notext">Delete</a>
 	    </div>
-	    <div id="placeholder" style="width: 300px; height: 350px;"></div>
+	    <div id="placeholder" style="width: 300px; height: 150px;"></div>
 	    <p id="hoverdata"></p>
 	    <div id="txtlist"></div>
     </div>

@@ -1,4 +1,5 @@
 //data for every page
+var wbrm=0;
 var existingPlan = new TaxPlan(irssoi, obama);
 var proposedPlan = new TaxPlan(irssoi, rates);
 //page iniitialization
@@ -73,7 +74,7 @@ $('#main').live('pageinit', function(event) {
 				{ label: "95-99%",  data: 1.13},
 				{ label: "80-95",  data: 1.97},
 				{ label: "quint4",  data: 1.52},
-				{ label: "quint1+2+3",  data: 1.73},
+				{ label: "quint1+2+3",  data: 1.73}
 				];
 				$.plot($("#existingPies"), USd1, 
 				{
@@ -102,7 +103,7 @@ $('#main').live('pageinit', function(event) {
 				break;
 			}						
 		}
-		cnt++
+		cnt++;
 	});	
 });
 
@@ -125,6 +126,28 @@ $('#decisions').live('pageinit', function(event) {
 
 $('#propage').live('pageinit', function(event) {    
 	plotTotTaxBar();
+	$("#inpAdjBr").val(ln(proposedPlan.rates.brackets[wbrm])).slider('refresh');	
+	plotBrackets();
+	$('body').on('click', "#butBr", function (e) { 
+		e.stopImmediatePropagation();
+	    e.preventDefault();
+	    wbr++;
+	    wbrm = wbr%numBrackets;
+	    $("#inpAdjBr").val(ln(proposedPlan.rates.brackets[wbrm])).slider('refresh');	
+	    plotBrackets();
+	    console.log(wbrm);
+	});	
+
+	$("#inpAdjBr").change(function(e){
+		proposedPlan.rates.brackets[wbrm] = rund(expo(Number($(this).val())),0);
+		plotBrackets();
+		console.log(proposedPlan.rates.brackets[wbrm]);
+		console.log(Number($(this).val()));
+		proposedPlan.refresh();
+		plotTotTaxBar();
+		$('#taxRaised').empty();
+		$('#taxRaised').append('<b>target:  $'+addCommas(existingPlan.taxUStot) +'<br/>yourPlan: $'+addCommas(proposedPlan.taxUStot)+'</b>' );
+	});		
 /*
 	$('body').on('click', "#but1", function (e) { 
 		e.stopImmediatePropagation();
@@ -228,26 +251,65 @@ function plotTotTaxBar(){
 		yaxis: {show: false}
     })	;  
 };
+
+var wbr = -1;
+var brackets =proposedPlan.rates.brackets;
+var numBrackets = brackets.length;
+    
+function plotBrackets(){
+	brackets =proposedPlan.rates.brackets;
+	var bracketL = vDollaCommas(brackets);
+	var bracketX = vln(brackets);
+	var b =new Array();
+	for (var j =0; j<numBrackets;j++){
+		var a =new Object();
+		a['label']=bracketL[j];
+		a['position']=bracketX[j];
+		a['row']=j;
+		a['labelHAlign']='right';
+		if( j==wbrm){
+			a['id']="mark";
+		 }
+		b.push(a);		
+	}
+	var md = new Object(); //the marks configuration
+	var mks = new Object();
+	mks.show = 'true';
+	md.marks = mks;
+	md.data =[];
+	md.markdata=b;
+	
+	console.log(md);
+	var exp1 = [];
+    for (var i = -4; i < 2.5; i += 0.1) {
+        exp1.push([i, expo(i)]);
+    }
+    var plot = $.plot($("#brChart"), 
+        			[{data: exp1}, md],{
+        			yaxis: { show: false},
+        			xaxis: { show: false}
+					});				
+};
+
 //crosshair code on propage
 var plot;
 $(function () {
     var sin = [], cos = [];
-    for (var i = 0; i < 14; i += 0.1) {
-        sin.push([i, Math.sin(i)]);
-        cos.push([i, Math.cos(i)]);
+    for (var i = -4; i < 2; i += 0.1) {
+        sin.push([i, 1000000*Math.exp(i)]);
     }
 
     plot = $.plot($("#placeholder"),
-                      [ { data: sin, label: "sin(x) = -0.00"},
-                        { data: cos, label: "cos(x) = -0.00" } ], {
+    					[{data: sin, label: "exp = 0000000"}] , {
                             series: {
                                 lines: { show: true }
                             },
                             crosshair: { mode: "x" },
                             grid: { hoverable: true, autoHighlight: false },
-                            yaxis: { min: -1.2, max: 1.2 }
-                        });
-    var legends = $("#placeholder .legendLabel");
+                            yaxis: { min: 0, max: 4000000 }
+                        });                        
+   
+ var legends = $("#placeholder .legendLabel");
     legends.each(function () {
         // fix the widths so they don't jump around
         $(this).css('width', $(this).width());
@@ -284,15 +346,14 @@ $(function () {
             else
                 y = p1[1] + (p2[1] - p1[1]) * (pos.x - p1[0]) / (p2[0] - p1[0]);
 
-            legends.eq(i).text(series.label.replace(/=.*/, "= " + y.toFixed(2)));
+           legends.eq(i).text(series.label.replace(/=.*/, "= " + y.toFixed(2)));
         }
-    }
-    
+    }   
     $("#placeholder").bind("plothover",  function (event, pos, item) {
         latestPosition = pos;
         if (!updateLegendTimeout)
             updateLegendTimeout = setTimeout(updateLegend, 50);
-    });	
+    });
 });
 
 
@@ -317,13 +378,16 @@ $('#thelists').live('pageinit', function(event) {
 			//$('#list').append(propRates.makeTbl());
 
             $('#list').append('<br/><br/>');
-            $('#list').append(JSON.stringify(existingPlan.popByPerc));       
+            $('#list').append(JSON.stringify(existingPlan.rates.brackets));       
+
+            $('#list').append('<br/><br/>');
+            $('#list').append(JSON.stringify(vln(existingPlan.rates.brackets)));                   
             
             var myTbl = arrayObj2table(irssoi2);
              $('#list').append('<br/><br/>');
             $('#list').append(myTbl); 
             var nn =8331234555433;
-            var n = addCommas(nn)
+            var n = addCommas(nn);
              $('#list').append('<br/><br/>');
             $('#list').append(n); 
             

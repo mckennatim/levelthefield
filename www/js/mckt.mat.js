@@ -299,4 +299,21 @@ function vperc(a) {
     }
     return r;
 }
+function vln(a){
+	var ylen =a.length;
+	var r = []
+    for (var i=0; i<ylen; i++){
+            r[i] = ln(a[i]);
+    }
+    return r;
+}
 
+function ln(a){
+	var r = rund(Math.log(a/1000000),4);
+	return r;
+}
+
+function expo(a){
+	var r = 1000000*Math.exp(a);
+	return r;
+}
