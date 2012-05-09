@@ -42,9 +42,11 @@ var tax_cap_gains_as_ord =0;
 var new_cap_gains_rate =.15;
 
 var current_brackets = [8700, 35350, 85650, 178650, 388350];
-var new_brackets = [87000, 135350, 200000, 400000, 2000000];
+//var new_brackets = [87000, 135350, 200000, 400000, 2000000];
 var current_rates = [.10, .15, .25, .30, .33, .35 ];
-var new_rates = [.12, .15, .17, .19, .45, .55 ]; 
+//var new_rates = [.12, .15, .17, .19, .45, .55 ]; 
+var new_brackets = [8700, 35350, 85650, 178650, 388350];
+var new_rates = [.10, .15, .25, .30, .33, .35 ]; 
 
 //current Obama/Bush plan
 var obama = new Object();

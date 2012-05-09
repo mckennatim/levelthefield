@@ -1,7 +1,7 @@
 //data for every page
 var wbrm=0;
 var existingPlan = new TaxPlan(irssoi, obama);
-var proposedPlan = new TaxPlan(irssoi, rates);
+var proposedPlan = new TaxPlan(irssoi, obama);
 //page iniitialization
 $('#main').live('pageinit', function(event) {    
 	plotExistingTotTaxPie();
@@ -124,75 +124,76 @@ $('#decisions').live('pageinit', function(event) {
 	});
 });
 
-$('#propage').live('pageinit', function(event) {    
+$('#bracketpg').live('pageinit', function(event) {    
 	plotTotTaxBar();
-	$("#inpAdjBr").val(ln(proposedPlan.rates.brackets[wbrm])).slider('refresh');	
-	plotBrackets();
-	$('body').on('click', "#butBr", function (e) { 
-		e.stopImmediatePropagation();
-	    e.preventDefault();
+	updateBr(0);
+	$('#divBr').click(function() {
 	    wbr++;
-	    wbrm = wbr%numBrackets;
-	    $("#inpAdjBr").val(ln(proposedPlan.rates.brackets[wbrm])).slider('refresh');	
-	    plotBrackets();
-	    console.log(wbrm);
+	    wbrm = wbr%(numBrackets+1);
+		updateBr(wbrm);
+	    //console.log(wbrm);
 	});	
-
 	$("#inpAdjBr").change(function(e){
-		proposedPlan.rates.brackets[wbrm] = rund(expo(Number($(this).val())),0);
+		if (wbrm<numBrackets){
+			proposedPlan.rates.brackets[wbrm] = rund(expo(Number($(this).val())),0);
+			plotBrackets();
+			console.log(proposedPlan);
+			//console.log(Number($(this).val()));
+			proposedPlan.refresh();
+			plotTotTaxBar();
+			$('#taxRaised').empty();
+			$('#taxRaised').append('<b>target:  $'+addCommas(existingPlan.taxUStot) +'<br/>yourPlan: $'+addCommas(proposedPlan.taxUStot)+'</b>' );
+		}
+	});	
+	$("#inpAdjPer").change(function(e){
+		proposedPlan.rates.marginal[wbrm] = Number($(this).val())/100;
 		plotBrackets();
-		console.log(proposedPlan.rates.brackets[wbrm]);
-		console.log(Number($(this).val()));
+		console.log(proposedPlan);
+		//console.log(Number($(this).val()));
 		proposedPlan.refresh();
 		plotTotTaxBar();
 		$('#taxRaised').empty();
 		$('#taxRaised').append('<b>target:  $'+addCommas(existingPlan.taxUStot) +'<br/>yourPlan: $'+addCommas(proposedPlan.taxUStot)+'</b>' );
 	});		
-/*
-	$('body').on('click', "#but1", function (e) { 
-		e.stopImmediatePropagation();
-		e.preventDefault();    
-		dataTotTax[0][0] +=1;
-		console.log(dataTotTax);
-		plotTotTaxBar();
-	});    
-	
-	$("#sliderTotTax").val(dataTotTax[0][0]).slider('refresh');
+});	
 
-	
-	$("#sliderTotTax").change(function(e){
-		console.log("the sucker changed");
-		dataTotTax[0][0] = Number($(this).val());
-		plotTotTaxBar();
-	});
-	*/
-	$("#inpProCG").val(proposedPlan.rates.capGains).slider('refresh');
-	
+$('#unearnpg').live('pageinit', function(event) {    
+	plotTotTaxBarU();
+	$("#inpProCG").val(proposedPlan.rates.capGains*100).slider('refresh');
+	$("#radProCG1").prop("checked", false);
+	$('input:radio[name=choProCG]').checkboxradio("refresh");
+	console.log($("#radProCG1").prop("checked")); 
+	$("#radProCG2").prop("checked", true);
+	//$('input[name=choProCG]').filter('[value="1"]').attr('checked', true);
+	console.log(proposedPlan.rates.capGains);
+	console.log(proposedPlan.rates.taxCGasOrd);
 	$('input[name=choProCG]').change( function(e){
-		//$('input[name=choProCG]').checkboxradio("refresh");
+			$('input[name=choProCG]').checkboxradio("refresh");
+			//$('input:radio[name=choProCG]').filter('[value="1"]').attr('checked', true);
 			proposedPlan.rates.taxCGasOrd = this.value;
 			proposedPlan.refresh();
-			plotTotTaxBar();
+			plotTotTaxBarU();
 			console.log(this.value);
 			console.log(proposedPlan.rates.taxCGasOrd);
 			$('#taxRaised').empty();
 			$('#taxRaised').append('<b>target:  $'+addCommas(existingPlan.taxUStot) +'<br/>yourPlan: $'+addCommas(proposedPlan.taxUStot)+'</b>' );
 			console.log(proposedPlan.taxUStot);
 			console.log(existingPlan.taxUStot);
-		/*	
-		if (this.value==0){
-			$('#fsProCG').append('<input id="inpProCG" type="range" min="0" max="35" value="'+	proposedPlan.rates.capGains*100 + 6 +'"/>').trigger("create");
-			$('#inpProCG').slider("refresh");
-		}*/
+			console.log($("#radProCG0").prop("checked")); 
 	});	
 	
-	$("#inpProCG").change(function(e){
-		proposedPlan.rates.capGains = Number($(this).val())/100;
-		//console.log(Number($(this).val()));
-		proposedPlan.refresh();
-		plotTotTaxBar();
-		$('#taxRaised').empty();
-		$('#taxRaised').append('<b>target:  $'+addCommas(existingPlan.taxUStot) +'<br/>yourPlan: $'+addCommas(proposedPlan.taxUStot)+'</b>' );
+	$("#inpProCG").change(function(e){ //on moving slider
+		console.log('hey dog');
+		console.log($("#radProCG0").prop("checked")); 
+		if ($("#radProCG0").prop("checked")==true){		
+			proposedPlan.rates.capGains = Number($(this).val())/100;
+			proposedPlan.rates.taxCGasOrd = 0;
+			console.log(Number($(this).val()));
+			proposedPlan.refresh();
+			plotTotTaxBarU();
+			$('#taxRaised').empty();
+			$('#taxRaised').append('<b>target:  $'+addCommas(existingPlan.taxUStot) +'<br/>yourPlan: $'+addCommas(proposedPlan.taxUStot)+'</b>' );
+		}
 	});	
 	
 });
@@ -202,6 +203,16 @@ $('#propage').live('pageinit', function(event) {
 
 //functions
 //main page functions
+
+function updateBr(wbmr){
+	if (wbrm<numBrackets){
+		$("#inpAdjBr").val(ln(proposedPlan.rates.brackets[wbrm])).slider('refresh');
+	}
+	$("#inpAdjPer").val(proposedPlan.rates.marginal[wbrm]*100).slider('refresh');
+	//console.log(proposedPlan.rates.marginal[wbrm]);
+	plotBrackets();
+}
+
 function plotExistingTotTaxPie(){
 	var USinc =rund(existingPlan.incomeUStot/trillion,2);
 	var UStax =rund(existingPlan.taxUStot/trillion,2);	
@@ -248,18 +259,42 @@ function plotTotTaxBar(){
     	grid: { hoverable: true, clickable: true },   
     	legend: { position: 'nw', show:false },
 		valueLabels: {show: false},
+		yaxis: {show: false},
+		xaxis: { min: 0, max: 1.2, position: 'top', ticks: [.9, 1.1] }
+    })	;  
+};
+function plotTotTaxBarU(){
+	var dataTotTaxExist = [rund(existingPlan.taxUStot/trillion,2), 1.5];
+	var dataTotTaxProp = [rund(proposedPlan.taxUStot/trillion,2), 0];
+	var dataTotTax = [dataTotTaxExist, dataTotTaxProp ];
+    var plot = $.plot($("#totTaxBarU"), [
+    {
+        label: "income",
+        data: dataTotTax,
+        color: "rgb(200, 20, 30)", //color: "rgb(200, 20, 30)" color: "rgb(30, 180, 20)"
+        bars: {show: true, fill: true , horizontal: true,  fillColor: { colors: [ {opacity: 1.0 }, { opacity: 0.1 } ] }},
+        points: {show: false}
+    }],
+    {	
+    	grid: { hoverable: true, clickable: true },   
+    	legend: { position: 'nw', show:false },
+		valueLabels: {show: false},
 		yaxis: {show: false}
     })	;  
 };
 
 var wbr = -1;
 var brackets =proposedPlan.rates.brackets;
+var marginal =proposedPlan.rates.marginal;
 var numBrackets = brackets.length;
     
 function plotBrackets(){
 	brackets =proposedPlan.rates.brackets;
+	var marginalR = vperc(proposedPlan.rates.marginal,2);
+	//console.log(marginalR);
 	var bracketL = vDollaCommas(brackets);
 	var bracketX = vln(brackets);
+	var maxE = 2.5;
 	var b =new Array();
 	for (var j =0; j<numBrackets;j++){
 		var a =new Object();
@@ -267,21 +302,36 @@ function plotBrackets(){
 		a['position']=bracketX[j];
 		a['row']=j;
 		a['labelHAlign']='right';
-		if( j==wbrm){
-			a['id']="mark";
-		 }
+		if( j==wbrm){a['id']="mark";}
 		b.push(a);		
 	}
+	for (var j =0; j<=numBrackets;j++){
+		var a =new Object();
+		a['label']=marginalR[j];
+		//console.log(marginalR[j]);
+		if (j<numBrackets){
+			a['position']=bracketX[j];		
+			a['labelHAlign']='left';	
+		}else{
+			a['position']=bracketX[j-1];	
+			a['labelHAlign']='right';		
+		}
+		a['row']=j;
+
+		if( j==wbrm){a['id']="mark";}
+		b.push(a);		
+	}	
 	var md = new Object(); //the marks configuration
 	var mks = new Object();
 	mks.show = 'true';
+	mks.rowHeight = '14';
 	md.marks = mks;
 	md.data =[];
 	md.markdata=b;
 	
 	console.log(md);
 	var exp1 = [];
-    for (var i = -4; i < 2.5; i += 0.1) {
+    for (var i = -5.4; i < maxE+.1; i += 0.1) {
         exp1.push([i, expo(i)]);
     }
     var plot = $.plot($("#brChart"), 

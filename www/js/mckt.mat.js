@@ -291,11 +291,11 @@ function vDollaCommas(a) {
     }
     return r;
 }
-function vperc(a) {
+function vperc(a,d) {
     var ylen =a.length;
 	var r = []
     for (var i=0; i<ylen; i++){
-            r[i] = rund(a[i]*100,4)+'%';
+            r[i] = rund(a[i]*100,d)+'%';
     }
     return r;
 }

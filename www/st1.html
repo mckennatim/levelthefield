@@ -15,7 +15,7 @@
             <div id="proCG">
                 <fieldset data-role="controlgroup" data-mini="true">
                     <legend>Tax Capital Gains </legend>
-                    <input type="radio" name="choProCG" id="radProCG1" value="1" checked="checked" />
+                    <input type="radio" name="choProCG" id="radProCG1" value="1" />
                     <label for="radProCG1">as ordinary income</label>
                     <input type="radio" name="choProCG" id="radProCG2" value="0" />
                     <label for="radProCG2">at a separate rate</label>
@@ -30,6 +30,8 @@
     <script>
     $('#page2').live('pageinit', function(event) {    
         console.log('here');
+        $("#radProCG2").attr("checked", true).checkboxradio("refresh");
+        $('input[name=choProCG]').checkboxradio("refresh");
         $('#txthere').append('duck');
         $('#txthere').append($('input[name=choProCG]:checked').val());
         $('input[name=choProCG]').change( function(e){
