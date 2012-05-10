@@ -149,7 +149,7 @@ function TaxCalcerOrd(incomeOrd, myRates){//calculates ordinary income tax
 } 
 
 function OrdTax(rates){
-	this.marginal = vperc(rates.marginal);
+	this.marginal = vperc(rates.marginal,0);
 	this.brackets = vDollaCommas(rates.brackets);	 
 	this.makeTbl = function(){
 		var numrates = this.marginal.length;

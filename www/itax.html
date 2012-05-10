@@ -215,14 +215,14 @@
 
 <div id="bracketpg" data-role="page"  data-add-back-btn="true">
     <div data-role="header">
-    	<a href="#" data-rel="back" data-icon="back" data-role="button">back</a>
+    	<a href="#main" data-icon="home" data-role="button">home</a>
         <h4>Set Brackets</h4>
         <a href="#decisions" data-icon="arrow-r" data-role="button" id="joinls">next</a>
         <div data-role="navbar"  data-iconpos="left">
 			<ul>
-	    	<li><a href="#bracketpg" data-icon="delete" data-role="button" id="bracketbu">brackets</a></li>
-	    	<li><a href="#unearnpg" data-icon="plus" data-role="button" id="unearnbu">unearned</a></li>
-	    	<li><a href="#deductpg" data-icon="arrow-u" data-role="button" id="deductbu">deductions</a> </li>
+	    	<li><a href="#bracketpg" data-icon="gear" data-role="button" id="bracketbu">brackets</a></li>
+	    	<li><a href="#unearnpg" data-icon="gear" data-role="button" id="unearnbu">unearned</a></li>
+	    	<li><a href="#deductpg" data-icon="gear" data-role="button" id="deductbu">deductions</a> </li>
 	    	</ul>
 	    </div>
     </div><!-- /header -->
@@ -231,12 +231,16 @@
 		Top bar is target, match it to win</p>
 		<div id="divBr">
 	        <div  id="totTaxBar" style="width: 290px; height: 70px;" class="crtBkg"></div>
-	    	<div id="brChart" style="width: 290px; height: 110px;" class="crtBkg"></div>		    	
+	    	<div id="brChart" style="width: 290px; height: 110px;" class="crtBkg"></div>	
+	    </div>	    	
     		<label for="inpAdjBr" class="txtOnGreen">Adj.Bracket: (click chart->nxt brack.)</label>
-    		<input id="inpAdjBr" type="range" min="-4.8" max="2.5" step=".01" data-highlight="true" data-mini="true"/>  
-    		<label for="inpAdjPer"class="txtOnGreen">Set  Tax Rate:</label>
-    		<input id="inpAdjPer" type="range" min="0" max="90" step="1" data-highlight="true" data-mini="true"/>			    	   	
-		</div>
+    		<input id="inpAdjBr" type="range" min="-5.4" max="2.5" step=".01" data-highlight="true" data-mini="true"/>  
+    		<label for="inpAdjPer"class="txtOnGreen"><div id="txrt">Set  Tax Rate:</div></label>
+    		<input id="inpAdjPer" type="range" min="0" max="90" step="1" data-highlight="true" data-mini="true"/>	
+    		<a href="index.html" data-role="button" data-inline="true" data-icon="plus" data-theme="b" data-mini="true" id="bradd" >add</a>
+			<a href="index.html" data-role="button" data-inline="true" data-icon="minus" data-theme="b" data-mini="true" id="brdel">del</a>	    	   	
+			<a href="index.html" data-role="button" data-inline="true" data-icon="back" data-theme="b" data-mini="true" id="brres">reset</a>
+			<div id="brtable" class="txtOnGreen">modify brackets</div>	    	   	
 	</div>
 </div>
 
@@ -247,23 +251,22 @@
         <a href="#decisions" data-icon="arrow-r" data-role="button" id="joinls">next</a>
         <div data-role="navbar"  data-iconpos="left">
 			<ul>
-	    	<li><a href="#bracketpg" data-icon="delete" data-role="button" id="bracketbu">brackets</a></li>
-	    	<li><a href="#unearnpg" data-icon="plus" data-role="button" id="unearnbu">unearned</a></li>
-	    	<li><a href="#deductpg" data-icon="arrow-u" data-role="button" id="deductbu">deductions</a> </li>
+	    	<li><a href="#bracketpg"  data-icon="gear" data-role="button" id="bracketbu">brackets</a></li>
+	    	<li><a href="#unearnpg" data-icon="gear" data-role="button" id="unearnbu">unearned</a></li>
+	    	<li><a href="#deductpg" data-icon="gear" data-role="button" id="deductbu">deductions</a> </li>
 	    	</ul>
 	    </div>
     </div><!-- /header -->
     <div data-role="content">
-			<p id="taxRaised" class="txtOnGreen"><b>Taxes Raised by Plan (in trillions) </b><br/>
+			<p id="utaxRaised" class="txtOnGreen">Taxes Raised by Plan (in trillions) <br/>
 			Top bar is target, match it to win</p>
-	        <div  id="totTaxBarU" style="width: 270px; height: 70px;" class="crtBkg"></div>
-				<h3><div id="proCGlabel">Set Cap.Gains Rate</div></h3>
+	        <div  id="totTaxBarU" style="width: 290px; height: 70px;" class="crtBkg"></div>
+				<p><div id="proCGlabel" class="txtOnGreen">Tax Cap.Gains &amp; Pref.Dividends</div></p>
 				<div id="proCG">
 				<fieldset id="fsProCG" data-role="controlgroup" data-mini="true">
-					<legend>Tax Capital Gains </legend>
-			    	<input type="radio" name="choProCG" id="radProCG1" value="1"  />
+					<input type="radio" name="choProCG" id="radProCG1" value="1"  data-theme="b" />
 			    	<label for="radProCG1">as ordinary income</label>
-			    	<input type="radio" name="choProCG" id="radProCG0" value="0" />
+			    	<input type="radio" name="choProCG" id="radProCG0" value="0"  data-theme="b" />
 			    	<label for="radProCG0">at a separate rate</label>
 			    	<input id="inpProCG" type="range" min="0" max="35"/>
 		    	</fieldset>
@@ -287,7 +290,7 @@
     <div data-role="content">
 			<p id="taxRaised" class="txtOnGreen"><b>Taxes Raised by Plan (in trillions) </b><br/>
 			Top bar is target, match it to win</p>
-	        <div  id="totTaxBarD" style="width: 270px; height: 70px;" class="crtBkg"></div>
+	        <div  id="totTaxBarD" style="width: 290px; height: 70px;" class="crtBkg"></div>
 	</div>
 </div>
 
