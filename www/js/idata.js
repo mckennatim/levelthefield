@@ -21,11 +21,11 @@ irssoi.unity = vplus(vmult(irssoi.income,0),1);
 
 irssoi3 = new Object();
 irssoi3.pop = vcommas(vmult(pop_perc, pop_tot));
-irssoi3.popPerc = vperc(pop_perc);
+irssoi3.popPerc = vperc(pop_perc, 0);
 irssoi3.income = vDollaCommas(income_avg);
 
 irssoi2 = new Object();
-irssoi2.capGains = vperc(income_perc_cap_gains);
+irssoi2.capGains = vperc(income_perc_cap_gains, 0);
 irssoi2.income = vDollaCommas(income_avg);
 irssoi2.incCapG = vDollaCommas(vmult(income_perc_cap_gains, income_avg))
 
@@ -132,19 +132,29 @@ function TaxCalcerOrd(incomeOrd, myRates){//calculates ordinary income tax
     	var incomeForBracket =[]; 
     	var taxForBracket=[];
     	var i = 0;
-        for (i=0; i<this.brackets.length; i++){
-            incomeForBracket = vgt(incomeRemaining, this.brackets[i]) ;//everything between one 
-            taxForBracket = vmult(incomeForBracket,this.rates[i]);
-            incomeRemaining = vlt0rem(incomeRemaining, this.brackets[i]);
-            this.incomeForBrackets[i]=incomeForBracket;
-            this.incomeRemainings[i]=incomeRemaining;
-            this.taxForBrackets[i]=taxForBracket;
-        }
-        //console.log(this.incomeForBrackets[i-1]);//i guess i gets incremented on leaving
-        this.incomeRemainings[i]=vlt(vminu(this.incomeRemainings[i-1], this.incomeForBrackets[i-1]),0);
-        this.taxForBrackets[i]=vmult(this.incomeRemainings[i], this.rates[i]);
-        this.taxForPercByBracket = inve(this.taxForBrackets);	
-        this.tax = mplus(this.taxForPercByBracket);	
+    	if (this.brackets.length==0){//flat tax
+    		console.log('no brackets');
+    		console.log(this.income);
+    		console.log(this.rates[0]);
+    		this.tax = vmult(this.income,this.rates[0]);
+    	}else{
+	         for (i=0; i<this.brackets.length; i++){
+	            incomeForBracket = vgt(incomeRemaining, this.brackets[i]) ;//everything between one 
+	            taxForBracket = vmult(incomeForBracket,this.rates[i]);
+	            incomeRemaining = vlt0rem(incomeRemaining, this.brackets[i]);
+	            this.incomeForBrackets[i]=incomeForBracket;
+	            this.incomeRemainings[i]=incomeRemaining;
+	            this.taxForBrackets[i]=taxForBracket;
+	        }
+	        this.taxForBrackets[i]=vmult(this.incomeRemainings[i-1], this.rates[i]);
+	        this.taxForPercByBracket = inve(this.taxForBrackets);	
+	        this.tax = mplus(this.taxForPercByBracket);	
+	        //console.log(this.incomeForBrackets);
+	        //console.log(this.incomeRemainings);
+	        //console.log(this.taxForBrackets);
+	        //console.log(this.taxForPercByBracket); 		
+    	}
+    	//console.log(this.tax);     
     }
 } 
 

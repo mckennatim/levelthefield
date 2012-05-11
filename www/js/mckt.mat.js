@@ -185,6 +185,14 @@ function rund(number, digits) {
     var multiple = Math.pow(10, digits);
     var rndedNum = Math.round(number * multiple) / multiple;
     return rndedNum;
+}
+function vrund(a, digits){
+    var ylen =a.length;
+	var r = [];
+    for (var i=0; i<ylen; i++){
+            r[i] = rund(a[i],digits);
+    }
+    return r;	
 }		
 // use dec_sep for internationalization
 function ndec(x)

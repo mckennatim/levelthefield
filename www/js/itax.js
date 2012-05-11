@@ -4,12 +4,14 @@ var maxE=2.5;
 var lowE=-5.4;
 localStorage.setItem('stobama', JSON.stringify(obama));
 var stobama=JSON.parse(localStorage.getItem('stobama'));
+//console.log('creating exiisting plan');
 var existingPlan = new TaxPlan(irssoi, obama);
 var storedRates=JSON.parse(localStorage.getItem('rates'));
 //var clobama = $.extend(true, {}, obama);//create a deepcopy clone
 if (storedRates==null){
 	var proposedPlan = new TaxPlan(irssoi, stobama);
 }else{
+	//console.log('creating plan from sttored rates');
 	var proposedPlan = new TaxPlan(irssoi, storedRates);	
 }
 console.log(proposedPlan);
@@ -139,7 +141,11 @@ $('#decisions').live('pageinit', function(event) {
 
 $('#bracketpg').live('pageinit', function(event) {   
 	reTot();
-	wbr=numBrackets-1;
+	if (numBrackets>0){
+		wbr=numBrackets-1;	
+	}else{
+		wbr==0;
+	}
 	wbrm = wbr%(numBrackets+1);
 	updateBr(wbrm);
     if (wbrm<numBrackets){
@@ -147,6 +153,7 @@ $('#bracketpg').live('pageinit', function(event) {
 	}
 	$("#inpAdjPer").val(proposedPlan.rates.marginal[wbrm]*100).slider('refresh');	
 	plotBrackets();
+	assembleSummary();
 	$('#divBr').click(function() {
 	    wbr++;
 	    wbrm = wbr%(numBrackets+1);
@@ -161,23 +168,23 @@ $('#bracketpg').live('pageinit', function(event) {
 		if (wbrm<numBrackets){
 			proposedPlan.rates.brackets[wbrm] = rund(expo(Number($(this).val())),0);
 			updateBr(wbrm);
-			console.log(proposedPlan);
+			//console.log(proposedPlan);
 			reTot();
 		}
 	});	
 	$("#inpAdjPer").change(function(e){ //percent slider
 		proposedPlan.rates.marginal[wbrm] = Number($(this).val())/100;
 		updateBr(wbrm);
-		console.log(proposedPlan);
+		//console.log(proposedPlan);
 		reTot();
 	});		
 	$('body').on('click', "#brres", function (e) { 
 		e.stopImmediatePropagation();
 		e.preventDefault();
-		console.log(obama);
+		//console.log(obama);
 		proposedPlan.rates=JSON.parse(localStorage.getItem('stobama'));
 		numBrackets = proposedPlan.rates.brackets.length;
-		console.log(proposedPlan.rates);
+		//console.log(proposedPlan.rates);
 		proposedPlan.refresh();
 		updateBr(numBrackets-1);;
 		reTot();
@@ -185,18 +192,37 @@ $('#bracketpg').live('pageinit', function(event) {
 	$('body').on('click', "#brdel", function (e) { 
 		e.stopImmediatePropagation();
 		e.preventDefault();
-		proposedPlan.rates.brackets.splice(wbrm,1);
-		proposedPlan.rates.marginal.splice(wbrm,1);	
-		numBrackets = proposedPlan.rates.brackets.length;
 		//console.log(proposedPlan.rates.brackets);
-		proposedPlan.refresh();
+		//console.log(proposedPlan.rates.marginal);
+		//console.log('wbrm is now ' +wbrm);
+		if (wbrm==numBrackets){
+			proposedPlan.rates.brackets.splice(wbrm-1,1);
+			proposedPlan.rates.marginal.splice(wbrm,1);				
+		}else {
+			proposedPlan.rates.brackets.splice(wbrm,1);
+			proposedPlan.rates.marginal.splice(wbrm,1);				
+		}
+		numBrackets = proposedPlan.rates.brackets.length;
+		console.log(proposedPlan.rates.brackets);
+		var bbb = proposedPlan.rates.brackets;
+		var bbbl = bbb.length;
+		//console.log(bbbl);
+		//console.log(proposedPlan.rates.marginal);
+		//console.log('wbrm is now ' +wbrm);
 		updateBr(numBrackets-1);
 		reTot();
 	});
 	$('body').on('click', "#bradd", function (e) { 
 		e.stopImmediatePropagation();
 		e.preventDefault();
-		if (wbrm==0){
+		//console.log(wbrm);
+		if (proposedPlan.rates.brackets.length==0){
+			var newBr = rund((expo(lowE)+expo(maxE))/2,0);	
+			var hiRa = proposedPlan.rates.marginal[wbrm];
+			var newRa = rund(hiRa/2,2);		
+			proposedPlan.rates.brackets.splice(wbrm,0, newBr);
+			proposedPlan.rates.marginal.splice(wbrm,0, newRa);
+		}else if (wbrm==0){
 			var hiBr = proposedPlan.rates.brackets[wbrm];
 			var newBr = rund((expo(lowE)+hiBr)/2,0);			
 			var hiRa = proposedPlan.rates.marginal[wbrm];
@@ -221,14 +247,13 @@ $('#bracketpg').live('pageinit', function(event) {
 			proposedPlan.rates.marginal.splice(wbrm,0, newRa);	
 		}
 		numBrackets = proposedPlan.rates.brackets.length;
-		console.log(proposedPlan.rates.brackets);
-		console.log(proposedPlan.rates.marginal);
+		//console.log(proposedPlan.rates.brackets);
+		//console.log(proposedPlan.rates.marginal);
 		proposedPlan.refresh();
 		updateBr(numBrackets-1);
 		reTot();
 	});			
 });	
-
 $('#unearnpg').live('pageinit', function(event) {    
 	reTot();
 	$("#inpProCG").val(proposedPlan.rates.capGains*100).slider('refresh');
@@ -238,15 +263,16 @@ $('#unearnpg').live('pageinit', function(event) {
     	$("#radProCG0").attr("checked", true).checkboxradio("refresh");
     }
     //$('input[name=choProCG]').checkboxradio("refresh");	don't need
-	console.log($("#radProCG1").prop("checked")); 
-	console.log(proposedPlan.rates.capGains);
-	console.log(proposedPlan.rates.taxCGasOrd);
+	//console.log($("#radProCG1").prop("checked")); 
+	//console.log(proposedPlan.rates.capGains);
+	//console.log(proposedPlan.rates.taxCGasOrd);
 	$('input[name=choProCG]').change( function(e){ //change radio
-			console.log("just changed radio");
+			//console.log("just changed radio");
 			$('input[name=choProCG]').checkboxradio("refresh");
 			//$('input:radio[name=choProCG]').filter('[value="1"]').attr('checked', true);
 			proposedPlan.rates.taxCGasOrd = this.value;
 			reTot();
+			assembleSummary();
 	});	
 	
 	$("#inpProCG").change(function(e){ //on moving slider
@@ -257,10 +283,14 @@ $('#unearnpg').live('pageinit', function(event) {
 			//proposedPlan.rates.taxCGasOrd = 0;
 			console.log(Number($(this).val()));
 			reTot();
+			assembleSummary();
 		}
 	});	
-	
 });
+$('#deductpg').live('pageinit', function(event) {    
+	reTot();
+});
+
 //event functions
 
 //common data	
@@ -278,15 +308,25 @@ function updateBr(wbmr){
 		$('#txrt').append(rund(proposedPlan.rates.marginal[wbrm]*100,0) +'% from $'+addCommas(proposedPlan.rates.brackets[wbrm-1])+' to $'+addCommas(proposedPlan.rates.brackets[wbrm]));
 	}
 	plotBrackets();
+	assembleSummary();
+}
+
+function assembleSummary(){
 	var brSummary = new OrdTax(proposedPlan.rates);
-	$('#brtable').empty();
-	$('#brtable').append(brSummary.makeTbl());
+	$('.brtable').empty();
+	if (proposedPlan.rates.taxCGasOrd==1){
+		$('.brtable').append('<ul><li><table><tr><td>capital gains / dividends </td><td>as ordinary income</td></tr>');
+	}else{
+		$('.brtable').append('<ul><li><table><tr><td>'+proposedPlan.rates.capGains*100 + '%</td><td>capital gains / dividends</td></tr>');
+	}
+	$('.brtable').append(brSummary.makeTbl());
 }
 
 function reTot(){
 	proposedPlan.refresh();
 	plotTotTaxBarU();
 	plotTotTaxBar();
+	plotTotTaxBarD();
 	$('#utaxRaised').empty();
 	$('#utaxRaised').append('target:  $'+addCommas(existingPlan.taxUStot) +'<br/>yourPlan: $'+addCommas(proposedPlan.taxUStot) );	
 	$('#taxRaised').empty();
@@ -325,12 +365,31 @@ function plotExistingTotTaxPie(){
 //propage functions
 //total tax revenue bar chart code
 		
-
 function plotTotTaxBar(){
 	var dataTotTaxExist = [rund(existingPlan.taxUStot/trillion,2), 1.5];
 	var dataTotTaxProp = [rund(proposedPlan.taxUStot/trillion,2), 0];
 	var dataTotTax = [dataTotTaxExist, dataTotTaxProp ];
     var plot = $.plot($("#totTaxBar"), [
+    {
+        label: "income",
+        data: dataTotTax,
+        color: "rgb(200, 20, 30)", //color: "rgb(200, 20, 30)" color: "rgb(30, 180, 20)"
+        bars: {show: true, fill: true , horizontal: true,  fillColor: { colors: [ {opacity: 1.0 }, { opacity: 0.1 } ] }},
+        points: {show: false}
+    }],
+    {	
+    	grid: { hoverable: true, clickable: true },   
+    	legend: { position: 'nw', show:false },
+		valueLabels: {show: false},
+		yaxis: {show: false},
+		xaxis: { min: 0, max: 1.2, position: 'top', ticks: [.9, 1.1] }
+    })	;  
+};
+function plotTotTaxBarD(){
+	var dataTotTaxExist = [rund(existingPlan.taxUStot/trillion,2), 1.5];
+	var dataTotTaxProp = [rund(proposedPlan.taxUStot/trillion,2), 0];
+	var dataTotTax = [dataTotTaxExist, dataTotTaxProp ];
+    var plot = $.plot($("#totTaxBarD"), [
     {
         label: "income",
         data: dataTotTax,
@@ -498,44 +557,16 @@ $('#thelists').live('pageinit', function(event) {
             for (i=1; i<6; i++){
                 $('#list').append('frog ');
             }
-            var myTaxPlan = new TaxPlan(irssoi, obama);
+            var myTaxPlan = proposedPlan;
             console.log(proposedPlan);
-            var rad = proposedPlan.rates.marginal;
-            var bad =proposedPlan.rates.brackets;
-            $('#list').append('<br/><br/>');
-            $('#list').append(JSON.stringify(rad));      
-            $('#list').append('<br/><br/>');
-            $('#list').append(JSON.stringify(bad));      
-            proposedPlan.rates.marginal.splice(2,1);       
-            proposedPlan.rates.brackets.splice(2,1); 
-            proposedPlan.rates.marginal.splice(2,1);       
-            proposedPlan.rates.brackets.splice(2,1); 
-            $('#list').append('<br/><br/>');
-            $('#list').append(JSON.stringify(proposedPlan.rates.marginal));      
-            $('#list').append('<br/><br/>');
-            $('#list').append(JSON.stringify(proposedPlan.rates.brackets));        
-            console.log(myTaxPlan.taxUStot);
-            $('#list').append('<br/><br/>');
-            $('#list').append(myTaxPlan.taxUStot);                   
-			var propRates = new OrdTax(rates);
-			//$('#list').append(propRates.makeTbl());
 
-            $('#list').append('<br/><br/>');
-            $('#list').append(JSON.stringify(existingPlan.rates.brackets));       
 
-            $('#list').append('<br/><br/>');
-            $('#list').append(JSON.stringify(vln(existingPlan.rates.brackets)));                   
-            
-            var myTbl = arrayObj2table(irssoi2);
-             $('#list').append('<br/><br/>');
-            $('#list').append(myTbl); 
+              
             var nn =8331234555433;
             var n = addCommas(nn);
              $('#list').append('<br/><br/>');
             $('#list').append(n); 
             
-            
-
             $('#list').append('<br/><br/>');
             $('#list').append(JSON.stringify(myTaxPlan.incomeUStot));                
             $('#list').append('<br/><br/>');
@@ -549,11 +580,15 @@ $('#thelists').live('pageinit', function(event) {
             $('#list').append('<br/><br/>');
             $('#list').append(JSON.stringify(myTaxPlan.irssoi.incomePercCapGains));       
             $('#list').append('<br/><br/>');
-            $('#list').append(JSON.stringify(myTaxPlan.incomeCapGains));       
-            $('#list').append('<br/><br/>');
-            $('#list').append(JSON.stringify(myTaxPlan.incomeOrd));       
-            $('#list').append('<br/><br/>');                    
-            $('#list').append(JSON.stringify(myTaxPlan.taxOrd.tax));            
+            $('#list').append(JSON.stringify(myTaxPlan.incomeCapGains));         
+            $('#list').append('<br/>rates<br/>');
+            $('#list').append(JSON.stringify(myTaxPlan.rates.marginal));                  
+            $('#list').append('<br/>incomeOrd<br/>');
+            $('#list').append(JSON.stringify(vcommas(vrund(myTaxPlan.incomeOrd,0))));       
+            $('#list').append('<br/>brackets<br/>');
+            $('#list').append(JSON.stringify(myTaxPlan.rates.brackets));                
+            $('#list').append('<br/>taxOrd.tax<br/>');                    
+            $('#list').append(JSON.stringify(vcommas(vrund(myTaxPlan.taxOrd.tax, 0))));            
             $('#list').append('<br/><br/>');
             $('#list').append(JSON.stringify(myTaxPlan.taxCapGains));     
             $('#list').append('<br/><br/>');
