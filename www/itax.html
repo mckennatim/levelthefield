@@ -13,8 +13,8 @@
 	<script type='text/javascript' src="js/jquery.flot.valuelabels.js"></script>
 	<script type='text/javascript' src="js/jquery.flot.stack.js"></script>
 	<script type='text/javascript' src="js/jquery.flot.pie.min.js"></script>
-	<script language="javascript" type="text/javascript" src="js/jquery.flot.crosshair.js"></script>
-	<script language="javascript" type="text/javascript" src="js/jquery.flot.marks.js"></script>
+	<script type="text/javascript" src="js/jquery.flot.crosshair.js"></script>
+	<script type="text/javascript" src="js/jquery.flot.marks.js"></script>
 	<script type='text/javascript' src="js/mckt.mat.js"></script>
 	<script type='text/javascript' src="js/idata.js"></script>
 	<script type='text/javascript' src="js/itax.js"></script>
@@ -198,7 +198,7 @@
     <div data-role="header">
     	<a href="#" data-rel="back" data-icon="back" data-role="button">back</a>
         <h4> The Existing</h4>
-        <a href="#propage" data-icon="arrow-r" data-role="button" id="joinls">next</a>
+        <a href="#propage" data-icon="arrow-r" data-role="button" id="prjoinls">next</a>
         <div data-role="navbar"  data-iconpos="left">
 			<div class="center-wrapper">
 	 	   		<b>Obama/Bush Tax plan</b>
@@ -217,30 +217,30 @@
     <div data-role="header">
     	<a href="#main" data-icon="home" data-role="button">home</a>
         <h4>Set Brackets</h4>
-        <a href="#decisions" data-icon="arrow-r" data-role="button" id="joinls">next</a>
+        <a href="#decisions" data-icon="arrow-r" data-role="button" id="brjoinls">next</a>
         <div data-role="navbar"  data-iconpos="left">
 			<ul>
-	    	<li><a href="#bracketpg" data-icon="gear" data-role="button" id="bracketbu">brackets</a></li>
-	    	<li><a href="#unearnpg" data-icon="gear" data-role="button" id="unearnbu">unearned</a></li>
-	    	<li><a href="#deductpg" data-icon="gear" data-role="button" id="deductbu">deductions</a> </li>
+	    	<li><a href="#bracketpg" data-icon="gear" data-role="button" id="bracketb">brackets</a></li>
+	    	<li><a href="#unearnpg" data-icon="gear" data-role="button" id="unearnb">unearned</a></li>
+	    	<li><a href="#deductpg" data-icon="gear" data-role="button" id="deductb">deductions</a> </li>
 	    	</ul>
 	    </div>
     </div><!-- /header -->
     <div data-role="content">
-		<p id="taxRaised" class="txtOnGreen">Taxes Raised by Plan (in trillions) <br/>
+		<p class="txtOnGreen taxRaised">Taxes Raised by Plan (in trillions) <br/>
 		Top bar is target, match it to win</p>
 		<div id="divBr">
 	        <div  id="totTaxBar" style="width: 290px; height: 70px;" class="crtBkg taxBar"></div>
 	    	<div id="brChart" style="width: 290px; height: 110px;" class="crtBkg"></div>	
 	    </div>	    	
-    		<label for="inpAdjBr" class="txtOnGreen">Adj.Bracket: (click chart->nxt brack.)</label>
+    		<label for="inpAdjBr" class="txtOnGreen">Adj.Bracket: ( tap chart->nxt brack.)</label>
     		<input id="inpAdjBr" type="range" min="-5.4" max="2.5" step=".01" data-highlight="true" data-mini="true"/>  
-    		<label for="inpAdjPer"class="txtOnGreen"><div id="txrt">Set  Tax Rate:</div></label>
+    		<label for="inpAdjPer" class="txtOnGreen"><div id="txrt">Set  Tax Rate:</div></label>
     		<input id="inpAdjPer" type="range" min="0" max="90" step="1" data-highlight="true" data-mini="true"/>	
     		<a href="index.html" data-role="button" data-inline="true" data-icon="plus" data-theme="b" data-mini="true" id="bradd" >add</a>
 			<a href="index.html" data-role="button" data-inline="true" data-icon="minus" data-theme="b" data-mini="true" id="brdel">del</a>	    	   	
 			<a href="index.html" data-role="button" data-inline="true" data-icon="back" data-theme="b" data-mini="true" id="brres">reset</a>
-			<div class="txtOnGreen brtable">modify brackets</div>	    	   	
+			<div id="brpg" class="txtOnGreen">modify brackets</div>	    	   	
 	</div>
 </div>
 
@@ -248,20 +248,20 @@
     <div data-role="header">
     	<a href="#" data-rel="back" data-icon="back" data-role="button">back</a>
         <h4>Unearned</h4>
-        <a href="#decisions" data-icon="arrow-r" data-role="button" id="joinls">next</a>
+        <a href="#decisions" data-icon="arrow-r" data-role="button" id="ujoinls">next</a>
         <div data-role="navbar"  data-iconpos="left">
 			<ul>
-	    	<li><a href="#bracketpg"  data-icon="gear" data-role="button" id="bracketbu">brackets</a></li>
-	    	<li><a href="#unearnpg" data-icon="gear" data-role="button" id="unearnbu">unearned</a></li>
-	    	<li><a href="#deductpg" data-icon="gear" data-role="button" id="deductbu">deductions</a> </li>
+	    	<li><a href="#bracketpg"  data-icon="gear" data-role="button" id="bracketu">brackets</a></li>
+	    	<li><a href="#unearnpg" data-icon="gear" data-role="button" id="unearnu">unearned</a></li>
+	    	<li><a href="#deductpg" data-icon="gear" data-role="button" id="deductu">deductions</a> </li>
 	    	</ul>
 	    </div>
     </div><!-- /header -->
     <div data-role="content">
-			<p id="utaxRaised" class="txtOnGreen">Taxes Raised by Plan (in trillions) <br/>
+			<p class="txtOnGreen taxRaised">Taxes Raised by Plan (in trillions) <br/>
 			Top bar is target, match it to win</p>
 	        <div  id="totTaxBarU" style="width: 290px; height: 70px;" class="crtBkg taxBar"></div>
-				<p><div id="proCGlabel" class="txtOnGreen">Tax Cap.Gains &amp; Pref.Dividends</div></p>
+				<div id="proCGlabel" class="txtOnGreen">Tax Cap.Gains &amp; Pref.Dividends</div>
 				<div id="proCG">
 				<fieldset id="fsProCG" data-role="controlgroup" data-mini="true">
 					<input type="radio" name="choProCG" id="radProCG1" value="1"  data-theme="b" />
@@ -270,7 +270,7 @@
 			    	<label for="radProCG0">at a separate rate</label>
 			    	<input id="inpProCG" type="range" min="0" max="35" data-mini="true"/>
 		    	</fieldset>
-		    	<div class="txtOnGreen brtable">modify brackets</div>
+		    	<div id="cappg" class="txtOnGreen">modify brackets</div>
 			</div>	        
 	</div>
 </div>
@@ -279,20 +279,36 @@
     <div data-role="header">
     	<a href="#" data-rel="back" data-icon="back" data-role="button">back</a>
         <h4>Deductions</h4>
-        <a href="#decisions" data-icon="arrow-r" data-role="button" id="joinls">next</a>
+        <a href="#decisions" data-icon="arrow-r" data-role="button" id="djoinls">next</a>
         <div data-role="navbar"  data-iconpos="left">
 			<ul>
-	    	<li><a href="#bracketpg" data-icon="delete" data-role="button" id="bracketbu">brackets</a></li>
-	    	<li><a href="#unearnpg" data-icon="plus" data-role="button" id="unearnbu">unearned</a></li>
-	    	<li><a href="#deductpg" data-icon="arrow-u" data-role="button" id="deductbu">deductions</a> </li>
+	    	<li><a href="#bracketpg" data-icon="delete" data-role="button" id="bracketd">brackets</a></li>
+	    	<li><a href="#unearnpg" data-icon="plus" data-role="button" id="unearnd">unearned</a></li>
+	    	<li><a href="#deductpg" data-icon="arrow-u" data-role="button" id="deductd">deductions</a> </li>
 	    	</ul>
 	    </div>
     </div><!-- /header -->
     <div data-role="content">
-			<p id="taxRaised" class="txtOnGreen"><b>Taxes Raised by Plan (in trillions) </b><br/>
+			<p class="txtOnGreen taxRaised"><b>Taxes Raised by Plan (in trillions) </b><br/>
 			Top bar is target, match it to win</p>
 	        <div  id="totTaxBarD" style="width: 290px; height: 70px;" class="crtBkg taxBar"></div>
-	        <div class="txtOnGreen brtable">large dogs</div>
+				<div id="proDlabel" class="txtOnGreen"><p>Deductions Model</p></div>
+				<div id="proD" class="ui-body ui-body-e" >
+					<div id="dedPgTxt" >$17,400 avg.ded for all incomes </div>
+				<fieldset id="fsProD" data-role="controlgroup" data-mini="true" >
+					<input type="radio" name="choProD" id="radProD0" value="0"  data-theme="b" />
+			    	<label for="radProD0">current typical</label>
+			    	<input type="radio" name="choProD" id="radProD1" value="1"  data-theme="b" />
+			    	<label for="radProD1">deduction for all earners</label>
+			    	<input id="inpProD" type="range" min="5000" max="45000" data-mini="true"/>
+			    	<input type="radio" name="choProD" id="radProD2" value="2"  data-theme="b" />
+			    	<label for="radProD2">mixed current &amp fixed</label>
+			    	% fixed
+			    	<input id="inpProDM" type="range" min="0" max="100" data-mini="true"/>
+		    	</fieldset>
+		    		<div id="dedPgTxt2" ></div>
+		    	</div>	        
+	        <div id="dedpg" class="txtOnGreen" ><p>large dogs</p></div>
 	</div>
 </div>
 
@@ -301,19 +317,19 @@
     <div data-role="header">
     	<a href="#" data-rel="back" data-icon="back" data-role="button">back</a>
         <h4>The Proposal</h4>
-        <a href="#decisions" data-icon="arrow-r" data-role="button" id="joinls">next</a>
+        <a href="#decisions" data-icon="arrow-r" data-role="button" id="pjoinls">next</a>
         <div data-role="navbar"  data-iconpos="left">
 			<ul>
-	    	<li><a href="#bracketpg" data-icon="delete" data-role="button" id="bracketbu">brackets</a></li>
-	    	<li><a href="#unearnpg" data-icon="plus" data-role="button" id="unearnbu">unearned</a></li>
-	    	<li><a href="#deductpg" data-icon="arrow-u" data-role="button" id="deductbu">deductions</a> </li>
+	    	<li><a href="#bracketpg" data-icon="delete" data-role="button" id="bracketo">brackets</a></li>
+	    	<li><a href="#unearnpg" data-icon="plus" data-role="button" id="unearno">unearned</a></li>
+	    	<li><a href="#deductpg" data-icon="arrow-u" data-role="button" id="deducto">deductions</a> </li>
 	    	</ul>
 	    </div>
     </div><!-- /header -->
     <div data-role="content">
-			<p id="taxRaised" class="txtOnGreen"><b>Taxes Raised by Plan (in trillions) </b><br/>
+			<p id="taxRaisedO" class="txtOnGreen"><b>Taxes Raised by Plan (in trillions) </b><br/>
 			Top bar is target, match it to win</p>
-	        <div  id="totTaxBar" style="width: 270px; height: 70px;" class="crtBkg"></div>
+	        <div  id="totTaxBarP" style="width: 270px; height: 70px;" class="crtBkg"></div>
         <div class="ui-body ui-body-b" data-role="collapsible-set" data-mini="true">
 			<div data-role="collapsible" data-collapsed="true" data-theme="b">
 				<h3>Adjust Ord. Rates</h3>

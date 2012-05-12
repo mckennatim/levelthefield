@@ -243,14 +243,14 @@ function arrayObj2table(obj){
 		titles[i] = x;
 		data[i] = obj[x];
 		i++;
-		console.log(x + " " + obj[x] );
+		//console.log(x + " " + obj[x] );
 	}
 	data2 = inve(data);
 	var rows = data2.length;
 	var cols = data.length;
-	console.log(titles);
-	console.log(data);
-	console.log(data2);
+	//console.log(titles);
+	//console.log(data);
+	//console.log(data2);
 	var htm = '<ul><li><table><tr>';
 	for (i=0;i<cols;i++){
 		htm+='<th>'+titles[i].substr(0,8) +'</th>';
@@ -266,7 +266,7 @@ function arrayObj2table(obj){
 		htm += '</tr>';
 	}	
 	htm += '</table></li></ul>';
-	console.log(htm);
+	//console.log(htm);
 	return htm;
 }
 

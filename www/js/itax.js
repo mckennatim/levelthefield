@@ -6,6 +6,7 @@ localStorage.setItem('stobama', JSON.stringify(obama));
 var stobama=JSON.parse(localStorage.getItem('stobama'));
 //console.log('creating exiisting plan');
 var existingPlan = new TaxPlan(irssoi, obama);
+existingPlan.refresh();
 var storedRates=JSON.parse(localStorage.getItem('rates'));
 //var clobama = $.extend(true, {}, obama);//create a deepcopy clone
 if (storedRates==null){
@@ -16,6 +17,7 @@ if (storedRates==null){
 }
 console.log(proposedPlan);
 proposedPlan.refresh();
+assembleSummary();
 //page iniitialization
 $('#main').live('pageinit', function(event) {    
 	proposedPlan.refresh();
@@ -262,6 +264,7 @@ $('#unearnpg').live('pageinit', function(event) {
     }else{
     	$("#radProCG0").attr("checked", true).checkboxradio("refresh");
     }
+    assembleSummary();
     //$('input[name=choProCG]').checkboxradio("refresh");	don't need
 	//console.log($("#radProCG1").prop("checked")); 
 	//console.log(proposedPlan.rates.capGains);
@@ -273,8 +276,7 @@ $('#unearnpg').live('pageinit', function(event) {
 			proposedPlan.rates.taxCGasOrd = this.value;
 			reTot();
 			assembleSummary();
-	});	
-	
+	});		
 	$("#inpProCG").change(function(e){ //on moving slider
 		console.log(proposedPlan.rates.taxCGasOrd);
 		//console.log($("#radProCG0").attr("checked")); 
@@ -289,6 +291,40 @@ $('#unearnpg').live('pageinit', function(event) {
 });
 $('#deductpg').live('pageinit', function(event) {    
 	reTot();
+		if(proposedPlan.rates.useStdDed==0){
+        $("#radProD0").attr("checked", true).checkboxradio("refresh");
+    }else if(proposedPlan.rates.useStdDed==1){
+    	$("#radProD1").attr("checked", true).checkboxradio("refresh");
+    }else{
+    	$("#radProD2").attr("checked", true).checkboxradio("refresh");    	
+    }
+	$("#inpProD").val(proposedPlan.rates.deductionStd).slider('refresh');    
+	$("#inpProDM").val(proposedPlan.rates.dedMixPercStd).slider('refresh');    	
+    assembleSummary();
+	$('input[name=choProD]').change( function(e){ //change radio
+			//console.log("just changed radio");
+			$('input[name=choProD]').checkboxradio("refresh");
+			//$('input:radio[name=choProCG]').filter('[value="1"]').attr('checked', true);
+			proposedPlan.rates.useStdDed = this.value;
+			reTot();
+			assembleSummary();
+	});
+	$("#inpProD").change(function(e){ //on moving slider
+		if (proposedPlan.rates.useStdDed > 0){		
+			proposedPlan.rates.deductionStd = Number($(this).val());
+			//console.log(Number($(this).val()));
+			reTot();
+			assembleSummary();
+		}
+	});	
+		$("#inpProDM").change(function(e){ //on moving slider
+		if (proposedPlan.rates.useStdDed > 0){		
+			proposedPlan.rates.dedMixPercStd = Number($(this).val());
+			console.log(Number($(this).val()));
+			reTot();
+			assembleSummary();
+		}
+	});	    
 });
 
 //event functions
@@ -312,14 +348,57 @@ function updateBr(wbmr){
 }
 
 function assembleSummary(){
+	//clean for refresh
+	$('#dedPgTxt').empty();
+	$('#dedPgTxt2').empty();
+	$('#brpg').empty();
+	$('#cappg').empty();
+	$('#dedpg').empty();
+	//for br 
+	$('#brpg').append(createUnBrTxt().br);
+	$('#brpg').append(createUnBrTxt().cap);	
+	$('#brpg').append(createDedTxt().deds);		
+	//for cap	
+	$('#cappg').append(createUnBrTxt().cap);
+	$('#cappg').append(createUnBrTxt().br);	
+	$('#cappg').append(createDedTxt().deds);	
+	//for ded 
+	$('#dedpg').append(createDedTxt().deds);		
+	$('#dedpg').append(createUnBrTxt().cap);
+	$('#dedpg').append(createUnBrTxt().br);	
+	//on ded model
+	$('#dedPgTxt').append(createDedTxt().ded1);
+	$('#dedPgTxt2').append(createDedTxt().ded2);
+}
+function createUnBrTxt(){
 	var brSummary = new OrdTax(proposedPlan.rates);
-	$('.brtable').empty();
+	var btxt =  Object();
 	if (proposedPlan.rates.taxCGasOrd==1){
-		$('.brtable').append('<ul><li><table><tr><td>capital gains / dividends </td><td>as ordinary income</td></tr>');
+		txt='<ul><li><table><tr><td>capital gains / dividends </td><td>as ordinary income</td></tr></table></li></ul>';
 	}else{
-		$('.brtable').append('<ul><li><table><tr><td>'+proposedPlan.rates.capGains*100 + '%</td><td>capital gains / dividends</td></tr>');
+		txt='<ul><li><table><tr><td>'+proposedPlan.rates.capGains*100 + '%</td><td>capital gains / dividends</td></tr>';
 	}
-	$('.brtable').append(brSummary.makeTbl());
+	btxt.cap=txt
+	btxt.br=brSummary.makeTbl();	
+	return btxt;
+}
+function createDedTxt(){
+	var dtxt = "";
+	var atxt = new Object();
+	if (proposedPlan.rates.useStdDed == 0){//use tytpical ded
+        dtxt = 'Uses current data -> (rich ded.>%)';
+	}else if (proposedPlan.rates.useStdDed == 1){//use (your) std deduction
+		dtxt = '$' + proposedPlan.rates.deductionStd +' avg.ded. for all incomes';
+	} else {	
+		dtxt = proposedPlan.rates.dedMixPercStd + '% of $' +proposedPlan.rates.deductionStd + ' deduction as fixed,  the rest at historic rates';
+	}	
+	atxt.ded2='<ul><li><table><tr><td>totals:</td><td>Obama</td><td>$'+addCommas(vsum(existingPlan.deductionsUS))+'</td></tr><tr><td></td><td>yourPlan</td><td>$' + addCommas(vsum(proposedPlan.deductionsUS)) + '</td></tr></table></li></ul>';	
+	atxt.ded1=dtxt;
+	var dedTblSum = arrayObj2table(deduSummary);	
+	atxt.deds=dedTblSum;
+	atxt.deds+='<ul><li><table><tr><td>totals deductions:</td><td>Obama</td><td>$'+addCommas(vsum(existingPlan.deductionsUS))+'</td></tr><tr><td></td><td>yourPlan</td><td>$' + addCommas(vsum(proposedPlan.deductionsUS)) + '</td></tr></table></li></ul>';
+	atxt.deds+='<ul><li><table><tr><td>deductions</td></tr><tr><td>'+ dtxt + '</td><td></td></tr></table></li></ul>';
+	return atxt;
 }
 
 function reTot(){
@@ -327,10 +406,8 @@ function reTot(){
 	plotTotTaxBarU();
 	plotTotTaxBar();
 	plotTotTaxBarD();
-	$('#utaxRaised').empty();
-	$('#utaxRaised').append('target:  $'+addCommas(existingPlan.taxUStot) +'<br/>yourPlan: $'+addCommas(proposedPlan.taxUStot) );	
-	$('#taxRaised').empty();
-	$('#taxRaised').append('target:  $'+addCommas(existingPlan.taxUStot) +'<br/>yourPlan: $'+addCommas(proposedPlan.taxUStot) );
+	$('.taxRaised').empty();
+	$('.taxRaised').append('target:  $'+addCommas(existingPlan.taxUStot) +'<br/>yourPlan: $'+addCommas(proposedPlan.taxUStot) );
 	//console.log(proposedPlan);
 	localStorage.setItem('rates', JSON.stringify(proposedPlan.rates));
 	//console.log(existingPlan.taxUStot);
@@ -558,8 +635,25 @@ $('#thelists').live('pageinit', function(event) {
                 $('#list').append('frog ');
             }
             var myTaxPlan = proposedPlan;
-            console.log(proposedPlan);
-
+            
+            myTaxPlan.rates.deductionStd = 17400;
+			myTaxPlan.rates.useStdDed = 1;
+			myTaxPlan.rates.dedMixPercStd = 100;
+			myTaxPlan.refresh();
+            $('#list').append('<br/><br/>');
+            $('#list').append(JSON.stringify(myTaxPlan.deductions)); 
+            $('#list').append(JSON.stringify(addCommas(vsum(myTaxPlan.deductionsUS)))); 
+			myTaxPlan.rates.useStdDed = 0;            
+			myTaxPlan.refresh();
+            $('#list').append('<br/><br/>');
+            $('#list').append(JSON.stringify(myTaxPlan.deductions)); 
+            $('#list').append(JSON.stringify(addCommas(vsum(myTaxPlan.deductionsUS)))); 
+			myTaxPlan.rates.useStdDed = 2;            
+			myTaxPlan.rates.dedMixPercStd = 50;            
+			myTaxPlan.refresh();
+            $('#list').append('<br/><br/>');
+            $('#list').append(JSON.stringify(myTaxPlan.deductions)); 
+            $('#list').append(JSON.stringify(addCommas(vsum(myTaxPlan.deductionsUS))));             
 
               
             var nn =8331234555433;
@@ -574,9 +668,7 @@ $('#thelists').live('pageinit', function(event) {
             $('#list').append('<br/><br/>');
             $('#list').append(JSON.stringify(myTaxPlan.irssoi.popCumPerc));                
             $('#list').append('<br/><br/>');
-            $('#list').append(JSON.stringify(myTaxPlan.irssoi.income));       
-            $('#list').append('<br/><br/>');
-            $('#list').append(JSON.stringify(myTaxPlan.deductions));       
+            $('#list').append(JSON.stringify(myTaxPlan.irssoi.income));             
             $('#list').append('<br/><br/>');
             $('#list').append(JSON.stringify(myTaxPlan.irssoi.incomePercCapGains));       
             $('#list').append('<br/><br/>');

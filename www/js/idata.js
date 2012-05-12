@@ -33,7 +33,6 @@ dedu = new Object();
 dedu.income=vDollaCommas(income_avg);
 dedu.deductions=vDollaCommas(deductions_typ);
 
-
 //rates
 var new_std_deduct = 20000;
 var use_std_ded = 1;
@@ -50,8 +49,9 @@ var new_rates = [.10, .15, .25, .30, .33, .35 ];
 
 //current Obama/Bush plan
 var obama = new Object();
-obama.deductions = irssoi.deductionsTyp;
+obama.deductionStd = 17400;//if evenly distributed
 obama.useStdDed = 0; //use typical deductions
+obama.dedMixPercStd = 0;
 obama.taxCGasOrd = 0;
 obama.capGains = .15;
 obama.brackets = [8700, 35350, 85650, 178650, 388350];
@@ -59,13 +59,15 @@ obama.marginal = [.10, .15, .25, .30, .33, .35 ];
 
 //starting point for proposed
 var rates = new Object();
-rates.deductionStd = 20000;
+rates.deductionStd = 17400;//if evenly distributed
 rates.useStdDed = 1;
+rates.dedMixPercStd = 100;
 rates.taxCGasOrd = 1;
 rates.capGains = 0;
 rates.brackets =  [87000, 135350, 200000, 400000, 2000000];
 rates.marginal = [.12, .15, .17, .19, .45, .55 ];
 
+var deduSummary;
 
 function TaxPlan(irssoi, taxrates){
 	this.rates = taxrates;
@@ -74,15 +76,31 @@ function TaxPlan(irssoi, taxrates){
 	this.popByPerc = vmult(this.irssoi.popPerc, this.irssoi.popTot);
 	this.incomeUS = vmult(this.popByPerc, this.irssoi.income);	
     this.calcDeductions =function(){
+		    var deductionsUStyp = vmult(this.popByPerc, this.irssoi.deductionsTyp);
+		    var deductionsTyp =  this.irssoi.deductionsTyp;   
+		    var deductionsUSstd = vmult(this.popByPerc, this.rates.deductionStd);
+		    var deductionsStd = vmult(this.irssoi.unity, this.rates.deductionStd);			    	
 		if (this.rates.useStdDed == 0){//use tytpical ded
-		    this.deductionsUS = vmult(this.popByPerc, this.irssoi.deductionsTyp);
-		    this.deductions =  this.irssoi.deductionsTyp;
-		}else {//use (your) std deduction
-		    this.deductionsUS = vmult(this.popByPerc, this.rates.deductionStd);
-		    this.deductions = vmult(this.irssoi.unity, this.rates.deductionStd);	
+		    this.deductionsUS = deductionsUStyp;
+		    this.deductions =  deductionsTyp;
+		}else if (this.rates.useStdDed == 1){//use (your) std deduction
+		    this.deductionsUS = deductionsUSstd;
+		    this.deductions = deductionsStd;	
+		} else {
+			var percStd = this.rates.dedMixPercStd/100;
+			var percTyp = 1-percStd;
+			//console.log(percStd);
+			//console.log(percTyp);
+			this.deductionsUS = vplus(vmult(deductionsUStyp, percTyp), vmult(deductionsUSstd, percStd));
+			this.deductions = vplus(vmult(deductionsTyp, percTyp), vmult(deductionsStd, percStd));
 		}    	
 		this.incomeUStaxable = vminu(this.incomeUS, this.deductionsUS);
 		this.incomeTaxable = vminu(this.irssoi.income, this.deductions);
+		deduSummary = new Object();
+		deduSummary.popPerc=vperc(this.irssoi.popPerc, 4);
+		deduSummary.income=vDollaCommas(this.irssoi.income);
+		deduSummary.Obama=vDollaCommas(this.irssoi.deductionsTyp);		
+		deduSummary.yourPlan=vDollaCommas(this.deductions);		
     }
     this.calcDeductions();
 	this.calcCapGains =function(){
