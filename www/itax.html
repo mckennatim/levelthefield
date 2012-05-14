@@ -74,7 +74,6 @@
 		<h2>Create a Better Tax System</h2>
 		<p>There are mutliple parts of the tax system: income tax, corporate tax, payroll taxes (SSI, medicare), excise tax... There is plenty of work to do on all of them. This app takes on just a little piece, the income tax system. In it you will design a new system, new rates, new brackets new, assumtions. The only rule is somewhat artificial. You have to raise the same amount of money for income tax that is being raised now under the current system.  Then you win.  </p>
 	</div>	
-
 	<div data-role="collapsible">
 		<h2>The Income Tax</h2>
 		<p>Click on the charts below for more information on the current system. Your job is to devise a better system</p>
@@ -86,14 +85,9 @@
 		<div id="page1graph" class="ui-body ui-body-c" style="height:190px">
 			<div id="existingPies" class="graph"></div>
 		</div>
+			<a href="#deductpg" data-role="button" data-mini="true" data-transition="pop">jumpto create your plan</a>	
 		<p class="txtOnGreen" >These buttons are not part of the app. Being used only for development.</p>
-	        <a href="#propage" data-role="button" data-mini="true" data-transition="pop">propage</a>	
-	        <a href="#graph" data-role="button" data-mini="true" data-transition="pop">Display graph</a>
-	        <a href="#graph2" data-role="button" data-mini="true" data-transition="slidedown">Display graph2</a> 
-	        <a href="#calcs" data-role="button" data-mini="true" data-transition="turn">Calcs page</a>       
-	        <a href="#page4" data-role="button" data-mini="true" data-transition="turn">page4</a>  
-	        <a href="#page5" data-role="button" data-mini="true" data-transition="turn">page5</a>  
-	        <a href="#thelists" data-role="button" data-mini="true" data-transition="turn">thelists</a>                  	    
+	        <a href="#thelists" data-role="button" data-mini="true" data-transition="turn">test calculations</a>                  	    
 	</div>
 </div>
 
@@ -101,7 +95,7 @@
     <div data-role="header">
     	<a href="#main" data-icon="back" data-role="button">back</a>
         <h4> The Existing</h4>
-        <a href="#decisions" data-icon="arrow-r" data-role="button" id="joinls">next</a>
+        <a href="#deductpg" data-icon="arrow-r" data-role="button" id="joinls">makePlan</a>
         <div data-role="navbar"  data-iconpos="left">
 			<div class="center-wrapper">
 	 	   		<b>Obama/Bush Tax plan</b>
@@ -140,20 +134,25 @@
     </div><!-- /content -->
 </div><!-- /page -->
 
-<div id="decisions" data-role="page" class="green">
+<div id="decisions" data-role="page" class="green" data-add-back-btn="true">
     <div data-role="header">
-    	<a href="#main" data-icon="back" data-role="button">back</a>
-        <h4> Your Plan</h4>
-        <a href="#propage" data-icon="arrow-r" data-role="button" id="joinls2">next</a>
+    	<a href="#" data-icon="back" data-rel="back" data-role="button">back</a>
+        <h4> Help</h4>
+        <a href="#deductpg" data-icon="arrow-r" data-role="button" id="joinls2">next</a>
         <div data-role="navbar"  data-iconpos="left">
 			<div class="center-wrapper">
-	 	   		<b>for a better income tax system</b>
+	 	   		<b>for creating better income tax system</b>
 	 	   	</div>
 	    </div>
     </div><!-- /header -->
     <div data-role="content">	  
-    	<h3>Decide and make assumptions for...</h3>
-		<div class="ui-body ui-body-b" data-role="collapsible-set">
+		<div class="ui-body ui-body-b" data-role="collapsible-set" data-mini="true">
+			<p>To create a plan you need to set the level of deductions, decide on how treat Capital Gains / Dividends and determine the tax rates and the income brackets to which they apply. You can do these in any order; there are tabs on the next page to move you back and forth. What follows here is help for each task. </p>
+			<div data-role="collapsible" data-theme="b" data-content-theme="d" data-mini="true">
+				<h4>Deductions</h4>
+				<p>Deductions represent the amount of income is not taxed. They include things like <span style="color:green" id="mortA"> mortgage interest</span><span id="mortS"></span> and <span style="color:green" id="charA">charitable contributions.</span><span id="charS"></span> For deductions you can leave things alone using the current typical deductions from the IRS data, make a radical change and set deductions at the same amount for people of every income, or create a combination of the two. <br/><br/>The case for equal deductions for every income level centers around the idea that every American starts paying taxes at the point where their basic needs for food clothing and shelter have been met.  <br/><br/>In combining the two systems consider the 'totals' section at the bottom of the Deduction Model box. It might be a good idea to create a system that has the same overall total of income deductions. Or not. If you decide to 'mix' the current system and the fixed system, you can use the slider to choose the proportions and can see the implications in the table below the slider. </p><a href="#deductpg" data-role="button" data-mini="true">to deductions page</a>
+				<div id="decDe"></div>
+			</div>			
 			<div data-role="collapsible" data-theme="b" data-content-theme="d">
 				<h4>Capital Gains</h4>
 				<div data-role="collapsible">
@@ -183,33 +182,10 @@
 				</div><!--collapse argument-->
 			</div><!--collapsse Capital Galns-->
 			<div data-role="collapsible" data-theme="b" data-content-theme="d">
-				<h4>Deductions</h4>
-					<div id="decDe"></div>
-			</div>
-			<div data-role="collapsible" data-theme="b" data-content-theme="d">
 				<h4>Rates and Brackets</h4>
 					<div id="decRB"></div>
 			</div>
 		</div>
-    </div>
-</div>
-
-<div  id="graph" data-role="page" data-add-back-btn="true">
-    <div data-role="header">
-    	<a href="#" data-rel="back" data-icon="back" data-role="button">back</a>
-        <h4> The Existing</h4>
-        <a href="#propage" data-icon="arrow-r" data-role="button" id="prjoinls">next</a>
-        <div data-role="navbar"  data-iconpos="left">
-			<div class="center-wrapper">
-	 	   		<b>Obama/Bush Tax plan</b>
-	 	   	</div>
-	    </div>
-    </div><!-- /header -->
-    <div data-role="content">
-        <div id="chart" style="width: 300px; height: 650px;"></div>
-    </div>
-    <div data-role="footer" data-position="fixed">
-        <h4>test</h4>
     </div>
 </div>
 
@@ -220,9 +196,10 @@
         <a href="#decisions" data-icon="arrow-r" data-role="button" id="brjoinls">next</a>
         <div data-role="navbar"  data-iconpos="left">
 			<ul>
-	    	<li><a href="#bracketpg" data-icon="gear" data-role="button" id="bracketb">brackets</a></li>
-	    	<li><a href="#unearnpg" data-icon="gear" data-role="button" id="unearnb">unearned</a></li>
-	    	<li><a href="#deductpg" data-icon="gear" data-role="button" id="deductb">deductions</a> </li>
+	    	<li><a href="#deductpg"  data-icon="grid" data-role="button" id="deductb"></a>deductions </li>
+	    	<li><a href="#unearnpg" data-icon="star" data-role="button" id="unearnb"></a>unearned</li>
+	    	<li><a href="#bracketpg" data-icon="gear" data-role="button" id="bracketb"></a>brackets</li>
+	    	<li><a href="#decisions" data-icon="info" data-role="button" id="bracketb"></a>help</li>
 	    	</ul>
 	    </div>
     </div><!-- /header -->
@@ -246,14 +223,15 @@
 
 <div id="unearnpg" data-role="page"  data-add-back-btn="true">
     <div data-role="header">
-    	<a href="#" data-rel="back" data-icon="back" data-role="button">back</a>
+    	<a href="#main" data-icon="home" data-role="button">home</a>
         <h4>Unearned</h4>
         <a href="#decisions" data-icon="arrow-r" data-role="button" id="ujoinls">next</a>
         <div data-role="navbar"  data-iconpos="left">
 			<ul>
-	    	<li><a href="#bracketpg"  data-icon="gear" data-role="button" id="bracketu">brackets</a></li>
-	    	<li><a href="#unearnpg" data-icon="gear" data-role="button" id="unearnu">unearned</a></li>
-	    	<li><a href="#deductpg" data-icon="gear" data-role="button" id="deductu">deductions</a> </li>
+	    	<li><a href="#deductpg"  data-icon="grid" data-role="button" id="deductb"></a>deductions </li>
+	    	<li><a href="#unearnpg" data-icon="star" data-role="button" id="unearnb"></a>unearned</li>
+	    	<li><a href="#bracketpg" data-icon="gear" data-role="button" id="bracketb"></a>brackets</li>
+	    	<li><a href="#decisions" data-icon="info" data-role="button" id="bracketb"></a>help</li>
 	    	</ul>
 	    </div>
     </div><!-- /header -->
@@ -277,14 +255,15 @@
 
 <div id="deductpg" data-role="page"  data-add-back-btn="true">
     <div data-role="header">
-    	<a href="#" data-rel="back" data-icon="back" data-role="button">back</a>
+    	<a href="#main" data-icon="home" data-role="button">home</a>
         <h4>Deductions</h4>
         <a href="#decisions" data-icon="arrow-r" data-role="button" id="djoinls">next</a>
         <div data-role="navbar"  data-iconpos="left">
 			<ul>
-	    	<li><a href="#bracketpg" data-icon="delete" data-role="button" id="bracketd">brackets</a></li>
-	    	<li><a href="#unearnpg" data-icon="plus" data-role="button" id="unearnd">unearned</a></li>
-	    	<li><a href="#deductpg" data-icon="arrow-u" data-role="button" id="deductd">deductions</a> </li>
+	    	<li><a href="#deductpg"  data-icon="grid" data-role="button" id="deductb"></a>deductions </li>
+	    	<li><a href="#unearnpg" data-icon="star" data-role="button" id="unearnb"></a>unearned</li>
+	    	<li><a href="#bracketpg" data-icon="gear" data-role="button" id="bracketb"></a>brackets</li>
+	    	<li><a href="#decisions" data-icon="info" data-role="button" id="bracketb"></a>help</li>
 	    	</ul>
 	    </div>
     </div><!-- /header -->
@@ -312,53 +291,6 @@
 	</div>
 </div>
 
-
-<div id="propage" data-role="page"  data-add-back-btn="true">
-    <div data-role="header">
-    	<a href="#" data-rel="back" data-icon="back" data-role="button">back</a>
-        <h4>The Proposal</h4>
-        <a href="#decisions" data-icon="arrow-r" data-role="button" id="pjoinls">next</a>
-        <div data-role="navbar"  data-iconpos="left">
-			<ul>
-	    	<li><a href="#bracketpg" data-icon="delete" data-role="button" id="bracketo">brackets</a></li>
-	    	<li><a href="#unearnpg" data-icon="plus" data-role="button" id="unearno">unearned</a></li>
-	    	<li><a href="#deductpg" data-icon="arrow-u" data-role="button" id="deducto">deductions</a> </li>
-	    	</ul>
-	    </div>
-    </div><!-- /header -->
-    <div data-role="content">
-			<p id="taxRaisedO" class="txtOnGreen"><b>Taxes Raised by Plan (in trillions) </b><br/>
-			Top bar is target, match it to win</p>
-	        <div  id="totTaxBarP" style="width: 270px; height: 70px;" class="crtBkg"></div>
-        <div class="ui-body ui-body-b" data-role="collapsible-set" data-mini="true">
-			<div data-role="collapsible" data-collapsed="true" data-theme="b">
-				<h3>Adjust Ord. Rates</h3>
-				<p>I have <code> data-theme</code> attribute set manually on my container to set the color to match the content block I'm in. </p>
-			</div><!-- /collapsible -->
-			<div data-role="collapsible" data-theme="b" data-content-theme="b">
-			</div>    
-			<div data-role="collapsible" data-collapsed="true" data-theme="b">
-			</div><!-- /collapsible -->
-			<div data-role="collapsible" data-theme="b" data-content-theme="b">
-				<h3>Set Deductions</h3>
-				<p>I have <code> data-content-theme</code> attribute set manually on my container to set the color to match the content block I'm in. </p>
-			</div>  			
-		</div>    
-        
-        <div>
-        		<input type="range" min="0" max="200" id="sliderTotTax" value="34"/>
-        		
-        </div>
-        <div>
-        <a id="but1" href="#" data-role="button" data-mini="true" data-iconpos="notext" data-icon="arrow-u">but1</a>  
-	    <a id="but2" href="#" data-role="button" data-mini="true" data-iconpos="notext" data-icon="arrow-d">but2</a>
-	    <a href="index.html" data-role="button" data-icon="delete" data-iconpos="notext">Delete</a>
-	    </div>
-	    <div id="placeholder" style="width: 300px; height: 150px;"></div>
-	    <p id="hoverdata"></p>
-	    <div id="txtlist"></div>
-    </div>
-</div>    	
     
 <div id="thelists" data-role="page">     
 	<div data-role="header">

@@ -136,9 +136,20 @@ $('#existing').live('pageinit', function(event) {
 });
 
 $('#decisions').live('pageinit', function(event) {            
-	$('#radio-mini-2').live('change', function(){
-		alert('martians have landed');
+	$('body').on('tap', "#mortA", function (e) { 
+		$('#mortS').empty();
+		$('#mortS').append('<p class="bq">A popular deduction yet "the deduction overwhelmingly favors wealthier homeowners. The limits are quite high — up to $1 million of a mortgage’s value and an additional $100,000 for home equity loans — and the amount that can be deducted does not fall as people’s incomes rise. And the deduction is not limited to a primary residence, so someone with two or three homes that fall under that $1 million limit could claim the deduction."(P.Sullivan, NY Times, 11/8/11) The "tax system gives a better treatment to residential capital than it does to corporate capital. As a result, too much of the nation’s saving ends up in the form of housing rather than in business investment, where it could have increased productivity and wages." (GREGORY MANKIW NY Times 1/21/12)</p>');
 	});
+	$('body').on('tap', "#mortS", function (e) { 
+		$('#mortS').empty();		
+	});
+	$('body').on('tap', "#charA", function (e) { 
+		$('#charS').empty();
+		$('#charS').append('<p class="bq">This deductions seems so right, that is how we have symphony halls, museums, charter schools... Institutions and their patrons become dependent on corporate largesse. But people are not charitable because they get a deduction. If they were that would be a problem. Instead of UBS deciding which institutions to support, we as a society could fund institutions important to us through the tax system. Big corporations and the financial sector advocate shrinking government, massive privatization, tax breaks and deductions. They charitably fund charter schools as a way to break the back of the public institutions and the middle class thereby continuing the process of wealth concentration. ');
+	});
+	$('body').on('tap', "#charS", function (e) { 
+		$('#charS').empty();		
+	});	
 });
 
 $('#bracketpg').live('pageinit', function(event) {   
