@@ -68,6 +68,7 @@ rates.brackets =  [87000, 135350, 200000, 400000, 2000000];
 rates.marginal = [.12, .15, .17, .19, .45, .55 ];
 
 var deduSummary;
+var brackSummary;
 
 function TaxPlan(irssoi, taxrates){
 	this.rates = taxrates;
@@ -171,8 +172,7 @@ function TaxCalcerOrd(incomeOrd, myRates){//calculates ordinary income tax
 	        //console.log(this.incomeRemainings);
 	        //console.log(this.taxForBrackets);
 	        //console.log(this.taxForPercByBracket); 		
-    	}
-    	//console.log(this.tax);     
+    	}		
     }
 } 
 

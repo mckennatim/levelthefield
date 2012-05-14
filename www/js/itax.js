@@ -150,6 +150,13 @@ $('#decisions').live('pageinit', function(event) {
 	$('body').on('tap', "#charS", function (e) { 
 		$('#charS').empty();		
 	});	
+	$('body').on('tap', "#upslA", function (e) { 
+		$('#upslS').empty();
+		$('#upslS').append('<p class="bq"> On a phone it is a little tricky to get the brackets just right and typing into the box is a bit problematic. The problem has to do with having the slider work right. The existing sytem has 5 brackets squeezed into the lower 1/20th of the income range. To make it work better the slider runs on an exponential scale where <i>income=10^6*e^x </i>. What you see in the box is the x value. Try adding +/-.01 to that box to nudge the income range.  ');
+	});
+	$('body').on('tap', "#upslS", function (e) { 
+		$('#upslS').empty();		
+	});	
 });
 
 $('#bracketpg').live('pageinit', function(event) {   
@@ -194,6 +201,7 @@ $('#bracketpg').live('pageinit', function(event) {
 	$('body').on('click', "#brres", function (e) { 
 		e.stopImmediatePropagation();
 		e.preventDefault();
+		alert("This will reset your plan to existing Obama Plan");
 		//console.log(obama);
 		proposedPlan.rates=JSON.parse(localStorage.getItem('stobama'));
 		numBrackets = proposedPlan.rates.brackets.length;
@@ -367,16 +375,19 @@ function assembleSummary(){
 	$('#dedpg').empty();
 	//for br 
 	$('#brpg').append(createUnBrTxt().br);
+	$('#brpg').append(createUnBrTxt().br2);
 	$('#brpg').append(createUnBrTxt().cap);	
 	$('#brpg').append(createDedTxt().deds);		
 	//for cap	
 	$('#cappg').append(createUnBrTxt().cap);
 	$('#cappg').append(createUnBrTxt().br);	
 	$('#cappg').append(createDedTxt().deds);	
+	$('#cappg').append(createUnBrTxt().br2);	
 	//for ded 
 	$('#dedpg').append(createDedTxt().deds);		
 	$('#dedpg').append(createUnBrTxt().cap);
-	$('#dedpg').append(createUnBrTxt().br);	
+	$('#dedpg').append(createUnBrTxt().br);
+	$('#dedpg').append(createUnBrTxt().br2);		
 	//on ded model
 	$('#dedPgTxt').append(createDedTxt().ded1);
 	$('#dedPgTxt2').append(createDedTxt().ded2);
@@ -391,6 +402,14 @@ function createUnBrTxt(){
 	}
 	btxt.cap=txt
 	btxt.br=brSummary.makeTbl();	
+	btxt.br2='<ul><li><table><tr><td>Overall Tax % </td><td>by income</td></tr></table></li></ul>';
+	brackSummary = new Object();
+	brackSummary.popPerc=vperc(proposedPlan.irssoi.popPerc, 4);
+	brackSummary.income=vDollaCommas(proposedPlan.irssoi.income);
+	brackSummary.tax=vDollaCommas(proposedPlan.tax);		
+	brackSummary.Oba=vperc(existingPlan.taxAsPerc,0);		
+	brackSummary.yourPlan=vperc(proposedPlan.taxAsPerc,0);	
+	btxt.br2+=arrayObj2table(brackSummary);	;	
 	return btxt;
 }
 function createDedTxt(){
