@@ -146,7 +146,7 @@
     </div><!-- /header -->
     <div data-role="content">	  
 		<div class="ui-body ui-body-b" data-role="collapsible-set" data-mini="true">
-			<p>To create a plan you need to set the level of deductions, decide on how treat Capital Gains / Dividends and determine the tax rates and the income brackets to which they apply. You can do these in any order; there are tabs on the next page to move you back and forth. The goal is to match the target while creating a better system. What follows here is help for each task. </p>
+			<p>To create a plan you need to set the level of deductions, decide on how treat Capital Gains / Dividends and determine the tax rates and the income brackets to which they apply. You can do these in any order; there are tabs on the next page to move you back and forth. The goal is to match the target while creating a better system. You can tell you have reached your goal when the text turns from <span style="color:#99CCFF"> blue</span> to <span style="color:#FFFF19">yellow</span>. What follows here is help for each task. </p>
 			<div data-role="collapsible" data-theme="b" data-content-theme="d" data-mini="true">
 				<h4>Deductions</h4>
 				<p>Deductions represent the amount of income is not taxed. They include things like <span style="color:green" id="mortA"> mortgage interest</span><span id="mortS"></span> and <span style="color:green" id="charA">charitable contributions.</span><span id="charS"></span> For deductions you can leave things alone using the current typical deductions from the IRS data, make a radical change and set deductions at the same amount for people of every income, or create a combination of the two. <br/><br/>The case for equal deductions for every income level centers around the idea that every American starts paying taxes at the point where their basic needs for food clothing and shelter have been met.  <br/><br/>In combining the two systems consider the 'totals' section at the bottom of the Deduction Model box. It might be a good idea to create a system that has the same overall total of income deductions. Or not. If you decide to 'mix' the current system and the fixed system, you can use the slider to choose the proportions and can see the implications in the table below the slider. </p><a href="#deductpg" data-role="button" data-mini="true">to deductions page</a>
@@ -184,7 +184,7 @@
     <div data-role="header">
     	<a href="#main" data-icon="home" data-role="button">home</a>
         <h4>Set Brackets</h4>
-        <a href="#decisions" data-icon="arrow-r" data-role="button" id="brjoinls">next</a>
+        <a href="#savepg" data-icon="arrow-r" data-role="button" id="brjoinls">save</a>
         <div data-role="navbar"  data-iconpos="left">
 			<ul>
 	    	<li><a href="#deductpg"  data-icon="grid" data-role="button" id="deductb"></a>deductions </li>
@@ -216,7 +216,7 @@
     <div data-role="header">
     	<a href="#main" data-icon="home" data-role="button">home</a>
         <h4>Unearned</h4>
-        <a href="#decisions" data-icon="arrow-r" data-role="button" id="ujoinls">next</a>
+        <a href="#savepg" data-icon="arrow-r" data-role="button" id="ujoinls">save</a>
         <div data-role="navbar"  data-iconpos="left">
 			<ul>
 	    	<li><a href="#deductpg"  data-icon="grid" data-role="button" id="deductb"></a>deductions </li>
@@ -248,7 +248,7 @@
     <div data-role="header">
     	<a href="#main" data-icon="home" data-role="button">home</a>
         <h4>Deductions</h4>
-        <a href="#decisions" data-icon="arrow-r" data-role="button" id="djoinls">next</a>
+        <a href="#savepg" data-icon="arrow-r" data-role="button" id="djoinls">save</a>
         <div data-role="navbar"  data-iconpos="left">
 			<ul>
 	    	<li><a href="#deductpg"  data-icon="grid" data-role="button" id="deductb"></a>deductions </li>
@@ -282,7 +282,16 @@
 	</div>
 </div>
 
-    
+<div id="savepg" data-role="page">     
+	<div data-role="header">
+		<a href="#main" data-icon="home"  id="get" data-role="button" >home</a>
+		<a href="#" data-icon="back"  data-rel="back" data-role="button" >back</a>
+			<h2>SavePage</h2>
+	</div><!-- /header -->       
+	<div data-role="content">	 
+	</div><!-- /content -->
+</div><!-- /page -->     
+  
 <div id="thelists" data-role="page">     
 	<div data-role="header">
 		<a href="#main" data-icon="back"  id="goback" data-role="button" >back</a>

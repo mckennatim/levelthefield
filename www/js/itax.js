@@ -433,6 +433,11 @@ function createDedTxt(){
 
 function reTot(){
 	proposedPlan.refresh();
+	if(rund(existingPlan.taxUStot/10000000000, 0)==rund(proposedPlan.taxUStot/10000000000, 0) ){
+		$('.txtOnGreen').css("color", "#FFFF19");		
+	}else {
+		$('.txtOnGreen').css("color", "#99CCFF");	
+	}
 	plotTotTaxBarU();
 	plotTotTaxBar();
 	plotTotTaxBarD();

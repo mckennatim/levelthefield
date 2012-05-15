@@ -59,11 +59,12 @@
 #bracketpg.ui-page { background: green;}
 #unearnpg.ui-page { background: green;}
 #deductpg.ui-page { background: green;}
+#savepg.ui-page { background: green;}
 #totTaxBar.crtBkg { background: white;}
 #totTaxBarU.crtBkg { background: white;}
 .crtBkg { background: white;}
 
-.txtOnGreen{color:yellow;}
+.txtOnGreen{color:#99CCFF;}
 
 .center-wrapper{
 text-align: center;
