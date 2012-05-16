@@ -69,6 +69,14 @@ rates.marginal = [.12, .15, .17, .19, .45, .55 ];
 
 var deduSummary;
 var brackSummary;
+var descr = new Object();
+descr.intro='This plan...' ;
+descr.brackets='The brackets and rates are set so that...' ;
+descr.overall='Comparing this plan to Obama\'s, overall taxes for each income...' ;
+descr.unearned='Capital Gains and preferred dividends are treated ....' ;
+descr.deductions='Deductions by income group...' ;
+descr.conclude='Deductions by income group...' ;
+
 
 function TaxPlan(irssoi, taxrates){
 	this.rates = taxrates;

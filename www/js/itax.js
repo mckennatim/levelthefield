@@ -2,22 +2,43 @@
 var wbrm=0;
 var maxE=2.5;
 var lowE=-5.4;
-localStorage.setItem('stobama', JSON.stringify(obama));
-var stobama=JSON.parse(localStorage.getItem('stobama'));
-//console.log('creating exiisting plan');
-var existingPlan = new TaxPlan(irssoi, obama);
-existingPlan.refresh();
-var storedRates=JSON.parse(localStorage.getItem('rates'));
-//var clobama = $.extend(true, {}, obama);//create a deepcopy clone
-if (storedRates==null){
-	var proposedPlan = new TaxPlan(irssoi, stobama);
-}else{
-	//console.log('creating plan from sttored rates');
-	var proposedPlan = new TaxPlan(irssoi, storedRates);	
+var planNames ;
+var taxplans;
+var existingPlan;
+var proposedPlan;
+var taxRaisedTxt;
+var win;
+initTaxPlan();
+
+function initTaxPlan(){
+	taxplans =JSON.parse(localStorage.getItem('taxplans'));
+	if (taxplans == null){
+		taxplans = new Object();
+	}
+	taxplans.obama = obama; //replace3 with current obama rates just to be sure
+	localStorage.setItem('taxplans', JSON.stringify(taxplans));
+	//localStorage.setItem('stobama', JSON.stringify(obama));
+	//var stobama=JSON.parse(localStorage.getItem('stobama'));
+	console.log('creating exiisting plan');
+	existingPlan = new TaxPlan(irssoi, obama);
+	existingPlan.refresh();
+	console.log(existingPlan);
+	var storedRates=JSON.parse(localStorage.getItem('taxplans')).temp;
+	console.log(storedRates);
+	if (storedRates==null){
+		console.log('creating plan from obama');
+		taxplans.obama.descr = descr; //desc defined in idata.js
+		proposedPlan = new TaxPlan(irssoi, taxplans.obama);
+	}else{
+		console.log('creating plan from sttored rates');
+		proposedPlan = new TaxPlan(irssoi, storedRates);	
+	}
+	console.log(proposedPlan);
+	//proposedPlan.refresh();
+	//reTot();
+	//assembleSummary();	
 }
-console.log(proposedPlan);
-proposedPlan.refresh();
-assembleSummary();
+
 //page iniitialization
 $('#main').live('pageinit', function(event) {    
 	proposedPlan.refresh();
@@ -294,7 +315,6 @@ $('#unearnpg').live('pageinit', function(event) {
 			//$('input:radio[name=choProCG]').filter('[value="1"]').attr('checked', true);
 			proposedPlan.rates.taxCGasOrd = this.value;
 			reTot();
-			assembleSummary();
 	});		
 	$("#inpProCG").change(function(e){ //on moving slider
 		console.log(proposedPlan.rates.taxCGasOrd);
@@ -304,7 +324,6 @@ $('#unearnpg').live('pageinit', function(event) {
 			//proposedPlan.rates.taxCGasOrd = 0;
 			console.log(Number($(this).val()));
 			reTot();
-			assembleSummary();
 		}
 	});	
 });
@@ -326,14 +345,12 @@ $('#deductpg').live('pageinit', function(event) {
 			//$('input:radio[name=choProCG]').filter('[value="1"]').attr('checked', true);
 			proposedPlan.rates.useStdDed = this.value;
 			reTot();
-			assembleSummary();
 	});
 	$("#inpProD").change(function(e){ //on moving slider
 		if (proposedPlan.rates.useStdDed > 0){		
 			proposedPlan.rates.deductionStd = Number($(this).val());
 			//console.log(Number($(this).val()));
 			reTot();
-			assembleSummary();
 		}
 	});	
 		$("#inpProDM").change(function(e){ //on moving slider
@@ -341,16 +358,80 @@ $('#deductpg').live('pageinit', function(event) {
 			proposedPlan.rates.dedMixPercStd = Number($(this).val());
 			console.log(Number($(this).val()));
 			reTot();
-			assembleSummary();
 		}
 	});	    
 });
 
+
+$('#savepg').live('pageinit', function(event) { 
+	reTot();
+	$('body').on('click', "#delbut", function (e) { 
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		var planName  = $("#sname").val();
+		delete taxplans[planName];
+		console.log(taxplans);
+		localStorage.setItem('taxplans', JSON.stringify(taxplans));	
+		initTaxPlan();
+		$("#sname").val('temp');
+		console.log('is already created?')
+		$('#loadstuff').empty();
+		repopulatePlanList();		
+		reTot();
+	});	   
+	$('body').on('click', "#savebut", function (e) { 
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		console.log('in savebut');
+		var planName  = $("#sname").val();
+		taxplans[planName]=proposedPlan.rates;
+		var descr = new Object();
+		descr.intro=$('#tanno1').val();
+		descr.brackets=$('#tanno2').val();
+		descr.overall=$('#tanno3').val();
+		descr.unearned=$('#tanno4').val();
+		descr.deductions=$('#tanno5').val();
+		descr.conclude=$('#tanno6').val();
+		taxplans[planName].descr=descr ;
+		//console.log(JSON.stringify(taxplans));
+		//localStorage.removeItem(taxplans);
+		localStorage.setItem('taxplans', JSON.stringify(taxplans));	
+		console.log(localStorage.getItem('taxplans'));				
+	});	
+	$('body').on('click', "#loadbut", function (e) { 
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		repopulatePlanList();
+		reTot();
+	});   
+	$('body').on('change', "#selectplan", function (e) { 		
+		var selectedPlan =$('#selectplan').val();
+		$('#sname').val(selectedPlan);//put it in the top text box
+		taxplans = JSON.parse(localStorage.getItem('taxplans'));
+		proposedPlan = new TaxPlan(irssoi, taxplans[selectedPlan]);
+		//console.log(proposedPlan);
+		reTot();
+	});	
+});
 //event functions
 
 //common data	
 
 //functions
+function repopulatePlanList(){
+		console.log(localStorage.getItem('taxplans'));	
+		var x ;
+		var cumenu = '<div data-role="fieldcontain"><label for="selectplan" class="select txtOnGreen">Load Saved Plan</label><select name="selectplan" id="selectplan" data-native-menu="true" data-mini="true"><option>Saved Plans</option>';
+		planNames =new Array();
+		for (x in taxplans){
+			console.log(x);
+			planNames.push(x);
+			cumenu+='<option value="' + x + '">' + x + '</option>';
+		}
+		cumenu+='</select></div>';
+		$('#loadstuff').empty();
+		$('#loadstuff').append(cumenu).trigger('create');	
+}
 //main page functions
 
 function updateBr(wbmr){
@@ -373,6 +454,18 @@ function assembleSummary(){
 	$('#brpg').empty();
 	$('#cappg').empty();
 	$('#dedpg').empty();
+	$('#anno1').empty();
+	$('#anno2').empty();
+	$('#anno3').empty();
+	$('#anno4').empty();
+	$('.taxRaised').empty();
+	$('.taxRaised').append(taxRaisedTxt);
+	
+	$('#anno1').append(createUnBrTxt().br);
+	$('#anno2').append(createUnBrTxt().br2);
+	$('#anno3').append(createUnBrTxt().cap);
+	$('#anno4').append(createDedTxt().deds);	
+
 	//for br 
 	$('#brpg').append(createUnBrTxt().br);
 	$('#brpg').append(createUnBrTxt().br2);
@@ -434,17 +527,28 @@ function createDedTxt(){
 function reTot(){
 	proposedPlan.refresh();
 	if(rund(existingPlan.taxUStot/10000000000, 0)==rund(proposedPlan.taxUStot/10000000000, 0) ){
+		win = 'You WIN';
 		$('.txtOnGreen').css("color", "#FFFF19");		
 	}else {
+		win ='not quite there yet';
 		$('.txtOnGreen').css("color", "#99CCFF");	
 	}
 	plotTotTaxBarU();
 	plotTotTaxBar();
 	plotTotTaxBarD();
-	$('.taxRaised').empty();
-	$('.taxRaised').append('target:  $'+addCommas(existingPlan.taxUStot) +'<br/>yourPlan: $'+addCommas(proposedPlan.taxUStot) );
+	taxRaisedTxt =win + '<br/>target:  $'+addCommas(existingPlan.taxUStot) +'<br/>yourPlan: $'+addCommas(proposedPlan.taxUStot);
 	//console.log(proposedPlan);
-	localStorage.setItem('rates', JSON.stringify(proposedPlan.rates));
+	localStorage.setItem('tempRates', JSON.stringify(proposedPlan.rates));
+	taxplans.temp=proposedPlan.rates;
+	localStorage.setItem('taxplans', JSON.stringify(taxplans));
+	var descr = 	taxplans.temp.descr;
+	$('#tanno1').val(descr.intro);
+	$('#tanno2').val(descr.brackets);
+	$('#tanno3').val(descr.overall);
+	$('#tanno4').val(descr.unearned);
+	$('#tanno5').val(descr.deductions);
+	$('#tanno6').val(descr.conclude);	
+	assembleSummary();
 	//console.log(existingPlan.taxUStot);
 }
 
@@ -665,7 +769,8 @@ $(function () {
 //thelists test page
 $('#thelists').live('pageinit', function(event) {
     //test function by pressing get
-        $('#get').click(function() {
+        $('#geti').click(function() {
+        	console.log('clicked run');
             for (i=1; i<6; i++){
                 $('#list').append('frog ');
             }
@@ -730,6 +835,8 @@ $('#thelists').live('pageinit', function(event) {
             $('#list').append(JSON.stringify(myTaxPlan.incomeKept));
             $('#list').append('<br/><br/>');
             $('#list').append(JSON.stringify(myTaxPlan));            
+            $('#list').append('<br/><br/>');
+            $('#list').append(JSON.stringify(taxplans));            
              return false; 
         }); 	   
         

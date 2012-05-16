@@ -286,17 +286,39 @@
 	<div data-role="header">
 		<a href="#main" data-icon="home"  id="get" data-role="button" >home</a>
 		<a href="#" data-icon="back"  data-rel="back" data-role="button" >back</a>
-			<h2>SavePage</h2>
+			<h2>Finalize Plan</h2>
 	</div><!-- /header -->       
-	<div data-role="content">	 
+	<div data-role="content">	 		
+		<table><tr><td><span id="snamel" class="txtOnGreen">plan name:</span></td><td>
+	         <input type="text" name="sname" id="sname" value="temp" data-mini="true" /></tr></table>
+	         <div data-role="fieldcontain">		
+	        <div data-role="controlgroup" data-type="horizontal" data-mini="true" data-theme="a">
+		    	<a href="#" id="savebut" data-role="button" data-icon="plus" data-theme="b" data-mini="true" data-transition="pop">save</a>	  	
+		    	<a href="#" id="delbut" data-role="button" data-icon="delete" data-theme="b" data-mini="true" data-transition="pop">delete</a>
+		    	<a href="#" id="loadbut" data-role="button" data-icon="arrow-u" data-theme="b" data-mini="true" data-transition="pop">load</a>
+		    </div>	   	              
+	         <div id="loadstuff"></div>
+	         <p class="txtOnGreen taxRaised">hi</p>
+	         	<textarea name="tanno1" id="tanno1" data-mini="true">This plan...</textarea>
+	         <div id="anno1" class="txtOnGreen"></div>	      
+	         	<textarea name="tanno2" id="tanno2" data-mini="true">The brackets and rates are set so that...</textarea>	            
+	         <div id="anno2" class="txtOnGreen"></div>	         
+	         	<textarea name="tanno3" id="tanno3" data-mini="true">Comparing this plan to Obama's, overall taxes for each income...</textarea>
+	         <div id="anno3" class="txtOnGreen"></div>	         	         
+	         	<textarea name="tanno4" id="tanno4" data-mini="true">Capital Gains and preferred dividends are treated ....</textarea>
+	         <div id="anno4" class="txtOnGreen"></div>	         
+	         	<textarea name="tanno5" id="tanno5" data-mini="true">Deductions by income group...	 </textarea>	         
+	         <div id="anno5" class="txtOnGreen"></div>	         
+	         	<textarea name="tanno6" id="tanno6" data-mini="true">On balance...</textarea>
+			</div>		
 	</div><!-- /content -->
 </div><!-- /page -->     
   
 <div id="thelists" data-role="page">     
 	<div data-role="header">
-		<a href="#main" data-icon="back"  id="goback" data-role="button" >back</a>
+		<a href="#main" data-icon="back"  id="goback" ...data-role="button" >back</a>
 			<h2>TestPage</h2>
-		<a href="#" data-icon="arrow-d"  id="get" data-role="button" >run</a>
+		<a href="#" data-icon="arrow-d"  id="geti" data-role="button" >run</a>
 	</div><!-- /header -->       
 	<div data-role="content">	 
 		<p id="list" >nada </p>
