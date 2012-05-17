@@ -1,0 +1,64 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Tax</title> 
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
+        <link href="css/tax.css" rel="stylesheet" type="text/css" />
+        <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>  
+    </head>
+    <body>
+    <div id="page2" data-role="page"  data-add-back-btn="true">
+        <div data-role="content">
+            <div id="txthere"></div>
+        </div>
+    </div>    	
+    </body>
+    </html>	
+    
+    <script>
+    $('#page2').live('pageinit', function(event) {  
+        var obama = new Object();	
+        var odescr;
+    
+        obama.capGains = .15;
+        obama.brackets = [8700, 35350, 85650, 178650, 388350];
+        obama.marginal = [.10, .15, .25, .30, .33, .35 ];
+        
+        odescr = new Object();
+        odescr.intro='This is the current Obama Tax Plan as of April 2012' ;
+        odescr.brackets='The brackets are concentrated in the low income range with the top bracket at only $388,000' ;
+        odescr.overall='Once you get to the  99.5% range your rates start going down. Most of the tax burden is on the middle class.' ;
+
+        $('#txthere').append('THE obama TAX PLAN OBJECT HAS A descr SECTION THAT CAN BE CHANGED BY THE USER. HERE IS THE ORIGINAL<br/><br/>');        
+    
+        obama.descr = odescr;	
+        console.log(odescr);//if line below is not commmented out,  shows the above version unless  else shows the lower version
+        console.log(JSON.stringify(obama) + ' ---stringified, it does what I want');
+        console.log(obama + ' ---unstringified, a later change affects this');
+
+        $('#txthere').append(JSON.stringify(odescr) + '<br/><br/>');
+        
+        $('#txthere').append('HERE THE ORIGINAL descr IS NOW PART OF THE obama OBJECT<br/><br/>');         
+         
+        $('#txthere').append(JSON.stringify(obama) + '<br/><br/> ');
+        
+        $('#txthere').append('Stringified, the above does what I want but check the object in the console for test5.html:38 and you see that it has been changed by what happens in the future<br/><br/><br/>');    
+
+        $('#txthere').append('LATER THE USER CHANGES THE descr SECTION. <br/><br/>');         
+        
+        odescr = new Object();
+        odescr.intro='This plan...' ;
+        odescr.brackets='The brackets and rates are set so that...' ;
+        odescr.overall='Comparing this plan to Obama\'s, overall taxes for each income...' ;
+    
+        obama.descr = odescr; //jQuery.extend(true, {}, odescr);
+        console.log(odescr);	
+        console.log((obama));        
+        console.log(JSON.stringify(obama)); 
+        $('#txthere').append(JSON.stringify(odescr) + '<br/><br/>');
+        $('#txthere').append(JSON.stringify(obama) + '<br/><br/>');        		
+        });
+    </script>

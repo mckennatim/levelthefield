@@ -9,6 +9,7 @@ var unity = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 var trillion =1000000000000;
 var billion =100000000;
 var million = 1000000;
+var TaxPlan;
 
 var irssoi = new Object();
 irssoi.popTot = pop_tot; //# of tax filers
@@ -49,6 +50,8 @@ var new_rates = [.10, .15, .25, .30, .33, .35 ];
 
 //current Obama/Bush plan
 var obama = new Object();
+obama.planName='obama';
+obama.deductions = deductions_typ
 obama.deductionStd = 17400;//if evenly distributed
 obama.useStdDed = 0; //use typical deductions
 obama.dedMixPercStd = 0;
@@ -56,6 +59,28 @@ obama.taxCGasOrd = 0;
 obama.capGains = .15;
 obama.brackets = [8700, 35350, 85650, 178650, 388350];
 obama.marginal = [.10, .15, .25, .30, .33, .35 ];
+obama.descr = new Object();
+var odescr = new Object();
+odescr.intro='This is the current Obama Tax Plan as of April 2012' ;
+odescr.brackets='The brackets are concentrated in the low income range with the top bracket at only $388,000' ;
+odescr.overall='Once you get to the  99.5% range your rates start going down. Most of the tax burden is on the middle class.' ;
+odescr.unearned='Unearned income - Capital Gains and Preferred Dividends - are treated special at the low rate of 15%' ;
+odescr.deductions='80% of the population has deductions of around $10,000 while the top .1% deduct millions' ;
+odescr.conclude='The tax burden is borne by the middle and upper middle class. The rich pay taxes at lower percentage of income than their secretaries ' ;
+var dd = JSON.stringify(odescr);
+var ode = JSON.parse(dd);
+obama.descr = ode;
+
+var descr = new Object();
+descr.intro='This plan...' ;
+descr.brackets='The brackets and rates are set so that...' ;
+descr.overall='Comparing this plan to Obama\'s, overall taxes for each income...' ;
+descr.unearned='Capital Gains and preferred dividends are treated ....' ;
+descr.deductions='Deductions by income group...' ;
+descr.conclude='Deductions by income group...' ;
+
+console.log('in idata');
+console.log(obama.descr);
 
 //starting point for proposed
 var rates = new Object();
@@ -69,17 +94,23 @@ rates.marginal = [.12, .15, .17, .19, .45, .55 ];
 
 var deduSummary;
 var brackSummary;
-var descr = new Object();
-descr.intro='This plan...' ;
-descr.brackets='The brackets and rates are set so that...' ;
-descr.overall='Comparing this plan to Obama\'s, overall taxes for each income...' ;
-descr.unearned='Capital Gains and preferred dividends are treated ....' ;
-descr.deductions='Deductions by income group...' ;
-descr.conclude='Deductions by income group...' ;
+//var descr = new Object();
+//descr.intro='This plan...' ;
+//descr.brackets='The brackets and rates are set so that...' ;
+//descr.overall='Comparing this plan to Obama\'s, overall taxes for each income...' ;
+//descr.unearned='Capital Gains and preferred dividends are treated ....' ;
+//descr.deductions='Deductions by income group...' ;
+//descr.conclude='Deductions by income group...' ;
 
 
 function TaxPlan(irssoi, taxrates){
-	this.rates = taxrates;
+	console.log('in TaxPlan');
+	//console.log(taxrates);
+	var descr =  new Object();
+	descr = jQuery.extend(true, {}, taxrates.descr);
+	this.rates=taxrates;
+	//console.log(this.rates);	
+	//console.log(taxrates);	
 	this.irssoi = irssoi;
 	//calculated from irs soi
 	this.popByPerc = vmult(this.irssoi.popPerc, this.irssoi.popTot);
@@ -105,6 +136,7 @@ function TaxPlan(irssoi, taxrates){
 		}    	
 		this.incomeUStaxable = vminu(this.incomeUS, this.deductionsUS);
 		this.incomeTaxable = vminu(this.irssoi.income, this.deductions);
+		this.rates.deductions = this.deductions;
 		deduSummary = new Object();
 		deduSummary.popPerc=vperc(this.irssoi.popPerc, 4);
 		deduSummary.income=vDollaCommas(this.irssoi.income);
@@ -142,11 +174,12 @@ function TaxPlan(irssoi, taxrates){
 		this.incomeUStot = vsum(this.incomeUS);		
 	}
 	this.refresh();
+	console.log('leaving TaxPlan');	
 }
 //.log(rates.brackets);
 
 function TaxCalcerOrd(incomeOrd, myRates){//calculates ordinary income tax
-    this.rates=myRates.marginal;//[.10, .15, .25, .30, .33, .35 ];
+    this.marginal=myRates.marginal;//[.10, .15, .25, .30, .33, .35 ];
     this.brackets = myRates.brackets;//[8700, 35350, 85650, 178650, 388350];
     this.income=vlt(incomeOrd,0);
     this.incomeForBrackets = new Array();
@@ -162,18 +195,18 @@ function TaxCalcerOrd(incomeOrd, myRates){//calculates ordinary income tax
     	if (this.brackets.length==0){//flat tax
     		console.log('no brackets');
     		console.log(this.income);
-    		console.log(this.rates[0]);
-    		this.tax = vmult(this.income,this.rates[0]);
+    		console.log(this.marginal[0]);
+    		this.tax = vmult(this.income,this.marginal[0]);
     	}else{
 	         for (i=0; i<this.brackets.length; i++){
 	            incomeForBracket = vgt(incomeRemaining, this.brackets[i]) ;//everything between one 
-	            taxForBracket = vmult(incomeForBracket,this.rates[i]);
+	            taxForBracket = vmult(incomeForBracket,this.marginal[i]);
 	            incomeRemaining = vlt0rem(incomeRemaining, this.brackets[i]);
 	            this.incomeForBrackets[i]=incomeForBracket;
 	            this.incomeRemainings[i]=incomeRemaining;
 	            this.taxForBrackets[i]=taxForBracket;
 	        }
-	        this.taxForBrackets[i]=vmult(this.incomeRemainings[i-1], this.rates[i]);
+	        this.taxForBrackets[i]=vmult(this.incomeRemainings[i-1], this.marginal[i]);
 	        this.taxForPercByBracket = inve(this.taxForBrackets);	
 	        this.tax = mplus(this.taxForPercByBracket);	
 	        //console.log(this.incomeForBrackets);

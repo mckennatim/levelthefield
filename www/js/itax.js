@@ -8,40 +8,48 @@ var existingPlan;
 var proposedPlan;
 var taxRaisedTxt;
 var win;
+var currPlanName= 'duck';
+var currentStored;
+var numBrackets ;
+console.log('beg of itax');
+console.log(obama.descr);
+//console.log(JSON.stringify(obama));
 initTaxPlan();
 
 function initTaxPlan(){
 	taxplans =JSON.parse(localStorage.getItem('taxplans'));
 	if (taxplans == null){
+		console.log("taxplans is null will get obama");		
 		taxplans = new Object();
+		taxplans.obama = obama; //replace3 with current obama rates just to be sure
+		currPlanName = 'obama';
+		taxplans.current = currPlanName;
+		console.log(taxplans.obama.descr);	
+		localStorage.setItem('taxplans', JSON.stringify(taxplans));
 	}
-	taxplans.obama = obama; //replace3 with current obama rates just to be sure
-	localStorage.setItem('taxplans', JSON.stringify(taxplans));
-	//localStorage.setItem('stobama', JSON.stringify(obama));
-	//var stobama=JSON.parse(localStorage.getItem('stobama'));
+	//there should be a taxplan with a current name so open it
+	console.log("getting current plan");	
+	currPlanName = taxplans.current;
+	console.log(currPlanName);
+	taxplans = JSON.parse(localStorage.getItem('taxplans'));
+	currentStored=taxplans[currPlanName];
+	console.log(currentStored);
+	proposedPlan = new TaxPlan(irssoi, jQuery.extend(true, {}, currentStored));		
+	console.log(proposedPlan);
+	//to do reporting you need to have a copy of the existing(obama)plan
 	console.log('creating exiisting plan');
 	existingPlan = new TaxPlan(irssoi, obama);
 	existingPlan.refresh();
 	console.log(existingPlan);
-	var storedRates=JSON.parse(localStorage.getItem('taxplans')).temp;
-	console.log(storedRates);
-	if (storedRates==null){
-		console.log('creating plan from obama');
-		taxplans.obama.descr = descr; //desc defined in idata.js
-		proposedPlan = new TaxPlan(irssoi, taxplans.obama);
-	}else{
-		console.log('creating plan from sttored rates');
-		proposedPlan = new TaxPlan(irssoi, storedRates);	
-	}
-	console.log(proposedPlan);
-	//proposedPlan.refresh();
-	//reTot();
-	//assembleSummary();	
+	//set some variables
+	numBrackets =proposedPlan.rates.brackets.length;
+	//display currentPlan
+	assembleSummary();
 }
 
 //page iniitialization
 $('#main').live('pageinit', function(event) {    
-	proposedPlan.refresh();
+	plotBars();
 	plotExistingTotTaxPie();
 	var cnt=0;
 	$('#page1graph').click(function() {	
@@ -181,7 +189,7 @@ $('#decisions').live('pageinit', function(event) {
 });
 
 $('#bracketpg').live('pageinit', function(event) {   
-	reTot();
+	plotBars();	
 	if (numBrackets>0){
 		wbr=numBrackets-1;	
 	}else{
@@ -297,7 +305,7 @@ $('#bracketpg').live('pageinit', function(event) {
 	});			
 });	
 $('#unearnpg').live('pageinit', function(event) {    
-	reTot();
+	plotBars();
 	$("#inpProCG").val(proposedPlan.rates.capGains*100).slider('refresh');
 	if(proposedPlan.rates.taxCGasOrd==1){
         $("#radProCG1").attr("checked", true).checkboxradio("refresh");
@@ -328,8 +336,8 @@ $('#unearnpg').live('pageinit', function(event) {
 	});	
 });
 $('#deductpg').live('pageinit', function(event) {    
-	reTot();
-		if(proposedPlan.rates.useStdDed==0){
+	plotBars();
+	if(proposedPlan.rates.useStdDed==0){
         $("#radProD0").attr("checked", true).checkboxradio("refresh");
     }else if(proposedPlan.rates.useStdDed==1){
     	$("#radProD1").attr("checked", true).checkboxradio("refresh");
@@ -364,7 +372,8 @@ $('#deductpg').live('pageinit', function(event) {
 
 
 $('#savepg').live('pageinit', function(event) { 
-	reTot();
+	//$("#sname").val(currPlanName);	
+	assembleSummary();
 	$('body').on('click', "#delbut", function (e) { 
 		e.stopImmediatePropagation();
 		e.preventDefault();
@@ -373,8 +382,8 @@ $('#savepg').live('pageinit', function(event) {
 		console.log(taxplans);
 		localStorage.setItem('taxplans', JSON.stringify(taxplans));	
 		initTaxPlan();
-		$("#sname").val('temp');
-		console.log('is already created?')
+		currPlanName = 'temp';
+		console.log('is already created?');
 		$('#loadstuff').empty();
 		repopulatePlanList();		
 		reTot();
@@ -383,30 +392,25 @@ $('#savepg').live('pageinit', function(event) {
 		e.stopImmediatePropagation();
 		e.preventDefault();
 		console.log('in savebut');
-		var planName  = $("#sname").val();
+		/*var planName  = $("#sname").val();
+		proposedPlan.rates.planName=planName;
 		taxplans[planName]=proposedPlan.rates;
-		var descr = new Object();
-		descr.intro=$('#tanno1').val();
-		descr.brackets=$('#tanno2').val();
-		descr.overall=$('#tanno3').val();
-		descr.unearned=$('#tanno4').val();
-		descr.deductions=$('#tanno5').val();
-		descr.conclude=$('#tanno6').val();
-		taxplans[planName].descr=descr ;
-		//console.log(JSON.stringify(taxplans));
-		//localStorage.removeItem(taxplans);
-		localStorage.setItem('taxplans', JSON.stringify(taxplans));	
-		console.log(localStorage.getItem('taxplans'));				
+		localStorage.setItem('taxplans', JSON.stringify(taxplans));	//saves new plan
+		reTot();//rewrite descr
+		console.log(localStorage.getItem('taxplans'));
+		*/
+		reTot();				
 	});	
 	$('body').on('click', "#loadbut", function (e) { 
 		e.stopImmediatePropagation();
 		e.preventDefault();
 		repopulatePlanList();
-		reTot();
+		//reTot();
 	});   
 	$('body').on('change', "#selectplan", function (e) { 		
 		var selectedPlan =$('#selectplan').val();
-		$('#sname').val(selectedPlan);//put it in the top text box
+		$('#sname').val(selectedPlan)
+		currPlanName = selectedPlan;//put it in the top text box
 		taxplans = JSON.parse(localStorage.getItem('taxplans'));
 		proposedPlan = new TaxPlan(irssoi, taxplans[selectedPlan]);
 		//console.log(proposedPlan);
@@ -415,7 +419,7 @@ $('#savepg').live('pageinit', function(event) {
 });
 //event functions
 
-//common data	
+//commoxxn data	
 
 //functions
 function repopulatePlanList(){
@@ -448,6 +452,14 @@ function updateBr(wbmr){
 }
 
 function assembleSummary(){
+	if(rund(existingPlan.taxUStot/10000000000, 0)==rund(proposedPlan.taxUStot/10000000000, 0) ){
+		win = 'You WIN';
+		$('.txtOnGreen').css("color", "#FFFF19");		
+	}else {
+		win ='not quite there yet';
+		$('.txtOnGreen').css("color", "#99CCFF");	
+	}
+	taxRaisedTxt =win + '<br/>target:  $'+addCommas(existingPlan.taxUStot) +'<br/>yourPlan: $'+addCommas(proposedPlan.taxUStot);	
 	//clean for refresh
 	$('#dedPgTxt').empty();
 	$('#dedPgTxt2').empty();
@@ -458,9 +470,10 @@ function assembleSummary(){
 	$('#anno2').empty();
 	$('#anno3').empty();
 	$('#anno4').empty();
+	//totals
 	$('.taxRaised').empty();
 	$('.taxRaised').append(taxRaisedTxt);
-	
+	//tables used on savepg to explain plan
 	$('#anno1').append(createUnBrTxt().br);
 	$('#anno2').append(createUnBrTxt().br2);
 	$('#anno3').append(createUnBrTxt().cap);
@@ -484,6 +497,14 @@ function assembleSummary(){
 	//on ded model
 	$('#dedPgTxt').append(createDedTxt().ded1);
 	$('#dedPgTxt2').append(createDedTxt().ded2);
+	//fill in currPlanName and description
+	$('#sname').val(proposedPlan.rates.planName);
+	$('#tanno1').val(proposedPlan.rates.descr.intro);
+	$('#tanno2').val(proposedPlan.rates.descr.brackets);
+	$('#tanno3').val(proposedPlan.rates.descr.overall);
+	$('#tanno4').val(proposedPlan.rates.descr.unearned);
+	$('#tanno5').val(proposedPlan.rates.descr.deductions);
+	$('#tanno6').val(proposedPlan.rates.descr.conclude);	
 }
 function createUnBrTxt(){
 	var brSummary = new OrdTax(proposedPlan.rates);
@@ -493,7 +514,7 @@ function createUnBrTxt(){
 	}else{
 		txt='<ul><li><table><tr><td>'+proposedPlan.rates.capGains*100 + '%</td><td>capital gains / dividends</td></tr>';
 	}
-	btxt.cap=txt
+	btxt.cap=txt;
 	btxt.br=brSummary.makeTbl();	
 	btxt.br2='<ul><li><table><tr><td>Overall Tax % </td><td>by income</td></tr></table></li></ul>';
 	brackSummary = new Object();
@@ -524,32 +545,49 @@ function createDedTxt(){
 	return atxt;
 }
 
-function reTot(){
+function reTot(){//recalc and plot bars, check name, replace w default, get name and desc from screen into proposedPlan, save to taxplan
+	console.log('now in teTot');
+	console.log(taxplans.obama);
 	proposedPlan.refresh();
-	if(rund(existingPlan.taxUStot/10000000000, 0)==rund(proposedPlan.taxUStot/10000000000, 0) ){
-		win = 'You WIN';
-		$('.txtOnGreen').css("color", "#FFFF19");		
-	}else {
-		win ='not quite there yet';
-		$('.txtOnGreen').css("color", "#99CCFF");	
+	//check and see if sname == obama
+	if ($('#sname').val()=='obama'){
+		$('#sname').val('temp');
 	}
-	plotTotTaxBarU();
-	plotTotTaxBar();
-	plotTotTaxBarD();
-	taxRaisedTxt =win + '<br/>target:  $'+addCommas(existingPlan.taxUStot) +'<br/>yourPlan: $'+addCommas(proposedPlan.taxUStot);
-	//console.log(proposedPlan);
-	localStorage.setItem('tempRates', JSON.stringify(proposedPlan.rates));
-	taxplans.temp=proposedPlan.rates;
+	//replace unmodified desc with default
+	if ($('#tanno1').val()==obama.descr.intro){
+		$('#tanno1').val(descr.intro);
+	}
+	if ($('#tanno2').val()==obama.descr.brackets){
+		$('#tanno2').val(descr.brackets);
+	}
+	if ($('#tanno3').val()==obama.descr.overall){
+		$('#tanno3').val(descr.overall);
+	}
+	if ($('#tanno4').val()==obama.descr.unearned){
+		$('#tanno4').val(descr.unearned);
+	}
+	if ($('#tanno5').val()==obama.descr.deductions){
+		$('#tanno5').val(descr.deductions);
+	}
+	if ($('#tanno6').val()==obama.descr.conclude){
+		$('#tanno6').val(descr.conclude);
+	}	
+	//update proposedPlan.rates
+	currPlanName=$('#sname').val();
+	proposedPlan.rates.planName =currPlanName ;
+	proposedPlan.rates.descr.intro = $('#tanno1').val();
+	proposedPlan.rates.descr.brackets = $('#tanno2').val();
+	proposedPlan.rates.descr.overall = $('#tanno3').val();
+	proposedPlan.rates.descr.deductions = $('#tanno5').val();
+	proposedPlan.rates.descr.unearned = $('#tanno4').val();
+	proposedPlan.rates.descr.conclude = $('#tanno6').val();
+	//save to localStorage
+	taxplans.current=currPlanName;
+	taxplans[currPlanName]=jQuery.extend(true, {}, proposedPlan.rates);
 	localStorage.setItem('taxplans', JSON.stringify(taxplans));
-	var descr = 	taxplans.temp.descr;
-	$('#tanno1').val(descr.intro);
-	$('#tanno2').val(descr.brackets);
-	$('#tanno3').val(descr.overall);
-	$('#tanno4').val(descr.unearned);
-	$('#tanno5').val(descr.deductions);
-	$('#tanno6').val(descr.conclude);	
+	//redisplay updated info from proposedPlan
+	plotBars();
 	assembleSummary();
-	//console.log(existingPlan.taxUStot);
 }
 
 function plotExistingTotTaxPie(){
@@ -580,6 +618,11 @@ function plotExistingTotTaxPie(){
 }
 //propage functions
 //total tax revenue bar chart code
+function plotBars(){
+	plotTotTaxBarU();
+	plotTotTaxBar();
+	plotTotTaxBarD();		
+}
 		
 function plotTotTaxBar(){
 	var dataTotTaxExist = [rund(existingPlan.taxUStot/trillion,2), 1.5];
@@ -643,9 +686,9 @@ function plotTotTaxBarU(){
 };
 
 var wbr = -1;
-var brackets =proposedPlan.rates.brackets;
-var marginal =proposedPlan.rates.marginal;
-var numBrackets = brackets.length;
+//var brackets =proposedPlan.rates.brackets;
+//var marginal =proposedPlan.rates.marginal;
+//var numBrackets = brackets.length;
     
 function plotBrackets(){
 	brackets =proposedPlan.rates.brackets;
@@ -699,7 +742,8 @@ function plotBrackets(){
 					});				
 };
 
-//crosshair code on propage
+
+/*crosshair code on propage
 var plot;
 $(function () {
     var sin = [], cos = [];
@@ -753,8 +797,10 @@ $(function () {
                 y = p1[1];
             else
                 y = p1[1] + (p2[1] - p1[1]) * (pos.x - p1[0]) / (p2[0] - p1[0]);
+                */
 
-           legends.eq(i).text(series.label.replace(/=.*/, "= " + y.toFixed(2)));
+           //legends.eq(i).text(series.label.replace(/=.*/, "= " + y.toFixed(2)));
+           /*
         }
     }   
     $("#placeholder").bind("plothover",  function (event, pos, item) {
@@ -764,7 +810,7 @@ $(function () {
     });
 });
 
-
+*/
    
 //thelists test page
 $('#thelists').live('pageinit', function(event) {

@@ -1,0 +1,44 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Tax</title> 
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
+        <link href="css/tax.css" rel="stylesheet" type="text/css" />
+        <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>  
+    </head>
+    <body>
+    <div id="page2" data-role="page"  data-add-back-btn="true">
+        <div data-role="content">
+            <div id="txthere"></div>
+        </div>
+    </div>    	
+    </body>
+    </html>	
+    
+<script>
+$('#page2').live('pageinit', function(event) {  
+
+	var odescr;
+	
+	odescr = new Object();	
+
+	odescr.intro='This is the current Obama Tax Plan as of April 2012' ;
+	odescr.brackets='The brackets are concentrated in the low income range with the top bracket at only $388,000' ;
+	odescr.overall='Once you get to the  99.5% range your rates start going down. Most of the tax burden is on the middle class.' ;
+
+	console.log(odescr);
+
+	odescr = new Object();			
+
+	odescr.intro='This plan...' ;
+	odescr.brackets='The brackets and rates are set so that...' ;
+	odescr.overall='Comparing this plan to Obama\'s, overall taxes for each income...' ;
+
+	console.log(odescr);		
+
+
+});
+</script>

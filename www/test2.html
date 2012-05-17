@@ -1,0 +1,70 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Tax</title> 
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
+        <link href="css/tax.css" rel="stylesheet" type="text/css" />
+        <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>  
+    </head>
+    <body>
+    <div id="page2" data-role="page"  data-add-back-btn="true">
+        <div data-role="content">
+            <div id="txthere"></div>
+        </div>
+    </div>    	
+    </body>
+    </html>	
+    
+    <script>
+    $('#page2').live('pageinit', function(event) {    
+
+        $('#txthere').append('testing<br/>');
+		var obama = new Object();
+		obama.capGains = .15;
+		obama.brackets = [8700, 35350, 85650, 178650, 388350];
+		obama.marginal = [.10, .15, .25, .30, .33, .35 ];
+        
+		var odescr = new Object();
+		odescr.intro='This is the current Obama Tax Plan as of April 2012' ;
+		odescr.brackets='The brackets are concentrated in the low income range with the top bracket at only $388,000' ;
+		odescr.overall='Once you get to the  99.5% range your rates start going down. Most of the tax burden is on the middle class.' ;     
+        
+		var descr = new Object();
+		obama.descr = odescr;
+        console.log(obama);
+    	
+    	var ndescr = new Object();
+		ndescr.intro='This plan...' ;
+		ndescr.brackets='The brackets and rates are set so that...' ;
+		ndescr.overall='Comparing this plan to Obama\'s, overall taxes for each income...' ;
+
+		obama.descr = ndescr;   	
+    	
+	var oplan = new TaxPlan(obama);
+    console.log(oplan);
+	$('#txthere').append(JSON.stringify(oplan));
+	$('#txthere').append('<br/><br/>');		
+	
+	obama.descr = odescr;  
+	
+	var oplan = new TaxPlan(obama);
+    console.log(oplan);
+	$('#txthere').append(JSON.stringify(oplan));
+	$('#txthere').append('<br/><br/>');			
+  
+	obama.descr = ndescr;  
+	
+	var oplan = new TaxPlan(obama);
+    console.log(oplan);
+	$('#txthere').append(JSON.stringify(oplan));
+	$('#txthere').append('<br/><br/>');		
+	function TaxPlan(taxrates){
+		this.income= [9300, 20600, 34400, 56400, 97400, 210000, 486395, 1021643, 4024583, 35042705, 344759000 ];
+		this.rates=taxrates;
+	}	
+		  		
+    });
+    </script>
