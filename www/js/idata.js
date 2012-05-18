@@ -137,11 +137,6 @@ function TaxPlan(irssoi, taxrates){
 		this.incomeUStaxable = vminu(this.incomeUS, this.deductionsUS);
 		this.incomeTaxable = vminu(this.irssoi.income, this.deductions);
 		this.rates.deductions = this.deductions;
-		deduSummary = new Object();
-		deduSummary.popPerc=vperc(this.irssoi.popPerc, 4);
-		deduSummary.income=vDollaCommas(this.irssoi.income);
-		deduSummary.Obama=vDollaCommas(this.irssoi.deductionsTyp);		
-		deduSummary.yourPlan=vDollaCommas(this.deductions);		
     }
     this.calcDeductions();
 	this.calcCapGains =function(){

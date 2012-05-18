@@ -399,7 +399,7 @@ $('#savepg').live('pageinit', function(event) {
 		reTot();//rewrite descr
 		console.log(localStorage.getItem('taxplans'));
 		*/
-		reTot();				
+		assembleSummary();				
 	});	
 	$('body').on('click', "#loadbut", function (e) { 
 		e.stopImmediatePropagation();
@@ -407,14 +407,16 @@ $('#savepg').live('pageinit', function(event) {
 		repopulatePlanList();
 		//reTot();
 	});   
-	$('body').on('change', "#selectplan", function (e) { 		
+	$('body').on('change', "#selectplan", function (e) {
 		var selectedPlan =$('#selectplan').val();
-		$('#sname').val(selectedPlan)
+		$('#sname').val(selectedPlan);
 		currPlanName = selectedPlan;//put it in the top text box
+		taxplans.current =currPlanName;
 		taxplans = JSON.parse(localStorage.getItem('taxplans'));
-		proposedPlan = new TaxPlan(irssoi, taxplans[selectedPlan]);
-		//console.log(proposedPlan);
-		reTot();
+		currentStored=taxplans[currPlanName];
+		console.log(currentStored);
+		proposedPlan = new TaxPlan(irssoi, jQuery.extend(true, {}, currentStored));			
+		assembleSummary();
 	});	
 });
 //event functions
@@ -527,6 +529,11 @@ function createUnBrTxt(){
 	return btxt;
 }
 function createDedTxt(){
+	deduSummary = new Object();
+	deduSummary.popPerc=vperc(proposedPlan.irssoi.popPerc, 4);
+	deduSummary.income=vDollaCommas(proposedPlan.irssoi.income);
+	deduSummary.Obama=vDollaCommas(proposedPlan.irssoi.deductionsTyp);		
+	deduSummary.yourPlan=vDollaCommas(proposedPlan.rates.deductions);		
 	var dtxt = "";
 	var atxt = new Object();
 	if (proposedPlan.rates.useStdDed == 0){//use tytpical ded
