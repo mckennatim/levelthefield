@@ -378,10 +378,11 @@ $('#savepg').live('pageinit', function(event) {
 		e.preventDefault();
 		var planName  = $("#sname").val();
 		delete taxplans[planName];
+		currPlanName = 'temp';
+		taxplans.current = currPlanName;
 		console.log(taxplans);
 		localStorage.setItem('taxplans', JSON.stringify(taxplans));	
 		initTaxPlan();
-		currPlanName = 'temp';
 		console.log('is already created?');
 		$('#loadstuff').empty();
 		repopulatePlanList();		
