@@ -372,7 +372,6 @@ $('#deductpg').live('pageinit', function(event) {
 
 
 $('#savepg').live('pageinit', function(event) { 
-	//$("#sname").val(currPlanName);	
 	assembleSummary();
 	$('body').on('click', "#delbut", function (e) { 
 		e.stopImmediatePropagation();
@@ -388,7 +387,7 @@ $('#savepg').live('pageinit', function(event) {
 		repopulatePlanList();		
 		reTot();
 	});	   
-	$('body').on('click', "#savebut", function (e) { 
+	$('body').on('click', ".savebut", function (e) { 
 		e.stopImmediatePropagation();
 		e.preventDefault();
 		console.log('in savebut');
@@ -399,7 +398,8 @@ $('#savepg').live('pageinit', function(event) {
 		reTot();//rewrite descr
 		console.log(localStorage.getItem('taxplans'));
 		*/
-		assembleSummary();				
+		reTot();	
+		repopulatePlanList();			
 	});	
 	$('body').on('click', "#loadbut", function (e) { 
 		e.stopImmediatePropagation();
@@ -431,8 +431,10 @@ function repopulatePlanList(){
 		planNames =new Array();
 		for (x in taxplans){
 			console.log(x);
-			planNames.push(x);
-			cumenu+='<option value="' + x + '">' + x + '</option>';
+			if (x !='current'){
+				planNames.push(x);
+				cumenu+='<option value="' + x + '">' + x + '</option>';				
+			}
 		}
 		cumenu+='</select></div>';
 		$('#loadstuff').empty();
