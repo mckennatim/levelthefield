@@ -1,7 +1,0 @@
-===Design a better income tax system. (under development)===
-Using published IRS data and other sources, creates a model of the income tax system in the US. Mobile app explains the system and allows user to manipulate all the variables of brackets and rates on earned and unearned income to design a better system that raises the same amount of money.
-
-====technologies - html5 javascript jquery-mobile nosql python====
-
-====Motivation====
-I wanted to try using text + small simulations as a way to illuminate a complex topic under the constraints of a mobile device. Here I think more about the user experience and what you need to do to get a user to keep engaged and move to the next page. Data stays local, the model exists in javascript but once a user creates a system it can go in a NOSQL database and shared. The version on the server is not current. The github code is connected to the development version.
