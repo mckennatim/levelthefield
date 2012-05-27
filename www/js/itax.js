@@ -420,6 +420,10 @@ $('#savepg').live('pageinit', function(event) {
 		assembleSummary();
 	});	
 });
+
+$('#aboutpg').live('pageinit', function(event) {            
+	$('#about').load("../README.html");
+});
 //event functions
 
 //commoxxn data	

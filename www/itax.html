@@ -62,7 +62,7 @@
 		</div>	
 		<div data-role="collapsible">
 			<h5>You are smart, </h5>
-			<p>smart enough to know that something is fishy, smart enough to realize you cannot trust economists, politicains and the talking heads on TV, smart enough to understand the economy. What you don't know can be learned, what is hidden can be uncovered, what is shrouded in mystery can be understood.</p>
+			<p>smart enough to know that something is fishy, smart enough to realize you cannot trust economists, politicians and the talking heads on TV, smart enough to understand the economy. What you don't know can be learned, what is hidden can be uncovered, what is shrouded in mystery can be understood.</p>
 		</div>	
 		<div data-role="collapsible">
 			<h5>The field can be leveled.</h5>
@@ -72,7 +72,7 @@
 
 	<div data-role="collapsible" data-theme="b" data-content-theme="d">
 		<h2>Create a Better Tax System</h2>
-		<p>There are mutliple parts of the tax system: income tax, corporate tax, payroll taxes (SSI, medicare), excise tax... There is plenty of work to do on all of them. This app takes on just a little piece, the income tax system. In it you will design a new system, new rates, new brackets new, assumtions. The only rule is somewhat artificial. You have to raise the same amount of money for income tax that is being raised now under the current system.  Then you win.  </p>
+		<p>There are mutliple parts of the tax system: income tax, corporate tax, payroll taxes (SSI, medicare), excise tax... There is plenty of work to do on all of them. <br/><br/>This app takes on just a little piece, the income tax system. In it you will design a new system, new rates, new brackets, new assumptions. The only rule is somewhat artificial. You have to raise the same amount of money for income tax that is being raised now under the current system.  Then you win.  </p>
 	</div>	
 	<div data-role="collapsible">
 		<h2>The Income Tax</h2>
@@ -85,9 +85,13 @@
 		<div id="page1graph" class="ui-body ui-body-c" style="height:190px">
 			<div id="existingPies" class="graph"></div>
 		</div>
-			<a href="#deductpg" data-role="button" data-mini="true" data-transition="pop">jumpto create your plan</a>	
+		<fieldset data-role="controlgroup" data-mini="true" >
+			<a href="#existing" data-role="button" data-mini="true" data-transition="pop">next -> the current system</a>	
+			<a href="#deductpg" data-role="button" data-mini="true" data-transition="pop">jumpto -> create your plan</a>
+			<a href="#aboutpg" data-role="button" data-mini="true" data-transition="pop">about</a>			
 		<p class="txtOnGreen" >These buttons are not part of the app. Being used only for development.</p>
-	        <a href="#thelists" data-role="button" data-mini="true" data-transition="turn">test calculations</a>                  	    
+	        <a href="#thelists" data-role="button" data-mini="true" data-transition="turn">test calculations</a>
+	    </fieldset>                     	    
 	</div>
 </div>
 
@@ -119,7 +123,7 @@
 		    		<h4>C.Gains/Q.Dividends are taxed at a lower rate</h4>
 		    		<p>Ordinary income is taxed at the wage rates ie. 15%,25%,30%,33%&amp;35%. Capital gains and Qualified Dividends is taxed at 15%. On a phone this graph (below) is unreadable; the white area in the upper right is capital gains, the lower dark band is dividends. For the rich, most of their income is 'unearned'; coming from investments that pay dividends and have capital gains. The argument is that low capital gains rates is good for Americans; there is even a special  0% rate if you make less than $30,000. Trouble is those who make $30,000, on average, have about 2-4% 'unearned'  income. Even if your income is $100,000, you are likely to have less that 10% capital gains/dividend income. For the rich the numbers are reversed. ) Once you cross the million dollar mark (about the middle of the chart), then more than %50 of your income is likely to be from capital gains and (qualified (US corp)) dividends. </p>
 		    	</div>
-<img src="http://www.taxpolicycenter.org/taxfacts/Content/GIF/income_composition_2000.gif" alt="income composition"/><small>[The white area in the upper right is capital gains, the lower dark band is dividends]</small><br/>
+<img src="http://www.taxpolicycenter.org/taxfacts/Content/GIF/income_composition_2000.gif" alt="income composition gif -from taxpolicycenter.org is offline"/><small>income composition gif -from taxpolicycenter.org is offline[The white area in the upper right is capital gains, the lower dark band is dividends]</small><br/>
 
 		    		<p>It is difficult to find information on how much total income in the US is 'unearned' and taxed at low rates. The best information on the upper slices I found in a Forbes article by Janet Novak in 2011 (<a href="http://www.forbes.com/sites/janetnovack/2011/05/11/richest-400-took-record-share-of-capital-gains-during-market-meltdown-year/">Richest 400 Took Record Share Of Capital Gains During Market Meltdown Year) </a>.  Unless I had other information I ended up reading off the above chart for the average income of each quintile or smaller slice of population and then multipling that % by the income and then by the number of people with that average income.</p> <div id="capg"></div>
 
@@ -323,6 +327,16 @@
 	</div><!-- /header -->       
 	<div data-role="content">	 
 		<p id="list" >nada </p>
+	</div><!-- /content -->
+</div><!-- /page -->   
+
+<div id="aboutpg" data-role="page">     
+	<div data-role="header">
+		<a href="#main" data-icon="back"  id="goback" ...data-role="button" >home</a>
+			<h2>About</h2>
+	</div><!-- /header -->       
+	<div data-role="content">	
+		<div id="about"></div> 
 	</div><!-- /content -->
 </div><!-- /page -->   
 

@@ -22,7 +22,7 @@ irssoi.unity = vplus(vmult(irssoi.income,0),1);
 
 irssoi3 = new Object();
 irssoi3.pop = vcommas(vmult(pop_perc, pop_tot));
-irssoi3.popPerc = vperc(pop_perc, 0);
+irssoi3.popPerc = vperc(pop_perc, 4);
 irssoi3.income = vDollaCommas(income_avg);
 
 irssoi2 = new Object();
