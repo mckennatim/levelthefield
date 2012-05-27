@@ -422,7 +422,7 @@ $('#savepg').live('pageinit', function(event) {
 });
 
 $('#aboutpg').live('pageinit', function(event) {            
-	$('#about').load("../README.html");
+	$('#about').load("../README.mediawiki");
 });
 //event functions
 
