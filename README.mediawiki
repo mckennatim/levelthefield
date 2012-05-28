@@ -6,13 +6,17 @@ Timothy S. McKenna<br/>
 
 <h3>Design a better income tax system. (under development)</h3>
 <p>
-Using published IRS data and other sources, this mobile device app creates a model of the income tax system in the US.
+I've been playing with how technology can be used to explain a difficult idea. Listening to the chants and rants of the Occupy people I started to think how far we have to go in understanding the system that is playing us. We can rail against the machine but what we need to do is understand what's up with the current machine so we can invent a new one.
 </p><p>
-It explains the system and allows user to manipulate all the variables of brackets and rates on earned and unearned income to design a better system that raises the same amount of money.
+So here is my first attempt: http://www.levelthefield.us. What it is about is an answer to the rhetoric around income taxes. First I tried to understand the system, then I built a mathematical model, then I tried to figure out how to illuminate the ideas and empower the user to create something better. There are countless prospects for other topics to do this with.
+</p><p>
+The question is does it work, would anyone  find it interesting, educational, challenging or even fun?  Probably not yet at any rate, this is a first pass and I barely have the technology under control. 	
+</p><p>	
+Using published IRS data and other sources, this mobile device app creates a model of the income tax system in the US.  It explains the system and allows user to manipulate all the variables of brackets and rates on earned and unearned income to design a better system that raises the same amount of money.
 </p>
 <h4>Motivation</h4>
 <h5>Pedigogical</h5>
-<p>Income and wealth inequality were topics in my Boston Public high school Humanities classes. This app represents a three class-period unit on income inequality. I am hoping that spending 40 minutes or so exploring this app would be equivalent to those 3 days. </p>
+<p>Income and wealth inequality were topics in my Boston Public high school Humanities classes. This app represents a three class-period unit for seniors on income inequality. I am hoping that spending 40 minutes or so exploring this app would be equivalent to those 3 days. </p>
 
 <p>Teaching in a school where every student had a laptop, I found that laptops could fundamentally change the way students learned to read, write, solve problems and understand their world. I managed to get some software and pedagogy in place but my todo list of educational technology applications is huge.</p>
 
@@ -27,11 +31,11 @@ It seemed that nobody really understood what they were talking about. Not surpri
 </p><p>
 We must educate ourselves so that we can redress the bullshit that holds up the current financial system. We need to know enough to create a new model, a better system.
 <h5>Technological</h5>
-Here I think more about the user experience and what you need to do to get a user to keep engaged and move to the next page. Data stays local, the model exists in javascript but once a user creates a system it can go in a NOSQL database and shared. The version on the server is not current. The github code is connected to the development version. 
+A lot of what I have done in creating educational software was scripts in PHP/MYSQL that made some mod to Mediawiki or produced a multiple choice quiz on something the class just read. Here I think more about the user experience and what you need to do to get a user to keep engaged and move to the next page. Data stays local, the model exists in javascript/HTML5 but once a user creates a system it can go in a NOSQL database and be shared. The version on the server is not current. The github code is connected to the development version. 
 </p><p>
 I get most of my iphone software from the app store but have trouble with the imposed loyalty to the iconic company my itunes account represents. I think we would be better off not having to shop at the company store. 
 </p><p>
 I also like the idea of writing software that runs on many platforms. I chose to go with JQuery-mobile and I look forward to the continued development of mobile frameworks for HTML5.
 </p>
 <h6>technologies</h6>
-html5, javascript, jquery-mobile, (nosql python)
+html5, javascript, css3, jquery-mobile, jflot(by Ole Laursen), jflot.marks(by Serge V. Izmaylov) , nosql, python
