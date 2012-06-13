@@ -424,6 +424,58 @@ $('#savepg').live('pageinit', function(event) {
 $('#aboutpg').live('pageinit', function(event) {            
 	$('#about').load("../README.mediawiki");
 });
+
+$('#sharepg').live('pageinit', function(event) {     
+	$("#tiplan").append(currPlanName);
+	$('body').on('click', "#subshare", function (e) { 
+		e.stopImmediatePropagation();
+	    e.preventDefault();
+	    var otherID = $("#otherID").val();
+	    var pname = currPlanName;
+	    var pdesc= proposedPlan.rates.descr.intro;
+	    var splan = JSON.stringify(proposedPlan.rates);
+	    $.ajax({
+		     type: "post",
+		     url: "/cgi-bin/sdbpost.py",
+		     data: {otherID: otherID, pname: pname, pdesc: pdesc, splan: splan},
+		     dataType: "json",
+		     success: function(da){
+		      	alert(da.splan);		
+		      	console.log(JSON.stringify(da));
+	     	}
+	     });
+	});
+	$('body').on('click', "#subdel", function (e) { 
+		e.stopImmediatePropagation();
+	    e.preventDefault();
+	    var otherID = $("#otherID").val();
+	    var pname = currPlanName;
+	    $.ajax({
+		     type: "post",
+		     url: "/cgi-bin/ajaxdel.py",
+		     data: {otherID: otherID, pname: pname},
+		     dataType: "json",
+		     success: function(da){
+		      	alert(da.otherID);			
+	     	}
+	     });
+	});	
+});
+
+$('#accesspg').live('pageinit', function(event) {            
+	$('body').on('click', "#geti", function (e) { 
+		e.stopImmediatePropagation();
+	    e.preventDefault();
+	    $.getJSON( "/cgi-bin/sdblist.py", function(data){
+	    	botos = data.sboto;	    		    
+	    	//alert(data.sboto[5]['PlanName']);	
+	    	$.each(botos, function(index, boto) {
+	    		$('#obolist').append('<li data-theme="d" alt="'+boto["Description"]+ '">' + boto["Description"] + '</li>');
+    		})	;
+    		$('#obolist').listview('refresh'); 
+	    });
+	});
+});
 //event functions
 
 //commoxxn data	
@@ -597,7 +649,7 @@ function reTot(){//recalc and plot bars, check name, replace w default, get name
 	proposedPlan.rates.descr.conclude = $('#tanno6').val();
 	//save to localStorage
 	taxplans.current=currPlanName;
-	taxplans[currPlanName]=jQuery.extend(true, {}, proposedPlan.rates);
+	taxplans[currPlanName]=jQuery.extend(true, {}, proposedPlan.rates);//makes a deep copy
 	localStorage.setItem('taxplans', JSON.stringify(taxplans));
 	//redisplay updated info from proposedPlan
 	plotBars();
