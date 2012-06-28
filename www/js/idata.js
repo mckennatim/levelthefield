@@ -77,7 +77,7 @@ descr.brackets='The brackets and rates are set so that...' ;
 descr.overall='Comparing this plan to Obama\'s, overall taxes for each income...' ;
 descr.unearned='Capital Gains and preferred dividends are treated ....' ;
 descr.deductions='Deductions by income group...' ;
-descr.conclude='Deductions by income group...' ;
+descr.conclude='The combined effect of...' ;
 
 console.log('in idata');
 console.log(obama.descr);
