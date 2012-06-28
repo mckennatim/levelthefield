@@ -11,12 +11,15 @@ var win;
 var currPlanName= 'duck';
 var currentStored;
 var numBrackets ;
+var repo;
 console.log('beg of itax');
 console.log(obama.descr);
 //console.log(JSON.stringify(obama));
 initTaxPlan();
 
 function initTaxPlan(){
+	existingPlan = new TaxPlan(irssoi, obama);
+	existingPlan.refresh();	
 	taxplans =JSON.parse(localStorage.getItem('taxplans'));
 	if (taxplans == null){
 		console.log("taxplans is null will get obama");		
@@ -38,8 +41,7 @@ function initTaxPlan(){
 	console.log(proposedPlan);
 	//to do reporting you need to have a copy of the existing(obama)plan
 	console.log('creating exiisting plan');
-	existingPlan = new TaxPlan(irssoi, obama);
-	existingPlan.refresh();
+
 	console.log(existingPlan);
 	//set some variables
 	numBrackets =proposedPlan.rates.brackets.length;
@@ -408,6 +410,22 @@ $('#savepg').live('pageinit', function(event) {
 		repopulatePlanList();
 		//reTot();
 	});   
+	$('body').on('click', "#sharebut", function (e) { 
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		oid = localStorage.getItem("email");
+		shmenu = '<form name="listadd" method="post" action="/var/www/cgi-bin/helloworld.py" >\
+	    	<table>\
+	         <tr><td><span class="txtOnGreen">Email or otherID:</span></td><td>\
+	         <input type="email" name="otherID" id="otherID" value="' + oid + '" data-mini="true" size="35" />\
+         </td></tr>\
+			</table> <div data-role="controlgroup" data-type="horizontal" class="stangersubmit" data-mini="true" >\
+				<input type="submit"  data-theme="b" data-mini="true" id="subshare" value="Share"/>\
+				<input type="submit" data-theme="b" data-mini="true" id="subdel" value="unShare"/> \
+				<a href="#accesspg" data-role="button" data-theme="b" data-mini="true" >seeShared</a></div> </div></form>	';
+		$('#loadstuff').empty();
+		$('#loadstuff').append(shmenu).trigger('create');			
+	});  	
 	$('body').on('change', "#selectplan", function (e) {
 		var selectedPlan =$('#selectplan').val();
 		$('#sname').val(selectedPlan);
@@ -419,68 +437,276 @@ $('#savepg').live('pageinit', function(event) {
 		proposedPlan = new TaxPlan(irssoi, jQuery.extend(true, {}, currentStored));			
 		assembleSummary();
 	});	
-});
-
-$('#aboutpg').live('pageinit', function(event) {            
-	$('#about').load("../README.mediawiki");
-});
-
-$('#sharepg').live('pageinit', function(event) {     
-	$("#tiplan").append(currPlanName);
 	$('body').on('click', "#subshare", function (e) { 
 		e.stopImmediatePropagation();
 	    e.preventDefault();
 	    var otherID = $("#otherID").val();
+	    localStorage.setItem('email', otherID);
 	    var pname = currPlanName;
 	    var pdesc= proposedPlan.rates.descr.intro;
 	    var splan = JSON.stringify(proposedPlan.rates);
 	    $.ajax({
-		     type: "post",
-		     url: "/cgi-bin/sdbpost.py",
+		     type: "POST",
+		     url: "../services/rdspost.php",
 		     data: {otherID: otherID, pname: pname, pdesc: pdesc, splan: splan},
 		     dataType: "json",
 		     success: function(da){
-		      	alert(da.splan);		
-		      	console.log(JSON.stringify(da));
+		     	console.log('came back');
+		      	mes= da.items[0].message;
+		      	$("#sharemes").append(mes);
+	     	},
+	     	error: function(da){
+	     		console.log(da);
+	     		mes="There might be a problem; maybe its not shared.";
+	     		$("#sharemes").append(mes);
 	     	}
 	     });
-	});
+	});	
 	$('body').on('click', "#subdel", function (e) { 
 		e.stopImmediatePropagation();
 	    e.preventDefault();
 	    var otherID = $("#otherID").val();
 	    var pname = currPlanName;
 	    $.ajax({
-		     type: "post",
-		     url: "/cgi-bin/ajaxdel.py",
+		     type: "POST",
+		     url: "../services/rdsdel.php",
 		     data: {otherID: otherID, pname: pname},
 		     dataType: "json",
 		     success: function(da){
-		      	alert(da.otherID);			
-	     	}
+		      	mes= da.items[0].message;
+		      	$("#sharemes").append(mes);	
+	     	},
+	     	error: function(da){
+	     		console.log(da);
+	     		mes=" There might be a problem; maybe its not deleted.";
+	     		$("#sharemes").append(mes);
+	     	}	     	
 	     });
-	});	
+	});		
 });
 
+$('#aboutpg').live('pageinit', function(event) {            
+	$('#about').load("../README.mediawiki");
+});
+
+var botos;
+var npg;
+var selectedAccessed;
 $('#accesspg').live('pageinit', function(event) {            
-	$('body').on('click', "#geti", function (e) { 
-		e.stopImmediatePropagation();
-	    e.preventDefault();
-	    $.getJSON( "/cgi-bin/sdblist.py", function(data){
-	    	botos = data.sboto;	    		    
-	    	//alert(data.sboto[5]['PlanName']);	
-	    	$.each(botos, function(index, boto) {
-	    		$('#obolist').append('<li data-theme="d" alt="'+boto["Description"]+ '">' + boto["Description"] + '</li>');
-    		})	;
-    		$('#obolist').listview('refresh'); 
-	    });
+	var aclause = new Object();
+	npg = 7;
+	aclause.pg = 0;	
+	aclause.pgn = npg*aclause.pg;
+	aclause.whr = "";
+	aclause.lim = " LIMIT " + aclause.pgn + " , " + npg;
+	aclause.ord ="";
+	aclause.lik ="";
+	getSharedPlans(aclause);
+	$('a.accessedItems').live("click", function() {
+		var $el = $(this);
+	    fid = $el.attr('id');
+	    tid= "#" + fid; 
+	    getSharedByID(fid);
+		$.mobile.changePage( $('#accessedplanpg') );	    
+	    return false;
 	});
+	$('body').on('click', "#btnran", function (e) { 
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		aclause.pg =0;	
+		aclause.pgn = npg*aclause.pg;
+		aclause.whr = "";
+		aclause.lim = " LIMIT " + aclause.pgn + " , " + npg;
+		aclause.ord =" ORDER BY RAND()";
+		getSharedPlans(aclause);			
+	});	
+	$('body').on('click', "#btnmor", function (e) { 
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		aclause.pg++;	
+		aclause.pgn = npg*aclause.pg;
+		aclause.lim = " LIMIT " + aclause.pgn + " , " + npg;
+		getSharedPlans(aclause);		
+	});	
+	$('body').on('click', "#btnlik", function (e) { 
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		aclause.pg =0;	
+		aclause.pgn = npg*aclause.pg;
+		aclause.whr = "";
+		aclause.lim = " LIMIT " + aclause.pgn + " , " + npg;
+		aclause.ord =" ORDER BY `voteplus`DESC";
+		getSharedPlans(aclause);				
+	});	
+	$('body').on('click', "#btncon", function (e) { 
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		aclause.pg =0;	
+		aclause.pgn = npg*aclause.pg;
+		aclause.whr = "";
+		aclause.lim = " LIMIT " + aclause.pgn + " , " + npg;
+		aclause.ord =" ORDER BY (`voteplus`* `voteminus`) DESC";
+		getSharedPlans(aclause);		
+	});					
+	$('body').on('click', "#btnrec", function (e) { 
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		aclause.pg =0;	
+		aclause.pgn = npg*aclause.pg;
+		aclause.whr = "";
+		aclause.lim = " LIMIT " + aclause.pgn + " , " + npg;
+		aclause.ord =" ORDER BY `tstamp`DESC";
+		getSharedPlans(aclause);		
+	});	
+	$("#search-plans").bind('keypress', function(e) {
+		var code = (e.keyCode ? e.keyCode : e.which);
+		if(code == 13 ) { //Enter keycode
+			stuff =$(this).val(); 
+			stuff = stuff.charAt(0).toUpperCase() + stuff.slice(1);
+			console.log(stuff);
+		}
+		aclause.pg =0;	
+		aclause.pgn = npg*aclause.pg;
+		aclause.whr = "";
+		aclause.lim = " LIMIT " + aclause.pgn + " , " + npg;
+		aclause.lik = "WHERE `otherID` LIKE '%" + stuff + "%' OR  `pname`LIKE '%" + stuff + "%' ";
+		getSharedPlans(aclause);						
+	});	
+});
+var youvoted;
+$('#accessedplanpg').live('pageinit', function(event) {  
+	urlps = getUrlVars();
+	console.log(urlps);
+	repo = urlps['planID'];
+	if (repo != undefined) {
+	    getSharedByID(repo);	
+	}		
+	youvoted=0;          
+	$('#theirplan').append("See their plan");
+	$('body').on('click', "#voteu", function (e) { 
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		$('#voteu').css("background-color", "#21E900");
+		if (youvoted == 0){
+			recordVote(1);
+		}
+		youvoted = 1;
+	});	
+	$('body').on('click', "#voted", function (e) { 
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		$('#voted').css("background-color", "#EB9999");		
+		if (youvoted == 0){
+			recordVote(-1);
+		}		
+		youvoted =1;
+	});	
+	$('body').on('click', "#butcopyplan", function (e) { 
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		$.mobile.changePage( $('#savepg') );		
+		$('#sname').val(snametxt);    	
+	});	
 });
 //event functions
 
 //commoxxn data	
 
 //functions
+var snametxt;
+function getSharedByID(fid){
+    $.ajax({
+	     type: "POST",
+	     url: "../services/rdsget.php",
+	     data: {pid: fid},
+	     dataType: "json",
+	     success: function(da){
+	      	mes= 'da.items[0].message';
+	      	//alert(mes);
+	      	botos = da.items[0];
+	      	splan = botos["splan"];
+	      	console.log(splan);
+			theplan = JSON.parse(splan);
+			var retrievedName =theplan["planName"];
+			console.log(retrievedName);
+			proposedPlan = new TaxPlan(irssoi, theplan);	
+			numBrackets =proposedPlan.rates.brackets.length;
+			console.log(proposedPlan);		
+			assembleSummary();		
+			selectedAccessed = botos["pid"];
+			snametxt=botos["otherID"] + '_' + botos["pname"]  	
+			console.log(snametxt);      	
+			$('#theirplan').empty();
+			$('#theirplan').append('<table><tr><td rowspan="2" width="80%"><h4>' + botos["otherID"] + '_' + botos["pname"] + '</h4></td><td rowspan="2">vote:</td><td><a href="#"  data-role="button" data-icon="arrow-u" style="text-decoration: none; background-color:yellow" id="voteu"><big> &uarr;</big></a></tr><tr><td><a href="#"  data-role="button" data-icon="arrow-d" style="text-decoration: none; background-color:yellow" id="voted"><big> &darr;</big></a></td></tr></table>');
+			$('#theirplan').append(botos["description"] + '<br/><br/>'); 	
+			$('#theirplan').append(proposedPlan.rates.descr.brackets);					
+			$('#theirplan').append(createUnBrTxt().br);			
+			$('#theirplan').append(proposedPlan.rates.descr.overall);	
+			$('#theirplan').append(createUnBrTxt().br2);
+			$('#theirplan').append(proposedPlan.rates.descr.unearned);
+			$('#theirplan').append(createUnBrTxt().cap);				
+			$('#theirplan').append(proposedPlan.rates.descr.deductions);
+			$('#theirplan').append(createDedTxt().deds);
+			$('#theirplan').append(proposedPlan.rates.descr.conclude);	
+     	},
+     	error: function(da){
+     		console.log(da);
+     		mes=" There might be a problem; didn't find it.";
+     		alert(mes);
+     	}	     	
+    });	    
+	//$.mobile.changePage( $('#accessedplanpg') );	
+}
+
+function recordVote(ud){
+	var vfield;
+	if (ud==1){
+		vfield = 'voteplus';
+	} else{
+		vfield = 'voteminus';
+	}
+    $.ajax({
+	     type: "POST",
+	     url: "../services/rdsvote.php",
+	     data: {pid: selectedAccessed, votefield: vfield},
+	     dataType: "json",
+	     success: function(da){
+	      	mes= da.items[0].message;
+	      	$("#sharemes").append(mes);	
+     	},
+     	error: function(da){
+     		console.log(da);
+     		mes=" There might be a problem; maybe the vote did not count.";
+     		$("#sharemes").append(mes);
+     	}	     	
+     });	
+}
+
+function getSharedPlans(clause){
+	console.log(clause.lim);
+	$('#obolist').empty();
+    $.ajax({
+	     type: "POST",
+	     url: "../services/rdslist.php",
+	     data: {whereClause: clause.whr, limitClause: clause.lim, orderClause: clause.ord, likeClause: clause.lik},
+	     dataType: "json",
+	     success: function(da){
+	      	mes= 'da.items[0].message';
+	      	//alert(mes);
+	      	botos = da.items;
+	    	$.each(botos, function(index, boto) {
+    		$('#obolist').append('<li data-theme="e" alt="' +boto["otherID"] + '_' + boto["pname"] + '" id="' + boto["pid"] + '"><a href="#" class="accessedItems"  id="' + boto["pid"] +'" ><p style="white-space:normal"><span style="font-size: 1.4em;">'  + boto["otherID"] + '_' + boto["pname"] + '</span><br/><span> ' + boto["description"] + '</span></p><p class="ui-li-aside">' + boto["tstamp"] + '</p><span style="background-color:yellow;color:red">' + ' &uarr;' + boto["voteplus"] + ''+ ' &darr;' + boto["voteminus"] +' </span></a></li>');
+    		})	;
+    		$('#obolist').listview('refresh'); 		      	
+     	},
+     	error: function(da){
+     		console.log(da);
+     		mes=" There might be a problem; maybe its not deleted.";
+     		alert(mes);
+     	}	     	
+    });	
+}
+
 function repopulatePlanList(){
 		console.log(localStorage.getItem('taxplans'));	
 		var x ;
@@ -954,4 +1180,15 @@ $('#thelists').live('pageinit', function(event) {
         
 });	
 
-
+function getUrlVars()
+{
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
+}

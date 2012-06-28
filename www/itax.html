@@ -9,7 +9,7 @@
 	<link href="css/tax.css" rel="stylesheet" type="text/css" />
 	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>  
-	<script type='text/javascript' src="http://people.iola.dk/olau/flot/jquery.flot.js"></script>
+	<script type='text/javascript' src="js/jquery.flot.js"></script>
 	<script type='text/javascript' src="js/jquery.flot.valuelabels.js"></script>
 	<script type='text/javascript' src="js/jquery.flot.stack.js"></script>
 	<script type='text/javascript' src="js/jquery.flot.pie.min.js"></script>
@@ -89,6 +89,7 @@
 			<a href="#existing" data-role="button" data-mini="true" data-transition="pop">next -> the current system</a>	
 			<a href="#deductpg" data-role="button" data-mini="true" data-transition="pop">jumpto -> create your plan</a>
 			<a href="#aboutpg" data-role="button" data-mini="true" data-transition="pop">about</a>			
+			<a href="#accesspg" data-role="button" data-mini="true" data-transition="pop">plans online</a>			
 		<p class="txtOnGreen" >These button(s) below are not part of the app, being used only for development.</p>
 	        <a href="#thelists" data-role="button" data-mini="true" data-transition="turn">test calculations</a>
 	    </fieldset>                     	    
@@ -124,7 +125,7 @@
 		    		<h4>C.Gains/Q.Dividends are taxed at a lower rate</h4>
 		    		<p>Ordinary income is from wages, money you make from going to a job and working. Unearned is income you get from investments. Unearned income comes to you in the form of Capital Gains and Dividends. Ordinary income is taxed at the wage rates ie. 15%,25%,30%,33%&amp;35%. Capital gains and Qualified Dividends is taxed at 15%. On a phone this graph (below) is unreadable; the white area in the upper right is capital gains, the lower dark band is dividends. For the rich, most of their income is 'unearned'; coming from investments that pay dividends and have capital gains. The argument is that low capital gains rates is good for Americans; there is even a special  0% rate if you make less than $30,000. Trouble is those who make $30,000, on average, have about 2-4% 'unearned'  income. Even if your income is $100,000, you are likely to have less that 10% capital gains/dividend income. For the rich the numbers are reversed. ) Once you cross the million dollar mark (about the middle of the chart), then more than %50 of your income is likely to be from capital gains and (qualified (US corp)) dividends. </p>
 		    	</div>
-<img src="http://www.taxpolicycenter.org/taxfacts/Content/GIF/income_composition_2000.gif" alt="income composition gif -from taxpolicycenter.org is offline"/><small>income composition gif -from taxpolicycenter.org is offline[The white area in the upper right is capital gains, the lower dark band is dividends]</small><br/>
+<img src="img/income_composition_2000.gif" alt="income composition gif -from taxpolicycenter.org is offline"/><small>income composition gif -from taxpolicycenter.org is offline[The white area in the upper right is capital gains, the lower dark band is dividends]</small><br/>
 
 		    		<p>It is difficult to find information on how much total income in the US is 'unearned' and taxed at low rates. The best information on the upper slices I found in a Forbes article by Janet Novak in 2011 (<a href="http://www.forbes.com/sites/janetnovack/2011/05/11/richest-400-took-record-share-of-capital-gains-during-market-meltdown-year/">Richest 400 Took Record Share Of Capital Gains During Market Meltdown Year) </a>.  Unless I had other information I ended up reading off the above chart for the average income of each quintile or smaller slice of population and then multipling that % by the income and then by the number of people with that average income.</p> <div id="capg"></div>
 
@@ -297,8 +298,8 @@
 			<h2>Finalize Plan</h2>
 	</div><!-- /header -->       
 	<div data-role="content">	 		
-		<table><tr><td><span id="snamel" class="txtOnGreen">plan name:</span></td><td>
-	         <input type="text" name="sname" id="sname" value="doggy" data-mini="true" /></tr></table>
+		<form><table><tr><td><span id="snamel" class="txtOnGreen">plan name:</span></td><td>
+	         <input type="email" name="sname" id="sname" value="doggy" data-mini="true" size="35" /></td></tr></table></form>
 	         <div data-role="fieldcontain">		
 	        <div data-role="controlgroup" data-type="horizontal" data-mini="true" data-theme="a">
 		    	<a href="#" id="savebut" class="savebut" data-role="button" data-theme="b" data-mini="true" data-transition="pop">save</a>	  	
@@ -345,37 +346,42 @@
 	</div><!-- /content -->
 </div><!-- /page -->     
 
-
-<div id="sharepg" data-role="page">     
-	<div data-role="header">
-		<a href="#savepg" data-icon="back" data-role="button" >back</a>
-			<h2><div id="tiplan"></div></h2>
-		<a href="#accesspg" data-icon="arrow-u"  data-role="button" >access</a>
-	</div><!-- /header -->       
-	<div data-role="content">	 
-		<form name="listadd" method="post" action="/var/www/cgi-bin/helloworld.py" >
-	    	<table>
-	         <tr><td>Email or otherID:</td><td>
-	         <input type="email" name="otherID" id="otherID" value=""  />
-         </td></tr>
-			</table>			
-		<div data-role="controlgroup" data-type="horizontal" class="stangersubmit">
-				<input type="submit" data-theme="c" id="subshare" value="Share"/>
-				<input type="submit" data-theme="c" id="subdel" value="unShare"/>						
-		</div>
- 		</form>		
-	</div><!-- /content -->
-</div><!-- /page -->   
   
 <div id="accesspg" data-role="page">     
 	<div data-role="header">
-		<a href="#sharepg" data-icon="back"  data-role="button" >back</a>
+		<a href="#" data-rel="back" data-icon="back"  data-role="button" >back</a>
 			<h2>Access Shared</h2>
-		<a href="#" data-icon="arrow-d"  id="geti" data-role="button" >run</a>
+		<a href="#main" data-icon="home"  id="geti" data-role="button" >home</a>
+		<div data-role="navbar"  >
+			<ul>
+	    	<li ><a href="#" data-role="button" id="btnran">random</a></li>
+	    	<li ><a href="#"  data-role="button" id="btnmor">more</a></li>
+	    	<li  data-icon="false"><input type="search" name="search" id="search-plans" value="" /></li>
+	    	</ul>
+	    </div>		
+		<div data-role="navbar" >
+			<ul>
+	    	<li><a href="#"  data-role="button" id="btnrec">recent</a></li>
+	    	<li><a href="#"  data-role="button" id="btnlik">liked</a> </li>
+	    	<li><a href="#"  data-role="button" id="btncon">controversial</a> </li>
+	    	</ul>
+	    </div>		    	
 	</div><!-- /header -->       
 	<div data-role="content">	 
-		<p>nada </p>
-		<ul id="obolist" class="current" data-role="listview" data-filter="false"></ul>	
+		<div>
+		<ul id="obolist" data-role="listview" data-filter="false"></ul>	
+		</div>
+	</div><!-- /content -->
+</div><!-- /page --> 
+
+<div id="accessedplanpg" data-role="page">     
+	<div data-role="header">
+		<a href="#accesspg" data-icon="back"  data-role="button" >back</a>
+			<h2>Accessed Plan</h2>
+		<a href="#savepg" data-icon="arrow-d"   id="butcopyplan" data-role="button" >copy</a>
+	</div><!-- /header -->       
+	<div data-role="content">	 
+		<div id="theirplan">dogs</div>
 	</div><!-- /content -->
 </div><!-- /page --> 
   
