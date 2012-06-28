@@ -452,13 +452,14 @@ $('#savepg').live('pageinit', function(event) {
 		     dataType: "json",
 		     success: function(da){
 		     	console.log('came back');
-		      	mes= da.items[0].message;
-		      	$("#sharemes").append(mes);
+		      	var mes= da.items[0].message;
+		     	console.log('message is' + mes);
+		      	//$("#sharemes").append(mes);
 	     	},
 	     	error: function(da){
 	     		console.log(da);
 	     		mes="There might be a problem; maybe its not shared.";
-	     		$("#sharemes").append(mes);
+	     		//$("#sharemes").append(mes);
 	     	}
 	     });
 	});	

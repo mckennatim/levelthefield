@@ -27,7 +27,7 @@ if ($rs->num_rows>1){
 }
 if ($rs->num_rows>0){
 	//update if exists	
-	$sqld ="UPDATE `taxplans`SET `otherID`= '$otherID', `pname`='$pname' WHERE `otherID`='$otherID' AND `pname`='$pname' ";
+	$sqld ="UPDATE `taxplans`SET `otherID`= '$otherID', `pname`='$pname', `description`='$pdesc', `splan`='$splan'  WHERE `otherID`='$otherID' AND `pname`='$pname' ";
 	ChromePhp::log($sqld);
 	$db->query($sqld);	
 	$mes =' There was an earlier version with this plan name and ID. I replaced it';
