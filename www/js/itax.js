@@ -485,6 +485,9 @@ $('#savepg').live('pageinit', function(event) {
 	     		$("#sharemes").append(mes);
 	     	}	     	
 	     });
+	});	
+	$(".tanno").blur(function () {
+		reTot();
 	});		
 });
 
