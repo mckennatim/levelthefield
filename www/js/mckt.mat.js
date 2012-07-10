@@ -295,7 +295,7 @@ function vDollaCommas(a) {
     var ylen =a.length;
 	var r = [];
     for (var i=0; i<ylen; i++){
-            r[i] = '$'+addCommas(a[i]);
+            r[i] = '$'+addCommas(rund(a[i],0));
     }
     return r;
 }

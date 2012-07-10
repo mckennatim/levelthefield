@@ -30,6 +30,8 @@ function initTaxPlan(){
 		console.log(taxplans.obama.descr);	
 		localStorage.setItem('taxplans', JSON.stringify(taxplans));
 	}
+	taxplans['obama']=jQuery.extend(true, {}, existingPlan.rates);//makes a deep copy
+	localStorage.setItem('taxplans', JSON.stringify(taxplans));
 	//there should be a taxplan with a current name so open it
 	console.log("getting current plan");	
 	currPlanName = taxplans.current;
@@ -580,10 +582,11 @@ $('#accessedplanpg').live('pageinit', function(event) {
 	console.log(urlps);
 	repo = urlps['planID'];
 	if (repo != undefined) {
+		//alert("its defined");
 	    getSharedByID(repo);	
 	}		
 	youvoted=0;          
-	$('#theirplan').append("See their plan");
+	$('#theirplan').append("See their plan").trigger('create');
 	$('body').on('click', "#voteu", function (e) { 
 		e.stopImmediatePropagation();
 		e.preventDefault();
@@ -740,11 +743,12 @@ function updateBr(wbmr){
 }
 
 function assembleSummary(){
+	win = 'for plan: <b>' + currPlanName + '</b><br/>';
 	if(rund(existingPlan.taxUStot/10000000000, 0)==rund(proposedPlan.taxUStot/10000000000, 0) ){
-		win = 'You WIN';
+		win += 'You WIN';
 		$('.txtOnGreen').css("color", "#FFFF19");		
 	}else {
-		win ='not quite there yet';
+		win +='not quite there yet';
 		$('.txtOnGreen').css("color", "#99CCFF");	
 	}
 	taxRaisedTxt =win + '<br/>target:  $'+addCommas(existingPlan.taxUStot) +'<br/>yourPlan: $'+addCommas(proposedPlan.taxUStot);	
@@ -764,7 +768,9 @@ function assembleSummary(){
 	//tables used on savepg to explain plan
 	$('#anno1').append(createUnBrTxt().br);
 	$('#anno2').append(createUnBrTxt().br2);
+	$('#anno2').append(createUnBrTxt().ord);		
 	$('#anno3').append(createUnBrTxt().cap);
+	$('#anno3').append(createUnBrTxt().cg);	
 	$('#anno4').append(createDedTxt().deds);	
 
 	//for br 
@@ -811,7 +817,21 @@ function createUnBrTxt(){
 	brackSummary.tax=vDollaCommas(proposedPlan.tax);		
 	brackSummary.Oba=vperc(existingPlan.taxAsPerc,0);		
 	brackSummary.yourPlan=vperc(proposedPlan.taxAsPerc,0);	
-	btxt.br2+=arrayObj2table(brackSummary);	;	
+	btxt.br2+=arrayObj2table(brackSummary);	
+	btxt.ord='<ul><li><table><tr><td>Taxed as Ordinary Income</td><td></td></tr></table></li></ul>';
+	ordI = new Object();
+	ordI.popPerc=vperc(proposedPlan.irssoi.popPerc, 4);
+	ordI.OrdInc=vDollaCommas(proposedPlan.incomeOrd);
+	ordI.Obama=vDollaCommas(existingPlan.taxOrd.tax);		
+	ordI.proposed=vDollaCommas(proposedPlan.taxOrd.tax);		
+	btxt.ord+=arrayObj2table(ordI);	
+	btxt.cg='<ul><li><table><tr><td>Taxed as Unearned </td><td></td></tr></table></li></ul>';
+	cg = new Object();
+	cg.popPerc=vperc(proposedPlan.irssoi.popPerc, 4);
+	cg.Income=vDollaCommas(proposedPlan.incomeCapGains);
+	cg.Obama=vDollaCommas(existingPlan.taxCapGains);	
+	cg.proposed=vDollaCommas(proposedPlan.taxCapGains);			
+	btxt.cg+=arrayObj2table(cg);			
 	return btxt;
 }
 function createDedTxt(){
@@ -832,7 +852,8 @@ function createDedTxt(){
 	atxt.ded2='<ul><li><table><tr><td>totals:</td><td>Obama</td><td>$'+addCommas(vsum(existingPlan.deductionsUS))+'</td></tr><tr><td></td><td>yourPlan</td><td>$' + addCommas(vsum(proposedPlan.deductionsUS)) + '</td></tr></table></li></ul>';	
 	atxt.ded1=dtxt;
 	var dedTblSum = arrayObj2table(deduSummary);	
-	atxt.deds=dedTblSum;
+	atxt.deds='<ul><li><table><tr><td>typical Deductions </td><td>by income</td></tr></table></li></ul>';
+	atxt.deds+=dedTblSum;
 	atxt.deds+='<ul><li><table><tr><td>totals deductions:</td><td>Obama</td><td>$'+addCommas(vsum(existingPlan.deductionsUS))+'</td></tr><tr><td></td><td>yourPlan</td><td>$' + addCommas(vsum(proposedPlan.deductionsUS)) + '</td></tr></table></li></ul>';
 	atxt.deds+='<ul><li><table><tr><td>deductions</td></tr><tr><td>'+ dtxt + '</td><td></td></tr></table></li></ul>';
 	return atxt;
@@ -1115,6 +1136,8 @@ $('#thelists').live('pageinit', function(event) {
             }
             var myTaxPlan = proposedPlan;
             
+            
+            
             myTaxPlan.rates.deductionStd = 17400;
 			myTaxPlan.rates.useStdDed = 1;
 			myTaxPlan.rates.dedMixPercStd = 100;
@@ -1165,7 +1188,9 @@ $('#thelists').live('pageinit', function(event) {
             $('#list').append('<br/><br/>');
             $('#list').append(JSON.stringify(myTaxPlan.tax));                                                         
             $('#list').append('<br/><br/>');
-            $('#list').append(JSON.stringify(myTaxPlan.taxUS));                                                         
+            $('#list').append(JSON.stringify(vcommas(vrund(myTaxPlan.taxUS,0))));                           
+                        $('#list').append('<br/><br/>');
+    $('#list').append(JSON.stringify(vcommas(vrund(myTaxPlan.incomeUS,0))));                              
             $('#list').append('<br/><br/>');
             $('#list').append(JSON.stringify(myTaxPlan.taxUStot));              
             $('#list').append('<br/><br/>');
@@ -1193,3 +1218,22 @@ function getUrlVars()
     }
     return vars;
 }
+$('#graphpg').live('pageinit', function(event) {            
+	
+	$(function () {
+	  var ms_data = [{"label":"FOO","data":[[0,80],[1,70],[2,100],[3,60],[4,102]]},
+	                 {"label":"BAR","data":[[0,10],[1,20],[2,30],[3,40],[4,80]]},
+	                 {"label":"CAR","data":[[0,5],[1,10],[2,15],[3,70],[4,25]]}]
+	  var ms_ticks = [[0,"1/28"],[1,"1/29"],[2,"1/30"],[3,"1/31"],[4,"1/32"]];
+	    
+	    function plotWithOptions() {
+	      $.plot($("#grdiv"), ms_data, {
+	        bars: { show: true, barWidth: 0.6, series_spread: true, align: "center" },
+	        xaxis: { ticks: ms_ticks, autoscaleMargin: .10 },
+	        grid: { hoverable: true, clickable: true }
+	      });
+	    }
+	    plotWithOptions();
+	});
+
+});
