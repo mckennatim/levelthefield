@@ -119,13 +119,18 @@ function TaxPlan(irssoi, taxrates){
 		    var deductionsUStyp = vmult(this.popByPerc, this.irssoi.deductionsTyp);
 		    var deductionsTyp =  this.irssoi.deductionsTyp;   
 		    var deductionsUSstd = vmult(this.popByPerc, this.rates.deductionStd);
-		    var deductionsStd = vmult(this.irssoi.unity, this.rates.deductionStd);			    	
+		    var deductionsStd = vmult(this.irssoi.unity, this.rates.deductionStd);	
+		    var deductionsMax = vgt(this.irssoi.deductionsTyp, this.rates.deductionStd);		   
+		    var deductionsUSmax = vmult(this.popByPerc, deductionsMax);		     	
 		if (this.rates.useStdDed == 0){//use tytpical ded
 		    this.deductionsUS = deductionsUStyp;
 		    this.deductions =  deductionsTyp;
 		}else if (this.rates.useStdDed == 1){//use (your) std deduction
 		    this.deductionsUS = deductionsUSstd;
-		    this.deductions = deductionsStd;	
+		    this.deductions = deductionsStd;		    
+		}else if (this.rates.useStdDed == 3){//use (your) deduction as max
+		    this.deductionsUS = deductionsUSmax;
+		    this.deductions = deductionsMax;	
 		} else {
 			var percStd = this.rates.dedMixPercStd/100;
 			var percTyp = 1-percStd;

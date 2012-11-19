@@ -849,6 +849,8 @@ function createDedTxt(){
         dtxt = 'Uses current data -> (rich ded.>%)';
 	}else if (proposedPlan.rates.useStdDed == 1){//use (your) std deduction
 		dtxt = '$' + proposedPlan.rates.deductionStd +' avg.ded. for all incomes';
+	}else if (proposedPlan.rates.useStdDed == 3){//use (your) deduction as max
+		dtxt = '$' + proposedPlan.rates.deductionStd +' max ded. for all incomes';		
 	} else {	
 		dtxt = proposedPlan.rates.dedMixPercStd + '% of $' +proposedPlan.rates.deductionStd + ' deduction as fixed,  the rest at historic rates';
 	}	
