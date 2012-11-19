@@ -345,6 +345,8 @@ $('#deductpg').live('pageinit', function(event) {
         $("#radProD0").attr("checked", true).checkboxradio("refresh");
     }else if(proposedPlan.rates.useStdDed==1){
     	$("#radProD1").attr("checked", true).checkboxradio("refresh");
+    }else if(proposedPlan.rates.useStdDed==3){
+    	$("#radProD3").attr("checked", true).checkboxradio("refresh");    	
     }else{
     	$("#radProD2").attr("checked", true).checkboxradio("refresh");    	
     }
