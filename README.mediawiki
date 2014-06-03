@@ -8,7 +8,7 @@ Timothy S. McKenna<br/>
 <p>
 I've been playing with how technology can be used to explain a difficult idea. Listening to the chants and rants of the Occupy people I started to think how far we have to go in understanding the system that is playing us. We can rail against the machine but what we need to do is understand what's up with the current machine so we can invent a new one.
 </p><p>
-So here is my first attempt: http://www.levelthefield.us. What it is about is an answer to the rhetoric around income taxes. First I tried to understand the system, then I built a mathematical model, then I tried to figure out how to illuminate the ideas and empower the user to create something better. There are countless prospects for other topics to do this with.
+So here is my first attempt: http://levelthefield.sitebuilt.net. What it is about is an answer to the rhetoric around income taxes. First I tried to understand the system, then I built a mathematical model, then I tried to figure out how to illuminate the ideas and empower the user to create something better. There are countless prospects for other topics to do this with.
 </p><p>
 The question is does it work, would anyone  find it interesting, educational, challenging or even fun?  Probably not yet at any rate, this is a first pass and I barely have the technology under control. 	
 </p><p>	
