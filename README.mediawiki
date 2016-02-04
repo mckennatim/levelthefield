@@ -39,3 +39,6 @@ I also like the idea of writing software that runs on many platforms. I chose to
 </p>
 <h6>technologies</h6>
 html5, javascript, css3, jquery-mobile, jflot(by Ole Laursen), jflot.marks(by Serge V. Izmaylov) , nosql, python
+
+====refs====
+http://taxfoundation.org/article/details-and-analysis-senator-bernie-sanders-s-tax-plan
